@@ -16,36 +16,54 @@
             v-show="error || !(loading || !data || data?.length == 0)"
         >
             <div
-                class="flex flex-wrap gap-4 items-center"
                 style="
                     display: flex;
+                    flex-direction: column;
+                    flex-wrap: wrap;
                     align-content: center;
                     justify-content: center;
                     align-items: center;
-                    flex-wrap: wrap;
                 "
             >
-                <el-select
-                    v-loading="loading"
-                    :loading="loading"
-                    v-model="value"
-                    placeholder="Select"
-                    size="large"
-                    style="width: 500px"
+                <div
+                    class="flex flex-wrap gap-4 items-center"
+                    style="
+                        display: flex;
+                        align-content: center;
+                        justify-content: center;
+                        align-items: center;
+                        flex-wrap: wrap;
+                    "
                 >
-                    <el-option
-                        v-for="item in options"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
-                    />
-                </el-select>
+                    <el-select
+                        v-loading="loading"
+                        :loading="loading"
+                        v-model="value"
+                        placeholder="Select"
+                        size="large"
+                        style="width: 500px"
+                    >
+                        <el-option
+                            v-for="item in options"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
+                        />
+                    </el-select>
+                </div>
+                <hr />
+                <el-button size="large" type="default" @click="handleconnect"
+                    >连接</el-button
+                >
             </div>
         </main>
     </div>
 </template>
 
 <script setup lang="ts">
+async function handleconnect() {
+    router.push("/shell/" + value.value);
+}
 const loginstate = ref("");
 const loginstyle = ref("");
 import Loading from "~/src/loading.vue";
