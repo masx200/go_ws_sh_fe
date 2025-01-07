@@ -238,6 +238,4 @@
         opacity: 1;
     }
 }
-
-/*# sourceMappingURL=loading.css.map */
 </style>

@@ -129,13 +129,22 @@ async function service(token: string) {
     return newLocal_1.list;
 }
 onMounted(async () => {
-    await runAsync(gettoken() ?? "").then(console.log, console.error);
+    await runAsync(gettoken() ?? "").then(
+        (a) => console.log(a),
+        (e) => console.error(e),
+    );
 });
 const { data, error, loading, runAsync } = useRequest(service, {
     defaultParams: [""],
     manual: true,
 });
 watch(error, (error) => {
+    const url = localStorage?.getItem("url");
+    const token = localStorage?.getItem("token");
+    if (!token || !url) {
+        router.push("/login?redirect=/");
+        return;
+    }
     console.log(error);
     ElMessage.error("获取列表失败:" + String(error));
     loginstate.value = "登录失败:" + String(error);

@@ -16,12 +16,20 @@ export default defineNuxtConfig({
             ],
         },
     },
-    css: [
-        "~/styles/styles.css",
-        "~/styles/xterm.css",
-    ],
+    css: ["~/styles/styles.css", "~/styles/xterm.css"],
     elementPlus: {},
     compatibilityDate: "2024-11-01",
     devtools: { enabled: true },
     modules: ["@element-plus/nuxt"],
+    vite: {
+        build: {
+            minify: "terser",
+            terserOptions: {
+                compress: {
+                    drop_console: true,
+                    drop_debugger: true,
+                },
+            },
+        },
+    },
 });

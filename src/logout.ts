@@ -9,7 +9,8 @@ export interface logoutResults {
 }
 
 export async function logout(
-    credentials: logoutCredentials, url = logoutUrl
+    credentials: logoutCredentials,
+    url = logoutUrl,
 ): Promise<logoutResults> {
     try {
         const response = await fetch(url, {

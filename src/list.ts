@@ -10,7 +10,8 @@ export interface listResults {
 }
 
 export async function list(
-    credentials: listCredentials, url = listUrl
+    credentials: listCredentials,
+    url = listUrl,
 ): Promise<listResults> {
     try {
         const response = await fetch(url, {

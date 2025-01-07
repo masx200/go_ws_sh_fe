@@ -11,7 +11,8 @@ export interface LoginResults {
 }
 
 export async function login(
-    credentials: LoginCredentials, url = loginUrl
+    credentials: LoginCredentials,
+    url = loginUrl,
 ): Promise<LoginResults> {
     try {
         const response = await fetch(url, {
