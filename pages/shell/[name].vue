@@ -30,8 +30,8 @@
                         class="xterm-char-measure-element"
                         aria-hidden="true"
                         style="
-                            font-family: Consolas, 'Liberation Mono', Menlo,
-                                Courier, monospace;
+                            font-family: Consolas, &quot;Liberation Mono&quot;,
+                                Menlo, Courier, monospace;
                             font-size: 13px;
                         "
                         >W</span
