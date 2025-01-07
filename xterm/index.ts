@@ -84,7 +84,7 @@ export class Xterm {
     private written = 0;
     private pending = 0;
 
-    private terminal: Terminal;
+    private terminal: Terminal | undefined;
     private fitAddon = new FitAddon();
     private overlayAddon = new OverlayAddon();
     private clipboardAddon = new ClipboardAddon();
@@ -94,7 +94,7 @@ export class Xterm {
     private zmodemAddon?: ZmodemAddon;
 
     private socket?: WebSocket;
-    private token: string;
+    private token: string | undefined;
     private opened = false;
     private title?: string;
     private titleFixed?: string;
@@ -108,7 +108,7 @@ export class Xterm {
     constructor(
         private options: XtermOptions,
         private sendCb: () => void,
-    ) {}
+    ) { }
 
     dispose() {
         for (const d of this.disposables) {
@@ -180,6 +180,10 @@ export class Xterm {
     @bind
     private initListeners() {
         const { terminal, fitAddon, overlayAddon, register, sendData } = this;
+
+        if (typeof terminal == "undefined") {
+            throw new Error("terminal is undefined");
+        }
         register(
             terminal.onTitleChange((data) => {
                 if (data && data !== "" && !this.titleFixed) {
@@ -206,7 +210,11 @@ export class Xterm {
         );
         register(
             terminal.onSelectionChange(() => {
-                if (this.terminal.getSelection() === "") return;
+                const terminal = this.terminal;
+                if (typeof terminal == "undefined") {
+                    throw new Error("terminal is undefined");
+                }
+                if (terminal.getSelection() === "") return;
                 try {
                     document.execCommand("copy");
                 } catch (e) {
@@ -226,6 +234,9 @@ export class Xterm {
 
         this.written += data.length;
         if (this.written > limit) {
+            if (typeof terminal == "undefined") {
+                throw new Error("terminal is undefined");
+            }
             terminal.write(data, () => {
                 this.pending = Math.max(this.pending - 1, 0);
                 if (this.pending < lowWater) {
@@ -238,6 +249,9 @@ export class Xterm {
                 this.socket?.send(textEncoder.encode(Command.PAUSE));
             }
         } else {
+            if (typeof terminal == "undefined") {
+                throw new Error("terminal is undefined");
+            }
             terminal.write(data);
         }
     }
@@ -291,6 +305,9 @@ export class Xterm {
         console.log("[ttyd] websocket connection opened");
 
         const { textEncoder, terminal, overlayAddon } = this;
+        if (typeof terminal == "undefined") {
+            throw new Error("terminal is undefined");
+        }
         const msg = JSON.stringify({
             AuthToken: this.token,
             columns: terminal.cols,
@@ -327,6 +344,9 @@ export class Xterm {
             refreshToken().then(connect);
         } else {
             const { terminal } = this;
+            if (typeof terminal == "undefined") {
+                throw new Error("terminal is undefined");
+            }
             const keyDispose = terminal.onKey((e) => {
                 const event = e.domEvent;
                 if (event.key === "Enter") {
@@ -350,6 +370,9 @@ export class Xterm {
 
         for (const [k, queryVal] of queryObj) {
             let v = clientOptions[k];
+            if (typeof terminal == "undefined") {
+                throw new Error("terminal is undefined");
+            }
             if (v === undefined) v = terminal.options[k];
             switch (typeof v) {
                 case "boolean":
@@ -419,6 +442,9 @@ export class Xterm {
                 writer: this.writeData,
             });
             this.writeFunc = (data) => this.zmodemAddon?.consume(data);
+            if (typeof terminal == "undefined") {
+                throw new Error("terminal is undefined");
+            }
             terminal.loadAddon(register(this.zmodemAddon));
         }
 
@@ -462,6 +488,9 @@ export class Xterm {
                     break;
                 case "enableSixel":
                     if (value) {
+                        if (typeof terminal == "undefined") {
+                            throw new Error("terminal is undefined");
+                        }
                         terminal.loadAddon(register(new ImageAddon()));
                         console.log("[ttyd] Sixel enabled");
                     }
@@ -485,6 +514,9 @@ export class Xterm {
                         case "11":
                         default:
                             console.log("[ttyd] setting Unicode version: 11");
+                            if (typeof terminal == "undefined") {
+                                throw new Error("terminal is undefined");
+                            }
                             terminal.loadAddon(new Unicode11Addon());
                             terminal.unicode.activeVersion = "11";
                             break;
@@ -494,6 +526,9 @@ export class Xterm {
                     console.log(
                         `[ttyd] option: ${key}=${JSON.stringify(value)}`,
                     );
+                    if (typeof terminal == "undefined") {
+                        throw new Error("terminal is undefined");
+                    }
                     if (terminal.options[key] instanceof Object) {
                         terminal.options[key] = Object.assign(
                             {},
@@ -533,7 +568,9 @@ export class Xterm {
             this.canvasAddon = new CanvasAddon();
             disposeWebglRenderer();
             try {
-                this.terminal.loadAddon(this.canvasAddon);
+                const terminal = this.terminal;
+                if (typeof terminal == "undefined") throw new Error("terminal is undefined");
+                terminal.loadAddon(this.canvasAddon);
                 console.log("[ttyd] canvas renderer loaded");
             } catch (e) {
                 console.log(
@@ -551,6 +588,9 @@ export class Xterm {
                 this.webglAddon.onContextLoss(() => {
                     this.webglAddon?.dispose();
                 });
+                if (typeof terminal == "undefined") {
+                    throw new Error("terminal is undefined");
+                }
                 terminal.loadAddon(this.webglAddon);
                 console.log("[ttyd] WebGL renderer loaded");
             } catch (e) {
