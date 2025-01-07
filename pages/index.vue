@@ -101,8 +101,9 @@ const loginstyle = ref("");
 import Loading from "~/src/loading.vue";
 const value = ref("");
 onMounted(() => {
+    const url = localStorage?.getItem("url");
     const token = localStorage?.getItem("token");
-    if (!token) {
+    if (!token || !url) {
         router.push("/login?redirect=/");
     }
     // 这里可以添加初始化逻辑
