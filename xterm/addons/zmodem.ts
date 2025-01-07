@@ -1,8 +1,8 @@
+import { type IDisposable, type ITerminalAddon, Terminal } from "@xterm/xterm";
 import { bind } from "decko";
 import { saveAs } from "file-saver";
-import { type IDisposable, type ITerminalAddon, Terminal } from "@xterm/xterm";
-import * as Zmodem from "../../zmodem.js/src/zmodem_browser";
 import { TrzszFilter } from "trzsz";
+import * as Zmodem from "../../zmodem.js/src/zmodem_browser";
 
 export interface ZmodeOptions {
     zmodem: boolean;
@@ -112,8 +112,10 @@ export class ZmodemAddon implements ITerminalAddon {
             dragInitTimeout: this.options.trzszDragInitTimeout,
         });
         const element = terminal.element as EventTarget;
-        this.addDisposableListener(element, "dragover", (event) =>
-            event.preventDefault(),
+        this.addDisposableListener(
+            element,
+            "dragover",
+            (event) => event.preventDefault(),
         );
         this.addDisposableListener(element, "drop", (event) => {
             event.preventDefault();
@@ -173,10 +175,11 @@ export class ZmodemAddon implements ITerminalAddon {
         terminal.options.disableStdin = true;
 
         this.denier = () => detection.deny();
-        this.session = detection.confirm();
-        this.session.on("session_end", () => this.reset());
+        const session = detection.confirm();
+        this.session = session;
+        session.on("session_end", () => this.reset());
 
-        if (this.session.type === "send") {
+        if (session.type === "send") {
             this.options.onSend();
         } else {
             receiveFile();
@@ -189,14 +192,22 @@ export class ZmodemAddon implements ITerminalAddon {
         Zmodem.Browser.send_files(session, files, {
             on_progress: (_, offer) => writeProgress(offer),
         })
-            .then(() => session.close())
+            .then(() => {
+                const { session } = this;
+                if (typeof session == "undefined" || !session) {
+                    throw new Error("session is undefined");
+                }
+                return session.close();
+            })
             .catch(() => this.reset());
     }
 
     @bind
     private receiveFile() {
         const { session, writeProgress } = this;
-
+        if (typeof session == "undefined" || !session) {
+            throw new Error("session is undefined");
+        }
         session.on("offer", (offer) => {
             offer.on("input", () => writeProgress(offer));
             offer
@@ -223,10 +234,12 @@ export class ZmodemAddon implements ITerminalAddon {
         const percent = ((100 * offset) / size).toFixed(2);
 
         this.options.writer(
-            `${name} ${percent}% ${bytesHuman(offset, 2)}/${bytesHuman(
-                size,
-                2,
-            )}\r`,
+            `${name} ${percent}% ${bytesHuman(offset, 2)}/${
+                bytesHuman(
+                    size,
+                    2,
+                )
+            }\r`,
         );
     }
 
