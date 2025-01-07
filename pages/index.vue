@@ -106,6 +106,12 @@ onMounted(() => {
             label: localStorage.getItem("url") ?? "",
         },
     ];
+    options.value = [
+        {
+            value: localStorage.getItem("session") ?? "",
+            label: localStorage.getItem("session") ?? "",
+        },
+    ];
     sessionvalue.value = localStorage.getItem("session") ?? "";
     return (urlvalue.value = localStorage.getItem("url") ?? "");
 });
