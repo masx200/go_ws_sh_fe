@@ -1,4 +1,12 @@
 <template>
+    <div
+        class="fullscreen-div"
+        v-show="!error && (loading || !data || data?.length == 0)"
+    >
+        <Loading
+            v-show="!error && (loading || !data || data?.length == 0)"
+        ></Loading>
+    </div>
     <div class="app-container">
         <header
             class="header"
@@ -8,9 +16,7 @@
             <span :style="loginstyle">{{ loginstate }}</span>
             <el-button type="danger" @click="handleLogout">退出</el-button>
         </header>
-        <Loading
-            v-show="!error && (loading || !data || data?.length == 0)"
-        ></Loading>
+
         <main
             class="main-content"
             v-show="error || !(loading || !data || data?.length == 0)"
@@ -175,5 +181,14 @@ const handleLogout = async () => {
     flex: 1;
     padding: 20px;
     background-color: #f0f2f5;
+}
+.fullscreen-div {
+    position: fixed; /* 固定定位，使其不会因为页面滚动而移动 */
+    top: 0;
+    left: 0;
+    width: 100vw; /* 使用视口单位，确保宽度为整个视口的宽度 */
+    height: 100vh; /* 使用视口单位，确保高度为整个视口的高度 */
+    background-color: #f0f0f0; /* 你可以更改背景颜色 */
+    z-index: 1000; /* 确保此 div 在其他内容之上 */
 }
 </style>

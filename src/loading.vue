@@ -46,9 +46,9 @@
 <style lang="css" scoped>
 .loading-panel {
     text-align: center;
-    background: #000;
+    /* background: #000; */
     color: #bdc0c5;
-    background: #ededed;
+    background: #f0f0f0;
     height: 50px;
     line-height: 50px;
     transform: scale(10) translate(0%, 80%);
