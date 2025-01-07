@@ -9,6 +9,10 @@ export default defineNuxtConfig({
                     rel: "stylesheet",
                     href: "https:/unpkg.com/element-plus@2.9.2/dist/index.css",
                 },
+                {
+                    rel: "stylesheet",
+                    href: "https://unpkg.com/@xterm/xterm@5.5.0/css/xterm.css",
+                },
             ],
         },
     },

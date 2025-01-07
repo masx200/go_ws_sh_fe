@@ -3,6 +3,7 @@
     "extends": "./.nuxt/tsconfig.json",
     "compilerOptions": {
         "verbatimModuleSyntax": true,
-        "allowImportingTsExtensions": true
+        "allowImportingTsExtensions": true,
+        "experimentalDecorators": true
     }
 }

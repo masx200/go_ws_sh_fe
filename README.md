@@ -85,3 +85,5 @@ more information.
 ## 鸣谢
 
 https://github.com/tsl0922/ttyd
+
+https://github.com/FGasper/zmodemjs

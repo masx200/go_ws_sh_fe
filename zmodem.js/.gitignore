@@ -1,0 +1,4 @@
+.*.sw?
+/dist
+/documentation
+/node_modules

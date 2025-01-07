@@ -12,13 +12,26 @@
     "dependencies": {
         "@element-plus/icons-vue": "^2.3.1",
         "@element-plus/nuxt": "^1.1.1",
+        "@types/file-saver": "^2.0.7",
+        "@xterm/addon-canvas": "^0.7.0",
+        "@xterm/addon-clipboard": "^0.1.0",
+        "@xterm/addon-fit": "^0.10.0",
+        "@xterm/addon-image": "^0.8.0",
+        "@xterm/addon-unicode11": "^0.8.0",
+        "@xterm/addon-web-links": "^0.11.0",
+        "@xterm/addon-webgl": "^0.18.0",
+        "@xterm/xterm": "^5.5.0",
+        "decko": "^1.2.0",
         "element-plus": "^2.9.2",
+        "file-saver": "^2.0.5",
         "nuxt": "^3.15.1",
+        "trzsz": "^1.1.5",
         "vue": "latest",
         "vue-hooks-plus": "^2.2.1",
         "vue-router": "latest"
     },
     "devDependencies": {
+        "prettier": "^3.4.2",
         "typescript": "5.7.2"
     }
 }
