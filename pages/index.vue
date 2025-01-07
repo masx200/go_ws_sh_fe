@@ -92,7 +92,9 @@ import { cleartoken, logout } from "~/src/logout";
 const router = useRouter();
 async function service(token: string) {
     if (!token) throw new Error("token is null");
-    const newLocal_1 = await list({ token });
+    const url = localStorage.getItem("url");
+    if (!url) throw new Error("url is null");
+    const newLocal_1 = await list({ token }, new URL("/list", url).href);
     if (newLocal_1.username.length) {
         ElMessage.success("登录成功:" + newLocal_1.username);
         loginstate.value = "登录成功:" + newLocal_1.username;
@@ -144,12 +146,17 @@ const handleLogout = async () => {
     const token = localStorage?.getItem("token");
     if (token) {
         try {
-            const newLocal = await logout({
-                token: token,
-            });
+            const url = localStorage.getItem("url");
+            if (!url) throw new Error("url is null");
+            const newLocal = await logout(
+                {
+                    token: token,
+                },
+                new URL("/logout", url).href,
+            );
             console.log(newLocal);
-
             cleartoken(newLocal);
+            localStorage.clear();
             ElMessage.success("退出登录成功");
         } catch (error) {
             console.log(error);

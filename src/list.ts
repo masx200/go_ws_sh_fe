@@ -10,10 +10,10 @@ export interface listResults {
 }
 
 export async function list(
-    credentials: listCredentials,
+    credentials: listCredentials, url = listUrl
 ): Promise<listResults> {
     try {
-        const response = await fetch(listUrl, {
+        const response = await fetch(url, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

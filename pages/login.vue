@@ -14,15 +14,18 @@
                 class="demo-ruleForm"
             >
                 <el-form-item label="账号" prop="username">
-                    <el-input v-model="loginForm.username" autocomplete="off" />
+                    <el-input v-model="loginForm.username" autocomplete="on" />
                 </el-form-item>
                 <el-form-item label="密码" prop="password">
                     <el-input
                         v-model="loginForm.password"
                         type="password"
-                        autocomplete="off"
+                        autocomplete="on"
                         show-password
                     />
+                </el-form-item>
+                <el-form-item label="网址" prop="url">
+                    <el-input v-model="loginForm.url" autocomplete="on" />
                 </el-form-item>
                 <el-form-item class="center-button">
                     <el-button
@@ -47,7 +50,7 @@
 const loading = ref(false);
 import { useRouter } from "vue-router";
 import type { ValidateFieldsError } from "async-validator";
-import type { FormInstance } from "element-plus";
+import type { FormInstance, FormRules } from "element-plus";
 import { reactive, ref } from "vue";
 import { login, savetoken } from "../src/login.ts";
 const loginstate = ref("");
@@ -56,9 +59,29 @@ const loginFormRef = ref<FormInstance | null>(null);
 const loginForm = reactive({
     username: "",
     password: "",
+    url: "",
 });
 const router = useRouter();
-const rules = reactive({
+const rules = reactive<FormRules<typeof loginForm>>({
+    url: [
+        { required: true, message: "请输入网址", trigger: "blur" },
+        {
+            validator: (rule, value, callback) => {
+                try {
+                    const url = new URL(value);
+                    if (url.protocol == "http:" || url.protocol == "https:") {
+                        callback();
+                    } else {
+                        callback(new Error("不是正确的网址"));
+                    }
+                } catch (error) {
+                    callback(new Error("不是正确的网址"));
+                }
+            },
+            message: "不是正确的网址",
+            trigger: "blur",
+        },
+    ],
     username: [
         { required: true, message: "请输入账号", trigger: "blur" },
         { min: 3, max: 20, message: "长度在 3 到 20 个字符", trigger: "blur" },
@@ -83,18 +106,22 @@ const submitForm = (formEl: FormInstance | null) => {
                 //   ElMessage.error(error.message || '登录失败')
                 // })
                 try {
-                    const newLocal = await login({
-                        username: loginForm.username,
-                        password: loginForm.password,
-                    });
+                    const newLocal = await login(
+                        {
+                            username: loginForm.username,
+                            password: loginForm.password,
+                        },
+                        new URL("/login", loginForm.url).href,
+                    );
                     console.log(newLocal);
+                    localStorage.setItem("url", loginForm.url);
                     loginstate.value = "登录成功";
                     loginstyle.value = "color:green";
                     savetoken(newLocal);
                     ElMessage.success("登录成功");
                     router.push(
                         new URL(location.href).searchParams.get("redirect") ??
-                            "/"
+                            "/",
                     );
                 } catch (error) {
                     console.log(error);
@@ -111,7 +138,7 @@ const submitForm = (formEl: FormInstance | null) => {
                 ElMessage.error("表单验证失败");
                 return;
             }
-        }
+        },
     );
 };
 

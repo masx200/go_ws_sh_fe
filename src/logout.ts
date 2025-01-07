@@ -9,10 +9,10 @@ export interface logoutResults {
 }
 
 export async function logout(
-    credentials: logoutCredentials,
+    credentials: logoutCredentials, url = logoutUrl
 ): Promise<logoutResults> {
     try {
-        const response = await fetch(logoutUrl, {
+        const response = await fetch(url, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

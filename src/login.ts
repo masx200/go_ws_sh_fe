@@ -11,10 +11,10 @@ export interface LoginResults {
 }
 
 export async function login(
-    credentials: LoginCredentials,
+    credentials: LoginCredentials, url = loginUrl
 ): Promise<LoginResults> {
     try {
-        const response = await fetch(loginUrl, {
+        const response = await fetch(url, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
