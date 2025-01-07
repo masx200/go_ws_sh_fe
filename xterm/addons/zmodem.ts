@@ -40,9 +40,17 @@ export class ZmodemAddon implements ITerminalAddon {
     consume(data: ArrayBuffer) {
         try {
             if (this.options.trzsz) {
-                this.trzszFilter.processServerOutput(data);
+                const { trzszFilter } = this;
+                if (typeof trzszFilter == "undefined") {
+                    throw new Error("trzszFilter is undefined");
+                }
+                trzszFilter.processServerOutput(data);
             } else {
-                this.sentry.consume(data);
+                const { sentry } = this;
+                if (typeof sentry == "undefined") {
+                    throw new Error("sentry is undefined");
+                }
+                sentry.consume(data);
             }
         } catch (e) {
             console.error("[ttyd] zmodem consume: ", e);
@@ -52,8 +60,7 @@ export class ZmodemAddon implements ITerminalAddon {
 
     @bind
     private reset() {
-        const terminal = this
-            .terminal;
+        const terminal = this.terminal;
         if (typeof terminal == "undefined") {
             throw new Error("terminal is undefined");
         }
@@ -81,8 +88,16 @@ export class ZmodemAddon implements ITerminalAddon {
         }
         this.trzszFilter = new TrzszFilter({
             writeToTerminal: (data) => {
-                if (!this.trzszFilter.isTransferringFiles() && zmodem) {
-                    this.sentry.consume(data);
+                const { trzszFilter } = this;
+                if (typeof trzszFilter == "undefined") {
+                    throw new Error("trzszFilter is undefined");
+                }
+                if (!trzszFilter.isTransferringFiles() && zmodem) {
+                    const { sentry } = this;
+                    if (typeof sentry == "undefined") {
+                        throw new Error("sentry is undefined");
+                    }
+                    sentry.consume(data);
                 } else {
                     writer(
                         typeof data === "string"
@@ -97,14 +112,16 @@ export class ZmodemAddon implements ITerminalAddon {
             dragInitTimeout: this.options.trzszDragInitTimeout,
         });
         const element = terminal.element as EventTarget;
-        this.addDisposableListener(
-            element,
-            "dragover",
-            (event) => event.preventDefault(),
+        this.addDisposableListener(element, "dragover", (event) =>
+            event.preventDefault(),
         );
         this.addDisposableListener(element, "drop", (event) => {
             event.preventDefault();
-            this.trzszFilter
+            const { trzszFilter } = this;
+            if (typeof trzszFilter == "undefined") {
+                throw new Error("trzszFilter is undefined");
+            }
+            trzszFilter
                 .uploadFiles(
                     (event as DragEvent).dataTransfer
                         ?.items as DataTransferItemList,
@@ -113,9 +130,13 @@ export class ZmodemAddon implements ITerminalAddon {
                 .catch((err) => console.log("[ttyd] upload failed: " + err));
         });
         this.disposables.push(
-            terminal.onResize((size) =>
-                this.trzszFilter.setTerminalColumns(size.cols)
-            ),
+            terminal.onResize((size) => {
+                const { trzszFilter } = this;
+                if (typeof trzszFilter == "undefined") {
+                    throw new Error("trzszFilter is undefined");
+                }
+                return trzszFilter.setTerminalColumns(size.cols);
+            }),
         );
     }
 
@@ -202,9 +223,10 @@ export class ZmodemAddon implements ITerminalAddon {
         const percent = ((100 * offset) / size).toFixed(2);
 
         this.options.writer(
-            `${name} ${percent}% ${bytesHuman(offset, 2)}/${
-                bytesHuman(size, 2)
-            }\r`,
+            `${name} ${percent}% ${bytesHuman(offset, 2)}/${bytesHuman(
+                size,
+                2,
+            )}\r`,
         );
     }
 
