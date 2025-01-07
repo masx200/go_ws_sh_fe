@@ -4,7 +4,7 @@ import { bind } from "decko";
 import { type ITerminalAddon, Terminal } from "@xterm/xterm";
 
 export class OverlayAddon implements ITerminalAddon {
-    private terminal: Terminal;
+    private terminal: Terminal | undefined;
     private overlayNode: HTMLElement;
     private overlayTimeout?: number;
 
@@ -34,11 +34,14 @@ position: absolute;
         this.terminal = terminal;
     }
 
-    dispose(): void {}
+    dispose(): void { }
 
     @bind
     showOverlay(msg: string, timeout?: number): void {
         const { terminal, overlayNode } = this;
+        if (typeof terminal == "undefined") {
+            throw new Error("terminal is undefined");
+        }
         if (!terminal.element) return;
 
         overlayNode.style.color = "#101010";

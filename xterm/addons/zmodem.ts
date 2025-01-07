@@ -16,13 +16,13 @@ export interface ZmodeOptions {
 
 export class ZmodemAddon implements ITerminalAddon {
     private disposables: IDisposable[] = [];
-    private terminal: Terminal;
+    private terminal: Terminal | undefined;
     private sentry: Zmodem.Sentry;
     private session: Zmodem.Session;
     private denier: () => void;
     private trzszFilter: TrzszFilter;
 
-    constructor(private options: ZmodeOptions) {}
+    constructor(private options: ZmodeOptions) { }
 
     activate(terminal: Terminal) {
         this.terminal = terminal;
@@ -52,8 +52,13 @@ export class ZmodemAddon implements ITerminalAddon {
 
     @bind
     private reset() {
-        this.terminal.options.disableStdin = false;
-        this.terminal.focus();
+        const terminal = this.
+            terminal
+        if (typeof terminal == "undefined") {
+            throw new Error("terminal is undefined");
+        }
+        terminal.options.disableStdin = false;
+        terminal.focus();
     }
 
     private addDisposableListener(
@@ -71,6 +76,9 @@ export class ZmodemAddon implements ITerminalAddon {
     private trzszInit() {
         const { terminal } = this;
         const { sender, writer, zmodem } = this.options;
+        if (typeof terminal == "undefined") {
+            throw new Error("terminal is undefined");
+        }
         this.trzszFilter = new TrzszFilter({
             writeToTerminal: (data) => {
                 if (!this.trzszFilter.isTransferringFiles() && zmodem) {
@@ -122,6 +130,9 @@ export class ZmodemAddon implements ITerminalAddon {
             on_retract: () => reset(),
             on_detect: (detection) => zmodemDetect(detection),
         });
+        if (typeof terminal == "undefined") {
+            throw new Error("terminal is undefined");
+        }
         this.disposables.push(
             terminal.onKey((e) => {
                 const event = e.domEvent;
@@ -135,6 +146,9 @@ export class ZmodemAddon implements ITerminalAddon {
     @bind
     private zmodemDetect(detection: Zmodem.Detection): void {
         const { terminal, receiveFile } = this;
+        if (typeof terminal == "undefined") {
+            throw new Error("terminal is undefined");
+        }
         terminal.options.disableStdin = true;
 
         this.denier = () => detection.deny();
@@ -188,8 +202,7 @@ export class ZmodemAddon implements ITerminalAddon {
         const percent = ((100 * offset) / size).toFixed(2);
 
         this.options.writer(
-            `${name} ${percent}% ${bytesHuman(offset, 2)}/${
-                bytesHuman(size, 2)
+            `${name} ${percent}% ${bytesHuman(offset, 2)}/${bytesHuman(size, 2)
             }\r`,
         );
     }
