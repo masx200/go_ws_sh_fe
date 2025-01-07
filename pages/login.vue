@@ -87,7 +87,10 @@ const submitForm = (formEl: FormInstance | null) => {
                     loginstyle.value = "color:green";
                     savetoken(newLocal);
                     ElMessage.success("登录成功");
-                    router.push("/");
+                    router.push(
+                        new URL(location.href).searchParams.get("redirect") ??
+                            "/"
+                    );
                 } catch (error) {
                     console.log(error);
                     loginstyle.value = "color:red";

@@ -72,7 +72,7 @@ const value = ref("");
 onMounted(() => {
     const token = localStorage?.getItem("token");
     if (!token) {
-        router.push("/login");
+        router.push("/login?redirect=/");
     }
     // 这里可以添加初始化逻辑
 });
@@ -130,7 +130,7 @@ if (data.value) {
 const handleLogin = () => {
     // 这里可以添加登录逻辑
     //ElMessage.success("登录页面");
-    router.push("/login");
+    router.push("/login?redirect=/");
 };
 
 const handleLogout = async () => {
