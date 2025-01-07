@@ -17,5 +17,8 @@
         "vue": "latest",
         "vue-hooks-plus": "^2.2.1",
         "vue-router": "latest"
+    },
+    "devDependencies": {
+        "typescript": "5.7.2"
     }
 }

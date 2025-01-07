@@ -1,8 +1,10 @@
+import { defineNuxtConfig } from "nuxt/config";
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
     app: {
         head: {
             link: [
+                { rel: "icon", href: "/favicon.ico" },
                 {
                     rel: "stylesheet",
                     href: "https:/unpkg.com/element-plus@2.9.2/dist/index.css",
