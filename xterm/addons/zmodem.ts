@@ -1,7 +1,7 @@
 import { bind } from "decko";
 import { saveAs } from "file-saver";
 import { type IDisposable, type ITerminalAddon, Terminal } from "@xterm/xterm";
-import * as Zmodem from "../../zmodem.js/src/zmodem_browser.js";
+import * as Zmodem from "../../zmodem.js/src/zmodem_browser";
 import { TrzszFilter } from "trzsz";
 
 export interface ZmodeOptions {
@@ -17,10 +17,10 @@ export interface ZmodeOptions {
 export class ZmodemAddon implements ITerminalAddon {
     private disposables: IDisposable[] = [];
     private terminal: Terminal | undefined;
-    private sentry: Zmodem.Sentry;
-    private session: Zmodem.Session;
-    private denier: () => void;
-    private trzszFilter: TrzszFilter;
+    private sentry: Zmodem.Sentry | undefined;
+    private session: Zmodem.Session | undefined | null;
+    private denier: (() => void) | undefined;
+    private trzszFilter: TrzszFilter | undefined;
 
     constructor(private options: ZmodeOptions) { }
 

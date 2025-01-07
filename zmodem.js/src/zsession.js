@@ -23,7 +23,7 @@ Object.assign(
 );
 
 const //pertinent to this module
-KEEPALIVE_INTERVAL = 5000,
+    KEEPALIVE_INTERVAL = 5000,
     //We ourselves don’t need ESCCTL, so we don’t send it;
     //however, we always expect to receive it in ZRINIT.
     //See _ensure_receiver_escapes_ctrl_chars() for more details.
@@ -444,7 +444,7 @@ Zmodem.Session = class ZmodemSession extends _Eventer {
         this._Happen("receive", hdr_or_pkt);
     }
 
-    _before_consume() {}
+    _before_consume() { }
 };
 
 function _trim_OO(array) {
@@ -555,11 +555,11 @@ Zmodem.Session.Receive = class ZmodemReceiveSession extends Zmodem.Session {
             // if (Zmodem.ZMLIB.find_subarray(this._input_buffer, OVER_AND_OUT) === 0) {
             if (
                 Zmodem.ZMLIB.find_subarray(this._input_buffer, OVER_AND_OUT) !==
-                    0
+                0
             ) {
                 console.warn(
                     "PROTOCOL: Only thing after ZFIN should be “OO” (79,79), not: " +
-                        this._input_buffer.join(),
+                    this._input_buffer.join(),
                 );
             }
 
@@ -1703,3 +1703,4 @@ Object.assign(
         type: "send",
     },
 );
+Zmodem.Offer = Offer
