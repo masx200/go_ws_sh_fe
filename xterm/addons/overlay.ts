@@ -34,7 +34,7 @@ position: absolute;
         this.terminal = terminal;
     }
 
-    dispose(): void { }
+    dispose(): void {}
 
     @bind
     showOverlay(msg: string, timeout?: number): void {

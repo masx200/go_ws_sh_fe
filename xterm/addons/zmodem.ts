@@ -22,7 +22,7 @@ export class ZmodemAddon implements ITerminalAddon {
     private denier: (() => void) | undefined;
     private trzszFilter: TrzszFilter | undefined;
 
-    constructor(private options: ZmodeOptions) { }
+    constructor(private options: ZmodeOptions) {}
 
     activate(terminal: Terminal) {
         this.terminal = terminal;
@@ -52,8 +52,8 @@ export class ZmodemAddon implements ITerminalAddon {
 
     @bind
     private reset() {
-        const terminal = this.
-            terminal
+        const terminal = this
+            .terminal;
         if (typeof terminal == "undefined") {
             throw new Error("terminal is undefined");
         }
@@ -202,7 +202,8 @@ export class ZmodemAddon implements ITerminalAddon {
         const percent = ((100 * offset) / size).toFixed(2);
 
         this.options.writer(
-            `${name} ${percent}% ${bytesHuman(offset, 2)}/${bytesHuman(size, 2)
+            `${name} ${percent}% ${bytesHuman(offset, 2)}/${
+                bytesHuman(size, 2)
             }\r`,
         );
     }

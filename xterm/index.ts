@@ -108,7 +108,7 @@ export class Xterm {
     constructor(
         private options: XtermOptions,
         private sendCb: () => void,
-    ) { }
+    ) {}
 
     dispose() {
         for (const d of this.disposables) {
@@ -569,7 +569,9 @@ export class Xterm {
             disposeWebglRenderer();
             try {
                 const terminal = this.terminal;
-                if (typeof terminal == "undefined") throw new Error("terminal is undefined");
+                if (typeof terminal == "undefined") {
+                    throw new Error("terminal is undefined");
+                }
                 terminal.loadAddon(this.canvasAddon);
                 console.log("[ttyd] canvas renderer loaded");
             } catch (e) {

@@ -387,4 +387,4 @@ Zmodem.Sentry = class ZmodemSentry {
         return null;
     }
 };
-Zmodem.Detection = Detection
+Zmodem.Detection = Detection;
