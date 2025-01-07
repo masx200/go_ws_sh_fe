@@ -25,7 +25,10 @@
                     />
                 </el-form-item>
                 <el-form-item class="center-button">
-                    <el-button type="primary" @click="submitForm(loginFormRef)"
+                    <el-button
+                        :loading="loading"
+                        type="primary"
+                        @click="submitForm(loginFormRef)"
                         >登录</el-button
                     >
                     <el-button @click="resetForm(loginFormRef)">重置</el-button>
@@ -41,6 +44,7 @@
 </template>
 
 <script setup lang="ts">
+const loading = ref(false);
 import { useRouter } from "vue-router";
 import type { ValidateFieldsError } from "async-validator";
 import type { FormInstance } from "element-plus";
@@ -70,6 +74,7 @@ const submitForm = (formEl: FormInstance | null) => {
         async (isValid: boolean, invalidFields?: ValidateFieldsError) => {
             if (isValid) {
                 console.log("submit!");
+                loading.value = true;
                 // Here you would typically make an API call to log the user in.
                 // For example:
                 // loginApi(loginForm).then(response => {
@@ -96,6 +101,8 @@ const submitForm = (formEl: FormInstance | null) => {
                     loginstyle.value = "color:red";
                     loginstate.value = "登录失败:" + String(error);
                     ElMessage.error("登录失败:" + String(error));
+                } finally {
+                    loading.value = false;
                 }
             } else {
                 console.log("error submit!");
