@@ -29,12 +29,15 @@
                 </el-form-item>
                 <el-form-item class="center-button">
                     <el-button
+                        size="large"
                         :loading="loading"
                         type="primary"
                         @click="submitForm(loginFormRef)"
                         >登录</el-button
                     >
-                    <el-button @click="resetForm(loginFormRef)">重置</el-button>
+                    <el-button size="large" @click="resetForm(loginFormRef)"
+                        >重置</el-button
+                    >
                 </el-form-item>
             </el-form>
             <template #footer>
