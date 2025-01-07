@@ -65,7 +65,7 @@
                         <el-select
                             v-loading="loading"
                             :loading="loading"
-                            v-model="value"
+                            v-model="sessionvalue"
                             placeholder="Select"
                             size="large"
                             style="width: 800px"
@@ -91,15 +91,16 @@
 <script setup lang="ts">
 const urlvalue = ref("");
 onMounted(() => {
+    sessionvalue.value = localStorage.getItem("session") ?? "";
     return (urlvalue.value = localStorage.getItem("url") ?? "");
 });
 async function handleconnect() {
-    router.push("/shell/" + value.value);
+    router.push("/shell/" + sessionvalue.value);
 }
 const loginstate = ref("");
 const loginstyle = ref("");
 import Loading from "~/src/loading.vue";
-const value = ref("");
+const sessionvalue = ref("");
 onMounted(() => {
     const url = localStorage?.getItem("url");
     const token = localStorage?.getItem("token");
@@ -158,8 +159,10 @@ watch(data, (data) => {
                 label: item,
             };
         });
-
-        value.value = data[0];
+        if (data.length) {
+            sessionvalue.value = data[0];
+            localStorage.setItem("session", data[0]);
+        }
     }
 });
 if (data.value) {
