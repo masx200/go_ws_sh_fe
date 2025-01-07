@@ -22,7 +22,7 @@ export class ZmodemAddon implements ITerminalAddon {
     private denier: (() => void) | undefined;
     private trzszFilter: TrzszFilter | undefined;
 
-    constructor(private options: ZmodeOptions) {}
+    constructor(private options: ZmodeOptions) { }
 
     activate(terminal: Terminal) {
         this.terminal = terminal;
@@ -97,6 +97,7 @@ export class ZmodemAddon implements ITerminalAddon {
                     if (typeof sentry == "undefined") {
                         throw new Error("sentry is undefined");
                     }
+                    //@ts-ignore
                     sentry.consume(data);
                 } else {
                     writer(
@@ -148,9 +149,12 @@ export class ZmodemAddon implements ITerminalAddon {
         const { terminal, reset, zmodemDetect } = this;
         this.session = null;
         this.sentry = new Zmodem.Sentry({
+            //@ts-ignore
             to_terminal: (octets) => writer(new Uint8Array(octets)),
+            //@ts-ignore
             sender: (octets) => sender(new Uint8Array(octets)),
             on_retract: () => reset(),
+            //@ts-ignore
             on_detect: (detection) => zmodemDetect(detection),
         });
         if (typeof terminal == "undefined") {
@@ -190,6 +194,7 @@ export class ZmodemAddon implements ITerminalAddon {
     public sendFile(files: FileList) {
         const { session, writeProgress } = this;
         Zmodem.Browser.send_files(session, files, {
+            //@ts-ignore
             on_progress: (_, offer) => writeProgress(offer),
         })
             .then(() => {
@@ -208,10 +213,12 @@ export class ZmodemAddon implements ITerminalAddon {
         if (typeof session == "undefined" || !session) {
             throw new Error("session is undefined");
         }
+        //@ts-ignore
         session.on("offer", (offer) => {
             offer.on("input", () => writeProgress(offer));
             offer
                 .accept()
+                //@ts-ignore
                 .then((payloads) => {
                     const blob = new Blob(payloads, {
                         type: "application/octet-stream",
@@ -231,14 +238,14 @@ export class ZmodemAddon implements ITerminalAddon {
         const name = file.name;
         const size = file.size;
         const offset = offer.get_offset();
+        //@ts-ignore
         const percent = ((100 * offset) / size).toFixed(2);
 
         this.options.writer(
-            `${name} ${percent}% ${bytesHuman(offset, 2)}/${
-                bytesHuman(
-                    size,
-                    2,
-                )
+            `${name} ${percent}% ${bytesHuman(offset, 2)}/${bytesHuman(
+                size,
+                2,
+            )
             }\r`,
         );
     }
