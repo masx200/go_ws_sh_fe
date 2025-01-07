@@ -81,3 +81,7 @@ bun run preview
 Check out the
 [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for
 more information.
+
+## 鸣谢
+
+https://github.com/tsl0922/ttyd
