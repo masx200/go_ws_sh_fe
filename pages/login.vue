@@ -115,10 +115,10 @@ const submitForm = (formEl: FormInstance | null) => {
                     );
                     console.log(newLocal);
                     localStorage.setItem("url", loginForm.url);
-                    loginstate.value = "登录成功";
+                    loginstate.value = "登录成功:" + loginForm.username;
                     loginstyle.value = "color:green";
                     savetoken(newLocal);
-                    ElMessage.success("登录成功");
+                    ElMessage.success("登录成功:" + loginForm.username);
                     router.push(
                         new URL(location.href).searchParams.get("redirect") ??
                             "/",

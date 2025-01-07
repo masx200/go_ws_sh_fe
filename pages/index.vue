@@ -40,25 +40,46 @@
                         justify-content: center;
                         align-items: center;
                         flex-wrap: wrap;
+                        flex-direction: column;
                     "
                 >
-                    <el-select
-                        v-loading="loading"
-                        :loading="loading"
-                        v-model="value"
-                        placeholder="Select"
-                        size="large"
-                        style="width: 500px"
-                    >
-                        <el-option
-                            v-for="item in options"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value"
-                        />
-                    </el-select>
+                    <el-row align="middle" justify="center">
+                        <span>网址</span>
+                        <div
+                            style="margin-left: 10px; margin-right: 10px"
+                        ></div>
+                        <el-input
+                            :readonly="true"
+                            :value="urlvalue"
+                            style="width: 800px"
+                            size="large"
+                        ></el-input>
+                    </el-row>
+
+                    <hr />
+                    <el-row align="middle" justify="center">
+                        <span>会话</span>
+                        <div
+                            style="margin-left: 10px; margin-right: 10px"
+                        ></div>
+                        <el-select
+                            v-loading="loading"
+                            :loading="loading"
+                            v-model="value"
+                            placeholder="Select"
+                            size="large"
+                            style="width: 800px"
+                        >
+                            <el-option
+                                v-for="item in options"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                            /> </el-select
+                    ></el-row>
                 </div>
                 <hr />
+
                 <el-button size="large" type="default" @click="handleconnect"
                     >连接</el-button
                 >
@@ -68,6 +89,10 @@
 </template>
 
 <script setup lang="ts">
+const urlvalue = ref("");
+onMounted(() => {
+    return (urlvalue.value = localStorage.getItem("url") ?? "");
+});
 async function handleconnect() {
     router.push("/shell/" + value.value);
 }
@@ -162,9 +187,12 @@ const handleLogout = async () => {
             console.log(error);
 
             ElMessage.error("退出登录失败:" + String(error));
+        } finally {
+            router.push("/login?redirect=/");
         }
     } else {
         ElMessage.error("退出登录失败:未登录");
+        router.push("/login?redirect=/");
     }
 };
 </script>
