@@ -87,7 +87,7 @@ const options: Ref<{ value: string; label: string }[]> = ref<
 >([]);
 import { gettoken, list } from "../src/list.ts";
 import { ElButton, ElMessage } from "element-plus";
-import { useRequest } from "vue-hooks-plus";
+import { useRequest } from "vue-hooks-plus/es/useRequest/useRequest.js";
 import { cleartoken, logout } from "~/src/logout";
 const router = useRouter();
 async function service(token: string) {
