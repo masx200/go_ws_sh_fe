@@ -48,12 +48,21 @@
                         <div
                             style="margin-left: 10px; margin-right: 10px"
                         ></div>
-                        <el-input
-                            :readonly="true"
-                            :value="urlvalue"
-                            style="width: 800px"
+                        <el-select
+                            v-loading="loading"
+                            :loading="loading"
+                            v-model="urlvalue"
+                            placeholder="Select"
                             size="large"
-                        ></el-input>
+                            style="width: 800px"
+                        >
+                            <el-option
+                                v-for="item in urloptions"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                            />
+                        </el-select>
                     </el-row>
 
                     <hr />
@@ -91,6 +100,12 @@
 <script setup lang="ts">
 const urlvalue = ref("");
 onMounted(() => {
+    urloptions.value = [
+        {
+            value: localStorage.getItem("url") ?? "",
+            label: localStorage.getItem("url") ?? "",
+        },
+    ];
     sessionvalue.value = localStorage.getItem("session") ?? "";
     return (urlvalue.value = localStorage.getItem("url") ?? "");
 });
@@ -99,7 +114,11 @@ async function handleconnect() {
 }
 const loginstate = ref("");
 const loginstyle = ref("");
+import { ElButton, ElMessage } from "element-plus";
+import { useRequest } from "vue-hooks-plus/es/useRequest/useRequest";
 import Loading from "~/src/loading.vue";
+import { cleartoken, logout } from "~/src/logout";
+import { gettoken, list } from "../src/list.ts";
 const sessionvalue = ref("");
 onMounted(() => {
     const url = localStorage?.getItem("url");
@@ -112,10 +131,9 @@ onMounted(() => {
 const options: Ref<{ value: string; label: string }[]> = ref<
     { value: string; label: string }[]
 >([]);
-import { gettoken, list } from "../src/list.ts";
-import { ElButton, ElMessage } from "element-plus";
-import { useRequest } from "vue-hooks-plus/es/useRequest/useRequest.js";
-import { cleartoken, logout } from "~/src/logout";
+const urloptions: Ref<{ value: string; label: string }[]> = ref<
+    { value: string; label: string }[]
+>([]);
 const router = useRouter();
 async function service(token: string) {
     if (!token) throw new Error("token is null");

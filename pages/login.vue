@@ -51,10 +51,10 @@
 
 <script setup lang="ts">
 const loading = ref(false);
-import { useRouter } from "vue-router";
 import type { ValidateFieldsError } from "async-validator";
 import type { FormInstance, FormRules } from "element-plus";
 import { reactive, ref } from "vue";
+import { useRouter } from "vue-router";
 import { login, savetoken } from "../src/login.ts";
 const loginstate = ref("");
 const loginstyle = ref("");
