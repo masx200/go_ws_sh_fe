@@ -49,11 +49,12 @@ export class ShellWebSocketAdaptor extends WebSocket {
     }
 
     parseMessage(event: MessageEvent): TextMessage | BinaryMessage {
+        console.log(event)
         const msgcodec = createcodec();
         const data = event.data;
         if (typeof data === "string") throw new Error("invalid message type");
-        if (data instanceof Uint8Array) {
-            const wsmsgins = wsmsg.decode(decompressData(data));
+        if (data instanceof Uint8Array || data instanceof ArrayBuffer) {
+            const wsmsgins = wsmsg.decode(decompressData(new Uint8Array(data)));
             if (wsmsgins.type === WebSocketMessage.BinaryMessage) {
                 //@ts-ignore
                 const bm = msgcodec.fromBuffer(Buffer.from(wsmsgins.data));
@@ -63,13 +64,14 @@ export class ShellWebSocketAdaptor extends WebSocket {
                 const array = JSON.parse(
                     new TextDecoder().decode(wsmsgins.data),
                 );
+                console.log(array)
                 if (!Array.isArray(array)) {
                     throw new Error("invalid message array");
                 }
                 if (array.length !== 2) {
                     throw new Error("invalid message length");
                 }
-                if (array.every((data) => typeof data === "string")) {
+                if (!array.every((data) => typeof data === "string")) {
                     throw new Error("invalid message type");
                 }
                 return new TextMessage(...(array as [string, string]));
