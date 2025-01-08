@@ -7,6 +7,7 @@
         :termoptions="termOptions"
         :flowcontrol="flowControl"
         :wsprotocol="wsprotocol"
+        :reconnect="reconnect"
     />
 </template>
 
@@ -77,6 +78,10 @@ const flowControl = {
 
 export default defineComponent({
     props: {
+        reconnect: {
+            type: Boolean,
+            default: false,
+        },
         wsprotocol: {
             type: String,
             required: true,

@@ -23,7 +23,7 @@ import {
     type PropType,
 } from "vue";
 import {
-    Xterm,
+    type Xterm,
     type ClientOptions,
     type FlowControl,
     type XtermOptions,
@@ -99,6 +99,10 @@ export default defineComponent({
             type: Boolean,
             default: false,
         },
+        reconnect: {
+            type: Boolean,
+            default: false,
+        },
         unicodeVersion: {
             type: String,
             default: "11",
@@ -160,7 +164,8 @@ export default defineComponent({
         };
 
         onMounted(async () => {
-            xterm = new Xterm(
+            const x = await import("../xterm/index.ts");
+            xterm = new x.Xterm(
                 {
                     ...props,
                     wsUrl: props["wsurl"],
@@ -169,6 +174,7 @@ export default defineComponent({
                         props.flowcontrol,
                     clientOptions: props.clientoptions,
                     wsprotocol: props.wsprotocol,
+                    reconnect: props.reconnect,
                 },
                 showModal,
             );

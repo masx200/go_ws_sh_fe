@@ -2,7 +2,7 @@ import { type IDisposable, type ITerminalAddon, Terminal } from "@xterm/xterm";
 
 import { saveAs } from "file-saver";
 import { TrzszFilter } from "trzsz";
-import * as Zmodem from "../../zmodem.js/src/zmodem_browser";
+import * as Zmodem from "@masx200/zmodem.js/src/zmodem_browser";
 
 export interface ZmodeOptions {
     zmodem: boolean;
@@ -29,7 +29,7 @@ export class ZmodemAddon implements ITerminalAddon {
         terminal.options.disableStdin = false;
         terminal.focus();
     };
-    constructor(public options: ZmodeOptions) {}
+    constructor(public options: ZmodeOptions) { }
 
     activate(terminal: Terminal) {
         this.terminal = terminal;
@@ -233,11 +233,10 @@ export class ZmodemAddon implements ITerminalAddon {
         const percent = ((100 * offset) / size).toFixed(2);
 
         this.options.writer(
-            `${name} ${percent}% ${bytesHuman(offset, 2)}/${
-                bytesHuman(
-                    size,
-                    2,
-                )
+            `${name} ${percent}% ${bytesHuman(offset, 2)}/${bytesHuman(
+                size,
+                2,
+            )
             }\r`,
         );
     };

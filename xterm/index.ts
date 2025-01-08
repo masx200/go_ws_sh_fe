@@ -56,6 +56,7 @@ export interface FlowControl {
 }
 
 export interface XtermOptions {
+    reconnect: boolean;
     wsprotocol: string;
     wsUrl: string;
     // tokenUrl: string;
@@ -108,7 +109,11 @@ export class Xterm {
     constructor(
         public options: XtermOptions,
         public sendCb: () => void,
-    ) {}
+    ) {
+
+        this.reconnect = options.reconnect;
+        this.doReconnect = this.reconnect;
+    }
 
     dispose() {
         for (const d of this.disposables) {

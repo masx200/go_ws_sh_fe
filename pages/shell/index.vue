@@ -3,9 +3,11 @@
         v-if="appopts.wsprotocol.length && appopts.wsurl.length"
         :wsprotocol="appopts.wsprotocol"
         v-bind:ws-url="appopts.wsurl"
+        :reconnect="reconnect"
     ></App>
 </template>
 <script setup lang="ts">
+const reconnect = false;
 import App from "~/src/App.vue";
 const router = useRouter();
 const appopts = reactive({
