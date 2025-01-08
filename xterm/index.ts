@@ -303,7 +303,7 @@ export class Xterm {
         if (typeof terminal == "undefined") {
             throw new Error("terminal is undefined");
         }
-        ws.sendResize(terminal.cols, terminal.rows);
+
     };
 
     onSocketOpen = () => {
@@ -313,13 +313,17 @@ export class Xterm {
         if (typeof terminal == "undefined") {
             throw new Error("terminal is undefined");
         }
-        const msg = JSON.stringify({
-            AuthToken: this.token,
-            columns: terminal.cols,
-            rows: terminal.rows,
-        });
-        this.socket?.send(textEncoder.encode(msg));
-
+        // const msg = JSON.stringify({
+        //     AuthToken: this.token,
+        //     columns: terminal.cols,
+        //     rows: terminal.rows,
+        // });
+        // this.socket?.send(textEncoder.encode(msg));
+        const ws = this.socket
+        if (typeof ws == "undefined") {
+            throw new Error("ws is undefined");
+        }
+        ws.sendResize(terminal.cols, terminal.rows);
         if (this.opened) {
             terminal.reset();
             terminal.options.disableStdin = false;
