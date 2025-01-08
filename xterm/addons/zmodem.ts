@@ -29,7 +29,7 @@ export class ZmodemAddon implements ITerminalAddon {
         terminal.options.disableStdin = false;
         terminal.focus();
     };
-    constructor(public options: ZmodeOptions) { }
+    constructor(public options: ZmodeOptions) {}
 
     activate(terminal: Terminal) {
         this.terminal = terminal;
@@ -109,10 +109,8 @@ export class ZmodemAddon implements ITerminalAddon {
             dragInitTimeout: this.options.trzszDragInitTimeout,
         });
         const element = terminal.element as EventTarget;
-        this.addDisposableListener(
-            element,
-            "dragover",
-            (event) => event.preventDefault(),
+        this.addDisposableListener(element, "dragover", (event) =>
+            event.preventDefault(),
         );
         this.addDisposableListener(element, "drop", (event) => {
             event.preventDefault();
@@ -236,8 +234,7 @@ export class ZmodemAddon implements ITerminalAddon {
             `${name} ${percent}% ${bytesHuman(offset, 2)}/${bytesHuman(
                 size,
                 2,
-            )
-            }\r`,
+            )}\r`,
         );
     };
 

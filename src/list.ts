@@ -27,7 +27,7 @@ export async function list(
         }
 
         // 如果需要处理响应数据，可以在这里进行
-        const data = await response.json() as listResults;
+        const data = (await response.json()) as listResults;
         console.log("list successful:", data);
         return data;
     } catch (error) {

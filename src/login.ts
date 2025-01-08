@@ -28,7 +28,7 @@ export async function login(
         }
 
         // 如果需要处理响应数据，可以在这里进行
-        const data = await response.json() as LoginResults;
+        const data = (await response.json()) as LoginResults;
         console.log("Login successful:", data);
         return data;
     } catch (error) {

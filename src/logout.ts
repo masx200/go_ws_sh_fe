@@ -26,7 +26,7 @@ export async function logout(
         }
 
         // 如果需要处理响应数据，可以在这里进行
-        const data = await response.json() as logoutResults;
+        const data = (await response.json()) as logoutResults;
         console.log("logout successful:", data);
         return data;
     } catch (error) {

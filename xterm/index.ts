@@ -111,7 +111,6 @@ export class Xterm {
         public options: XtermOptions,
         public sendCb: () => void,
     ) {
-
         this.reconnect = options.reconnect;
         this.doReconnect = this.reconnect;
     }
@@ -195,7 +194,7 @@ export class Xterm {
         register(terminal.onData((data) => sendData(data)));
         register(
             terminal.onBinary((data) =>
-                sendData(Uint8Array.from(data, (v) => v.charCodeAt(0)))
+                sendData(Uint8Array.from(data, (v) => v.charCodeAt(0))),
             ),
         );
         register(
@@ -631,4 +630,3 @@ export class Xterm {
         }
     };
 }
-
