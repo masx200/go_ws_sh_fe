@@ -87,3 +87,11 @@ more information.
 https://github.com/tsl0922/ttyd
 
 https://github.com/FGasper/zmodemjs
+
+
+## 构建protobuf文件
+
+```shell
+ protoc --plugin=node_modules/ts-proto/node_modules/.bin/protoc-gen-ts_proto.CMD --ts_proto_out=./src/ wsmsg.proto
+
+```
