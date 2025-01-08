@@ -1,9 +1,10 @@
 import { wsmsg } from "~/src/wsmsg";
 import { compressData } from "./compressData";
+import { toUint8Array } from "./toUint8Array";
 export class ShellWebSocketAdaptor extends WebSocket {
-    override send(
+    override async send(
         data: string | ArrayBufferLike | Blob | ArrayBufferView,
-    ): void {
+    ): Promise<void> {
         if (typeof data === "string") {
             const wsmsgins = {
                 type: WebSocketMessage.TextMessage,
@@ -17,7 +18,7 @@ export class ShellWebSocketAdaptor extends WebSocket {
             };
             super.send(compressData(wsmsg.encode(wsmsgins).finish()));
         } else {
-            throw new Error("Unsupported data type");
+            return this.send(await toUint8Array(data));
         }
     }
     sendResize(cols: number, rows: number) {
