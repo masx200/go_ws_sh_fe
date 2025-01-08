@@ -1,13 +1,8 @@
 <template>
     <div :id="id" ref="container">
-        <Modal v-if="modal" @close="hideModal">
+        <Modal :show="modal">
             <label class="file-label">
-                <input
-                    @change="sendFile"
-                    class="file-input"
-                    type="file"
-                    multiple
-                />
+                <input @change="sendFile" class="file-input" type="file" multiple />
                 <span class="file-cta">Choose files…</span>
             </label>
         </Modal>
@@ -15,10 +10,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, onUnmounted, ref } from "vue";
-import { Xterm, type XtermOptions } from "../xterm/index";
+import {
+    defineComponent,
+    onMounted,
+    onUnmounted,
+    ref,
+    type PropType
+} from "vue";
+import { Xterm, type ClientOptions, type FlowControl, type XtermOptions } from "../xterm/index";
 
 import Modal from "./modal.vue";
+import type { ITerminalOptions } from "@xterm/xterm";
 
 interface Props extends XtermOptions {
     id: string;
@@ -30,6 +32,25 @@ export default defineComponent({
         Modal,
     },
     props: {
+        termoptions: {
+            type: Object as PropType<ITerminalOptions>,
+            required: true,
+        }, flowcontrol: {
+            type: Object as PropType<FlowControl>,
+            required: true,
+        },
+        // tokenurl: {
+        //     type: String,
+        //     required: true,
+        // },
+        wsurl: {
+            type: String,
+            required: true,
+        },
+        clientoptions: {
+            type: Object as PropType<ClientOptions>,
+            required: true,
+        },
         id: {
             type: String,
             required: true,
@@ -107,7 +128,7 @@ export default defineComponent({
     setup(props) {
         const container = ref(null);
         const modal = ref(false);
-        let xterm;
+        let xterm: Xterm;
 
         const showModal = () => {
             modal.value = true;
@@ -116,7 +137,7 @@ export default defineComponent({
         const hideModal = () => {
             modal.value = false;
         };
-
+        //@ts-ignore
         const sendFile = (event) => {
             hideModal();
             const files = event.target.files;
@@ -124,8 +145,8 @@ export default defineComponent({
         };
 
         onMounted(async () => {
-            xterm = new Xterm(props, showModal);
-            await xterm.refreshToken();
+            xterm = new Xterm({ ...props, wsUrl: props["wsurl"], termOptions: props.termoptions, /* tokenUrl: props.tokenurl, */ flowControl: props.flowcontrol, clientOptions: props.clientoptions }, showModal);
+            // await xterm.refreshToken();
             xterm.open(container.value);
             xterm.connect();
         });

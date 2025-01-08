@@ -58,7 +58,7 @@ export interface FlowControl {
 
 export interface XtermOptions {
     wsUrl: string;
-    tokenUrl: string;
+    // tokenUrl: string;
     flowControl: FlowControl;
     clientOptions: ClientOptions;
     termOptions: ITerminalOptions;
@@ -108,7 +108,7 @@ export class Xterm {
     constructor(
         private options: XtermOptions,
         private sendCb: () => void,
-    ) {}
+    ) { }
 
     dispose() {
         for (const d of this.disposables) {
@@ -128,18 +128,18 @@ export class Xterm {
         this.zmodemAddon?.sendFile(files);
     }
 
-    @bind
-    public async refreshToken() {
-        try {
-            const resp = await fetch(this.options.tokenUrl);
-            if (resp.ok) {
-                const json = await resp.json();
-                this.token = json.token;
-            }
-        } catch (e) {
-            console.error(`[ttyd] fetch ${this.options.tokenUrl}: `, e);
-        }
-    }
+    // @bind
+    // public async refreshToken() {
+    //     try {
+    //         const resp = await fetch(this.options.tokenUrl);
+    //         if (resp.ok) {
+    //             const json = await resp.json();
+    //             this.token = json.token;
+    //         }
+    //     } catch (e) {
+    //         console.error(`[ttyd] fetch ${this.options.tokenUrl}: `, e);
+    //     }
+    // }
 
     @bind
     private onWindowUnload(event: BeforeUnloadEvent) {
@@ -334,14 +334,15 @@ export class Xterm {
             `[ttyd] websocket connection closed with code: ${event.code}`,
         );
 
-        const { refreshToken, connect, doReconnect, overlayAddon } = this;
+        const {/*  refreshToken, */ connect, doReconnect, overlayAddon } = this;
         overlayAddon.showOverlay("Connection Closed");
         this.dispose();
 
         // 1000: CLOSE_NORMAL
         if (event.code !== 1000 && doReconnect) {
             overlayAddon.showOverlay("Reconnecting...");
-            refreshToken().then(connect);
+            // refreshToken().then(connect);
+            connect();
         } else {
             const { terminal } = this;
             if (typeof terminal == "undefined") {
@@ -352,53 +353,54 @@ export class Xterm {
                 if (event.key === "Enter") {
                     keyDispose.dispose();
                     overlayAddon.showOverlay("Reconnecting...");
-                    refreshToken().then(connect);
+                    // refreshToken().then(connect);
+                    connect();
                 }
             });
             overlayAddon.showOverlay("Press ⏎ to Reconnect");
         }
     }
 
-    @bind
-    private parseOptsFromUrlQuery(query: string): Preferences {
-        const { terminal } = this;
-        const { clientOptions } = this.options;
-        const prefs = {} as Preferences;
-        const queryObj = Array.from(
-            new URLSearchParams(query) as unknown as Iterable<[string, string]>,
-        );
+    // @bind
+    // private parseOptsFromUrlQuery(query: string): Preferences {
+    //     const { terminal } = this;
+    //     const { clientOptions } = this.options;
+    //     const prefs = {} as Preferences;
+    //     const queryObj = Array.from(
+    //         new URLSearchParams(query) as unknown as Iterable<[string, string]>,
+    //     );
 
-        for (const [k, queryVal] of queryObj) {
-            let v = clientOptions[k];
-            if (typeof terminal == "undefined") {
-                throw new Error("terminal is undefined");
-            }
-            if (v === undefined) v = terminal.options[k];
-            switch (typeof v) {
-                case "boolean":
-                    prefs[k] = queryVal === "true" || queryVal === "1";
-                    break;
-                case "number":
-                case "bigint":
-                    prefs[k] = Number.parseInt(queryVal, 10);
-                    break;
-                case "string":
-                    prefs[k] = queryVal;
-                    break;
-                case "object":
-                    prefs[k] = JSON.parse(queryVal);
-                    break;
-                default:
-                    console.warn(
-                        `[ttyd] maybe unknown option: ${k}=${queryVal}, treating as string`,
-                    );
-                    prefs[k] = queryVal;
-                    break;
-            }
-        }
+    //     for (const [k, queryVal] of queryObj) {
+    //         let v = clientOptions[k];
+    //         if (typeof terminal == "undefined") {
+    //             throw new Error("terminal is undefined");
+    //         }
+    //         if (v === undefined) v = terminal.options[k];
+    //         switch (typeof v) {
+    //             case "boolean":
+    //                 prefs[k] = queryVal === "true" || queryVal === "1";
+    //                 break;
+    //             case "number":
+    //             case "bigint":
+    //                 prefs[k] = Number.parseInt(queryVal, 10);
+    //                 break;
+    //             case "string":
+    //                 prefs[k] = queryVal;
+    //                 break;
+    //             case "object":
+    //                 prefs[k] = JSON.parse(queryVal);
+    //                 break;
+    //             default:
+    //                 console.warn(
+    //                     `[ttyd] maybe unknown option: ${k}=${queryVal}, treating as string`,
+    //                 );
+    //                 prefs[k] = queryVal;
+    //                 break;
+    //         }
+    //     }
 
-        return prefs;
-    }
+    //     return prefs;
+    // }
 
     @bind
     private onSocketData(event: MessageEvent) {
@@ -419,7 +421,7 @@ export class Xterm {
                 this.applyPreferences({
                     ...this.options.clientOptions,
                     ...JSON.parse(textDecoder.decode(data)),
-                    ...this.parseOptsFromUrlQuery(window.location.search),
+                    // ...this.parseOptsFromUrlQuery(window.location.search),
                 } as Preferences);
                 break;
             default:
@@ -529,13 +531,17 @@ export class Xterm {
                     if (typeof terminal == "undefined") {
                         throw new Error("terminal is undefined");
                     }
+                    // @ts-ignore
                     if (terminal.options[key] instanceof Object) {
+                        // @ts-ignore
                         terminal.options[key] = Object.assign(
                             {},
+                            // @ts-ignore
                             terminal.options[key],
                             value,
                         );
                     } else {
+                        // @ts-ignore
                         terminal.options[key] = value;
                     }
                     if (key.indexOf("font") === 0) fitAddon.fit();

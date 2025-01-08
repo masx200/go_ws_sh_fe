@@ -1,14 +1,8 @@
 <template>
-    <div id="app">
-        <Terminal
-            id="terminal-container"
-            :ws-url="wsUrl"
-            :token-url="tokenUrl"
-            :client-options="clientOptions"
-            :term-options="termOptions"
-            :flow-control="flowControl"
-        />
-    </div>
+    <!-- :tokenurl="tokenUrl" -->
+    <Terminal id="terminal-container" :wsurl="wsUrl" :clientoptions="clientOptions" :termoptions="termOptions"
+        :flowcontrol="flowControl" />
+
 </template>
 
 <script lang="ts">
@@ -27,13 +21,13 @@ const wsUrl = [
     "/ws",
     window.location.search,
 ].join("");
-const tokenUrl = [
-    window.location.protocol,
-    "//",
-    window.location.host,
-    path,
-    "/token",
-].join("");
+// const tokenUrl = [
+//     window.location.protocol,
+//     "//",
+//     window.location.host,
+//     path,
+//     "/token",
+// ].join("");
 const clientOptions = {
     rendererType: "webgl",
     disableLeaveAlert: false,
@@ -84,7 +78,7 @@ export default defineComponent({
     data() {
         return {
             wsUrl,
-            tokenUrl,
+            // tokenUrl,
             clientOptions,
             termOptions,
             flowControl,
