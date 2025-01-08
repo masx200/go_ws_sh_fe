@@ -6,13 +6,13 @@ export class ShellWebSocketAdaptor extends WebSocket {
     ): void {
         if (typeof data === "string") {
             const wsmsgins = {
-                type: TextMessage.TextMessage,
+                type: WebSocketMessage.TextMessage,
                 data: new TextEncoder().encode(data),
             };
             super.send(compressData(wsmsg.encode(wsmsgins).finish()));
         } else if (data instanceof Uint8Array) {
             const wsmsgins = {
-                type: TextMessage.TextMessage,
+                type: WebSocketMessage.BinaryMessage,
                 data: new Uint8Array(data),
             };
             super.send(compressData(wsmsg.encode(wsmsgins).finish()));
@@ -25,7 +25,7 @@ export class ShellWebSocketAdaptor extends WebSocket {
     }
 }
 
-export const enum TextMessage {
+export const enum WebSocketMessage {
     TextMessage = 1,
     BinaryMessage = 2,
     CloseMessage = 8,
