@@ -5,10 +5,11 @@ import { ImageAddon } from "@xterm/addon-image";
 import { Unicode11Addon } from "@xterm/addon-unicode11";
 import { WebLinksAddon } from "@xterm/addon-web-links";
 import { WebglAddon } from "@xterm/addon-webgl";
-import type { IDisposable, ITerminalOptions } from "@xterm/xterm";
 import { Terminal } from "@xterm/xterm";
 import { OverlayAddon } from "./addons/overlay.ts";
 import { ZmodemAddon } from "./addons/zmodem";
+import { ShellWebSocketAdaptor } from "./ShellWebSocketAdaptor.ts";
+import type { IDisposable, ITerminalOptions } from "@xterm/xterm";
 
 interface TtydTerminal extends Terminal {
     fit(): void;
@@ -94,7 +95,7 @@ export class Xterm {
     public canvasAddon?: CanvasAddon;
     public zmodemAddon?: ZmodemAddon;
 
-    public socket?: WebSocket;
+    public socket?: ShellWebSocketAdaptor;
     public token: string | undefined;
     public opened = false;
     public title?: string;
@@ -199,10 +200,11 @@ export class Xterm {
         );
         register(
             terminal.onResize(({ cols, rows }) => {
-                const msg = JSON.stringify({ columns: cols, rows: rows });
-                this.socket?.send(
-                    this.textEncoder.encode(Command.RESIZE_TERMINAL + msg),
-                );
+                // const msg = JSON.stringify({ columns: cols, rows: rows });
+                // this.socket?.send(
+                //     this.textEncoder.encode(Command.RESIZE_TERMINAL + msg),
+                // );
+                this.socket?.sendResize(cols, rows);
                 if (this.resizeOverlay) {
                     overlayAddon.showOverlay(`${cols}x${rows}`, 300);
                 }
@@ -273,9 +275,10 @@ export class Xterm {
     };
 
     connect = () => {
-        this.socket = new WebSocket(this.options.wsUrl, [
+        const ws = new ShellWebSocketAdaptor(this.options.wsUrl, [
             this.options.wsprotocol,
         ]);
+        this.socket = ws;
         const { socket, register } = this;
 
         socket.binaryType = "arraybuffer";
@@ -297,6 +300,11 @@ export class Xterm {
         register(
             addEventListener(socket, "error", () => (this.doReconnect = false)),
         );
+        const { terminal } = this;
+        if (typeof terminal == "undefined") {
+            throw new Error("terminal is undefined");
+        }
+        ws.sendResize(terminal.cols, terminal.rows);
     };
 
     onSocketOpen = () => {
@@ -623,3 +631,4 @@ export class Xterm {
         }
     };
 }
+
