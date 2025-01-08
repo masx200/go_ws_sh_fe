@@ -1,5 +1,5 @@
 import { wsmsg } from "~/src/wsmsg";
-
+import { compressData } from "./compressData";
 export class ShellWebSocketAdaptor extends WebSocket {
     override send(
         data: string | ArrayBufferLike | Blob | ArrayBufferView,
@@ -9,13 +9,13 @@ export class ShellWebSocketAdaptor extends WebSocket {
                 type: TextMessage.TextMessage,
                 data: new TextEncoder().encode(data),
             };
-            super.send(wsmsg.encode(wsmsgins).finish());
+            super.send(compressData(wsmsg.encode(wsmsgins).finish()));
         } else if (data instanceof Uint8Array) {
             const wsmsgins = {
                 type: TextMessage.TextMessage,
                 data: new Uint8Array(data),
             };
-            super.send(wsmsg.encode(wsmsgins).finish());
+            super.send(compressData(wsmsg.encode(wsmsgins).finish()));
         } else {
             throw new Error("Unsupported data type");
         }
