@@ -304,7 +304,8 @@ export class Xterm {
         );
         register(
             addEventListener(socket, "error", ((e: ErrorEvent) => {
-                ElMessage.error(e.message);
+                // console.error(e)
+                // ElMessage.error(e.message);
                 this.doReconnect = false;
                 return;
             }) as EventListener),
@@ -348,6 +349,9 @@ export class Xterm {
 
     onSocketClose = (event: CloseEvent) => {
         // ElMessage.info("Connection Closed");
+        if (event.code !== 1000) {
+            ElMessage.error("Connection Closed with code: " + event.code);
+        }
         console.log(
             `[ttyd] websocket connection closed with code: ${event.code}`,
         );

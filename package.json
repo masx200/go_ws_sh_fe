@@ -1,5 +1,5 @@
 {
-    "name": "go_ws_sh_fe",
+    "name": "@masx200/go_ws_sh_fe",
     "public": true,
     "type": "module",
     "scripts": {
