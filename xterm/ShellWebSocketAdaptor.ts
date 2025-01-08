@@ -11,6 +11,7 @@ export class ShellWebSocketAdaptor extends WebSocket {
                 msgcodec.toBuffer({
                     //@ts-ignore
                     type: "stdin",
+                    //@ts-ignore
                     body:
                         //@ts-ignore
                         Buffer.from(arg0),
@@ -89,20 +90,20 @@ export class BinaryMessage {
     constructor(
         public type: string,
         public body: Uint8Array,
-    ) {}
+    ) { }
 }
 export class TextMessage {
     constructor(
         public type: string,
         public body: string,
-    ) {}
+    ) { }
 }
 export class ResizeMessage {
     constructor(
         public type: string,
         public cols: number,
         public rows: number,
-    ) {}
+    ) { }
 }
 export const MessageSchema = {
     type: "record",
