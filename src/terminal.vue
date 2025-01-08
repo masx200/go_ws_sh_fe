@@ -146,8 +146,10 @@ export default defineComponent({
 
         onMounted(async () => {
             xterm = new Xterm({ ...props, wsUrl: props["wsurl"], termOptions: props.termoptions, /* tokenUrl: props.tokenurl, */ flowControl: props.flowcontrol, clientOptions: props.clientoptions }, showModal);
+            const value = container.value;
             // await xterm.refreshToken();
-            xterm.open(container.value);
+            if (!value) throw new Error("container is null");
+            xterm.open(value);
             xterm.connect();
         });
 
