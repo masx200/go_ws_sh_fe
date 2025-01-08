@@ -44,7 +44,7 @@ export class ZmodemAddon implements ITerminalAddon {
         this.disposables.length = 0;
     }
 
-    consume(data: ArrayBuffer) {
+    consume(data: ArrayBuffer | Uint8Array) {
         try {
             if (this.options.trzsz) {
                 const { trzszFilter } = this;
@@ -57,6 +57,7 @@ export class ZmodemAddon implements ITerminalAddon {
                 if (typeof sentry == "undefined") {
                     throw new Error("sentry is undefined");
                 }
+                //@ts-ignore
                 sentry.consume(data);
             }
         } catch (e) {
@@ -109,8 +110,10 @@ export class ZmodemAddon implements ITerminalAddon {
             dragInitTimeout: this.options.trzszDragInitTimeout,
         });
         const element = terminal.element as EventTarget;
-        this.addDisposableListener(element, "dragover", (event) =>
-            event.preventDefault(),
+        this.addDisposableListener(
+            element,
+            "dragover",
+            (event) => event.preventDefault(),
         );
         this.addDisposableListener(element, "drop", (event) => {
             event.preventDefault();
@@ -231,10 +234,12 @@ export class ZmodemAddon implements ITerminalAddon {
         const percent = ((100 * offset) / size).toFixed(2);
 
         this.options.writer(
-            `${name} ${percent}% ${bytesHuman(offset, 2)}/${bytesHuman(
-                size,
-                2,
-            )}\r`,
+            `${name} ${percent}% ${bytesHuman(offset, 2)}/${
+                bytesHuman(
+                    size,
+                    2,
+                )
+            }\r`,
         );
     };
 

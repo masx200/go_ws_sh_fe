@@ -8,7 +8,11 @@ import { WebglAddon } from "@xterm/addon-webgl";
 import { Terminal } from "@xterm/xterm";
 import { OverlayAddon } from "./addons/overlay.ts";
 import { ZmodemAddon } from "./addons/zmodem";
-import { ShellWebSocketAdaptor } from "./ShellWebSocketAdaptor.ts";
+import {
+    BinaryMessage,
+    ShellWebSocketAdaptor,
+    TextMessage,
+} from "./ShellWebSocketAdaptor.ts";
 import type { IDisposable, ITerminalOptions } from "@xterm/xterm";
 
 interface TtydTerminal extends Terminal {
@@ -104,7 +108,7 @@ export class Xterm {
     public reconnect = true;
     public doReconnect = true;
 
-    public writeFunc = (data: ArrayBuffer) =>
+    public writeFunc = (data: ArrayBuffer | Uint8Array) =>
         this.writeData(new Uint8Array(data));
 
     constructor(
@@ -194,7 +198,7 @@ export class Xterm {
         register(terminal.onData((data) => sendData(data)));
         register(
             terminal.onBinary((data) =>
-                sendData(Uint8Array.from(data, (v) => v.charCodeAt(0))),
+                sendData(Uint8Array.from(data, (v) => v.charCodeAt(0)))
             ),
         );
         register(
@@ -297,7 +301,15 @@ export class Xterm {
             ),
         );
         register(
-            addEventListener(socket, "error", () => (this.doReconnect = false)),
+            addEventListener(
+                socket,
+                "error",
+                ((e: ErrorEvent) => {
+                    ElMessage.error(e.message);
+                    this.doReconnect = false;
+                    return;
+                }) as EventListener,
+            ),
         );
         const { terminal } = this;
         if (typeof terminal == "undefined") {
@@ -337,6 +349,7 @@ export class Xterm {
     };
 
     onSocketClose = (event: CloseEvent) => {
+        ElMessage.info("Connection Closed");
         console.log(
             `[ttyd] websocket connection closed with code: ${event.code}`,
         );
@@ -411,30 +424,46 @@ export class Xterm {
     // }
 
     onSocketData = (event: MessageEvent) => {
-        const { textDecoder } = this;
-        const rawData = event.data as ArrayBuffer;
-        const cmd = String.fromCharCode(new Uint8Array(rawData)[0]);
-        const data = rawData.slice(1);
-
-        switch (cmd) {
-            case Command.OUTPUT:
-                this.writeFunc(data);
-                break;
-            // case Command.SET_WINDOW_TITLE:
-            //     this.title = textDecoder.decode(data);
-            //     document.title = this.title;
-            //     break;
-            // case Command.SET_PREFERENCES:
-            //     this.applyPreferences({
-            //         ...this.options.clientOptions,
-            //         ...JSON.parse(textDecoder.decode(data)),
-            //         // ...this.parseOptsFromUrlQuery(window.location.search),
-            //     } as Preferences);
-            //     break;
-            default:
-                console.warn(`[ttyd] unknown command: ${cmd}`);
-                break;
+        const msg = this.socket?.parseMessage(event);
+        if (msg instanceof TextMessage) {
+            if (msg.type == "resolved") {
+                ElMessage.success(msg.body);
+            } else {
+                ElMessage.error(msg.body);
+            }
+            return;
         }
+        if (msg instanceof BinaryMessage) {
+            const data = msg.body;
+            if (msg.type != "stdout") throw new Error("unknown message type");
+            this.writeFunc(data);
+            return;
+        }
+        throw new Error("unknown message type");
+        // const { textDecoder } = this;
+        // const rawData = event.data as ArrayBuffer;
+        // const cmd = String.fromCharCode(new Uint8Array(rawData)[0]);
+        // const data = rawData.slice(1);
+
+        // switch (cmd) {
+        //     case Command.OUTPUT:
+        //         this.writeFunc(data);
+        //         break;
+        //     // case Command.SET_WINDOW_TITLE:
+        //     //     this.title = textDecoder.decode(data);
+        //     //     document.title = this.title;
+        //     //     break;
+        //     // case Command.SET_PREFERENCES:
+        //     //     this.applyPreferences({
+        //     //         ...this.options.clientOptions,
+        //     //         ...JSON.parse(textDecoder.decode(data)),
+        //     //         // ...this.parseOptsFromUrlQuery(window.location.search),
+        //     //     } as Preferences);
+        //     //     break;
+        //     default:
+        //         console.warn(`[ttyd] unknown command: ${cmd}`);
+        //         break;
+        // }
     };
 
     applyPreferences = (prefs: Preferences) => {

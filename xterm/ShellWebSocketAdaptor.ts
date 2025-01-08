@@ -20,12 +20,17 @@ export class ShellWebSocketAdaptor extends WebSocket {
             };
             super.send(compressData(wsmsg.encode(wsmsgins).finish()));
         } else {
-            return this.send(await toUint8Array(data));
+            const data2 = await toUint8Array(data);
+            const wsmsgins = {
+                type: WebSocketMessage.BinaryMessage,
+                data: new Uint8Array(data2),
+            };
+            super.send(compressData(wsmsg.encode(wsmsgins).finish()));
         }
     }
     sendResize(cols: number, rows: number) {
         const rm = new ResizeMessage("resize", cols, rows);
-        this.send(JSON.stringify([rm.type, rm.cols, rm.rows]));
+        this.send(JSON.stringify(EncodeMessageSizeToStringArray(rm)));
     }
 
     parseMessage(event: MessageEvent): TextMessage | BinaryMessage {
@@ -127,4 +132,7 @@ export function bufferToUint8Array(buffer: Buffer<Uint8Array>): Uint8Array {
         uint8Array[i] = buffer[i];
     }
     return new Uint8Array(uint8Array);
+}
+export function EncodeMessageSizeToStringArray(rm: ResizeMessage) {
+    return [rm.type, rm.cols, rm.rows];
 }
