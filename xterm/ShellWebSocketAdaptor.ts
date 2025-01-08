@@ -23,6 +23,19 @@ export class ShellWebSocketAdaptor extends WebSocket {
     sendResize(cols: number, rows: number) {
         this.send(JSON.stringify(["resize", cols, rows]));
     }
+    override addEventListener<K extends keyof WebSocketEventMap>(
+        type: K,
+        listener: (this: WebSocket, ev: WebSocketEventMap[K]) => any,
+        options?: boolean | AddEventListenerOptions,
+    ): void;
+    override addEventListener(
+        type: string,
+        listener: EventListenerOrEventListenerObject,
+        options?: boolean | AddEventListenerOptions,
+    ): void;
+    override addEventListener(type: any, listener: any, options?: any): void {
+        super.addEventListener(type, listener, options);
+    }
 }
 
 export const enum WebSocketMessage {
