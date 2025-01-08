@@ -1,28 +1,16 @@
 <template>
-    <div
-        class="fullscreen-div"
-        v-show="!error && (loading || !data || data?.length == 0)"
-    >
-        <Loading
-            v-show="!error && (loading || !data || data?.length == 0)"
-        ></Loading>
+    <div class="fullscreen-div" v-show="!error && (loading || !data || data?.length == 0)">
+        <Loading v-show="!error && (loading || !data || data?.length == 0)"></Loading>
     </div>
     <div class="app-container">
-        <header
-            class="header"
-            v-show="error || !(loading || !data || data?.length == 0)"
-        >
+        <header class="header" v-show="error || !(loading || !data || data?.length == 0)">
             <el-button type="primary" @click="handleLogin">登录</el-button>
             <span :style="loginstyle">{{ loginstate }}</span>
             <el-button type="danger" @click="handleLogout">退出</el-button>
         </header>
 
-        <main
-            class="main-content"
-            v-show="error || !(loading || !data || data?.length == 0)"
-        >
-            <div
-                style="
+        <main class="main-content" v-show="error || !(loading || !data || data?.length == 0)">
+            <div style="
                     height: 100%;
                     display: flex;
                     flex-direction: column;
@@ -30,68 +18,38 @@
                     align-content: center;
                     justify-content: center;
                     align-items: center;
-                "
-            >
-                <div
-                    class="flex flex-wrap gap-4 items-center"
-                    style="
+                ">
+                <div class="flex flex-wrap gap-4 items-center" style="
                         display: flex;
                         align-content: center;
                         justify-content: center;
                         align-items: center;
                         flex-wrap: wrap;
                         flex-direction: column;
-                    "
-                >
+                    ">
                     <el-row align="middle" justify="center">
                         <span>网址</span>
-                        <div
-                            style="margin-left: 10px; margin-right: 10px"
-                        ></div>
-                        <el-select
-                            v-loading="loading"
-                            :loading="loading"
-                            v-model="urlvalue"
-                            placeholder="Select"
-                            size="large"
-                            style="width: 800px"
-                        >
-                            <el-option
-                                v-for="item in urloptions"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                            />
+                        <div style="margin-left: 10px; margin-right: 10px"></div>
+                        <el-select v-loading="loading" :loading="loading" v-model="urlvalue" placeholder="Select"
+                            size="large" style="width: 800px">
+                            <el-option v-for="item in urloptions" :key="item.value" :label="item.label"
+                                :value="item.value" />
                         </el-select>
                     </el-row>
 
                     <hr />
                     <el-row align="middle" justify="center">
                         <span>会话</span>
-                        <div
-                            style="margin-left: 10px; margin-right: 10px"
-                        ></div>
-                        <el-select
-                            v-loading="loading"
-                            :loading="loading"
-                            v-model="sessionvalue"
-                            placeholder="Select"
-                            size="large"
-                            style="width: 800px"
-                        >
-                            <el-option
-                                v-for="item in options"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                            /> </el-select
-                    ></el-row>
+                        <div style="margin-left: 10px; margin-right: 10px"></div>
+                        <el-select v-loading="loading" :loading="loading" v-model="sessionvalue" placeholder="Select"
+                            size="large" style="width: 800px">
+                            <el-option v-for="item in options" :key="item.value" :label="item.label"
+                                :value="item.value" /> </el-select>
+                    </el-row>
                 </div>
                 <hr />
 
-                <el-button size="large" type="default" @click="handleconnect"
-                    >连接</el-button
-                >
+                <el-button size="large" type="default" @click="handleconnect">连接</el-button>
             </div>
         </main>
     </div>
@@ -116,7 +74,7 @@ onMounted(() => {
     return (urlvalue.value = localStorage.getItem("url") ?? "");
 });
 async function handleconnect() {
-    router.push("/shell/" + sessionvalue.value);
+    router.push("/shell/?server=" + encodeURIComponent(urlvalue.value) + "&session=" + sessionvalue.value);
 }
 const loginstate = ref("");
 const loginstyle = ref("");
@@ -254,13 +212,19 @@ const handleLogout = async () => {
     padding: 20px;
     background-color: #f0f2f5;
 }
+
 .fullscreen-div {
-    position: fixed; /* 固定定位，使其不会因为页面滚动而移动 */
+    position: fixed;
+    /* 固定定位，使其不会因为页面滚动而移动 */
     top: 0;
     left: 0;
-    width: 100vw; /* 使用视口单位，确保宽度为整个视口的宽度 */
-    height: 100vh; /* 使用视口单位，确保高度为整个视口的高度 */
-    background-color: #f0f0f0; /* 你可以更改背景颜色 */
-    z-index: 1000; /* 确保此 div 在其他内容之上 */
+    width: 100vw;
+    /* 使用视口单位，确保宽度为整个视口的宽度 */
+    height: 100vh;
+    /* 使用视口单位，确保高度为整个视口的高度 */
+    background-color: #f0f0f0;
+    /* 你可以更改背景颜色 */
+    z-index: 1000;
+    /* 确保此 div 在其他内容之上 */
 }
 </style>
