@@ -145,7 +145,7 @@ export default defineComponent({
         },
     },
     setup(props) {
-        const container = ref(null);
+        const container = ref<HTMLElement | null>(null);
         const modal = ref(false);
         let xterm: Xterm;
 

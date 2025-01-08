@@ -23,14 +23,14 @@ declare global {
 enum Command {
     // server side
     OUTPUT = "0",
-    SET_WINDOW_TITLE = "1",
-    SET_PREFERENCES = "2",
+    // SET_WINDOW_TITLE = "1",
+    // SET_PREFERENCES = "2",
 
     // client side
     INPUT = "0",
     RESIZE_TERMINAL = "1",
-    PAUSE = "2",
-    RESUME = "3",
+    // PAUSE = "2",
+    // RESUME = "3",
 }
 type Preferences = ITerminalOptions & ClientOptions;
 
@@ -238,15 +238,15 @@ export class Xterm {
             }
             terminal.write(data, () => {
                 this.pending = Math.max(this.pending - 1, 0);
-                if (this.pending < lowWater) {
-                    this.socket?.send(textEncoder.encode(Command.RESUME));
-                }
+                // if (this.pending < lowWater) {
+                //     this.socket?.send(textEncoder.encode(Command.RESUME));
+                // }
             });
             this.pending++;
             this.written = 0;
-            if (this.pending > highWater) {
-                this.socket?.send(textEncoder.encode(Command.PAUSE));
-            }
+            // if (this.pending > highWater) {
+            //     this.socket?.send(textEncoder.encode(Command.PAUSE));
+            // }
         } else {
             if (typeof terminal == "undefined") {
                 throw new Error("terminal is undefined");
@@ -410,17 +410,17 @@ export class Xterm {
             case Command.OUTPUT:
                 this.writeFunc(data);
                 break;
-            case Command.SET_WINDOW_TITLE:
-                this.title = textDecoder.decode(data);
-                document.title = this.title;
-                break;
-            case Command.SET_PREFERENCES:
-                this.applyPreferences({
-                    ...this.options.clientOptions,
-                    ...JSON.parse(textDecoder.decode(data)),
-                    // ...this.parseOptsFromUrlQuery(window.location.search),
-                } as Preferences);
-                break;
+            // case Command.SET_WINDOW_TITLE:
+            //     this.title = textDecoder.decode(data);
+            //     document.title = this.title;
+            //     break;
+            // case Command.SET_PREFERENCES:
+            //     this.applyPreferences({
+            //         ...this.options.clientOptions,
+            //         ...JSON.parse(textDecoder.decode(data)),
+            //         // ...this.parseOptsFromUrlQuery(window.location.search),
+            //     } as Preferences);
+            //     break;
             default:
                 console.warn(`[ttyd] unknown command: ${cmd}`);
                 break;
