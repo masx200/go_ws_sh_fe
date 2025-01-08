@@ -4,6 +4,20 @@ import { toUint8Array } from "./toUint8Array";
 import { parse } from "avsc";
 import { Buffer } from "buffer";
 export class ShellWebSocketAdaptor extends WebSocket {
+    sendStdin(arg0: Uint8Array<ArrayBufferLike>) {
+        const msgcodec = createcodec();
+        this.send(
+            bufferToUint8Array(
+                msgcodec.toBuffer({
+                    //@ts-ignore
+                    type: "stdin",
+                    body:
+                        //@ts-ignore
+                        Buffer.from(arg0),
+                }),
+            ),
+        );
+    }
     override async send(
         data: string | ArrayBufferLike | Blob | ArrayBufferView,
     ): Promise<void> {

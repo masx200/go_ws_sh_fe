@@ -198,7 +198,7 @@ export class Xterm {
         register(terminal.onData((data) => sendData(data)));
         register(
             terminal.onBinary((data) =>
-                sendData(Uint8Array.from(data, (v) => v.charCodeAt(0)))
+                sendData(Uint8Array.from(data, (v) => v.charCodeAt(0))),
             ),
         );
         register(
@@ -265,15 +265,17 @@ export class Xterm {
         if (socket?.readyState !== WebSocket.OPEN) return;
 
         if (typeof data === "string") {
-            const payload = new Uint8Array(data.length * 3 + 1);
-            payload[0] = Command.INPUT.charCodeAt(0);
-            const stats = textEncoder.encodeInto(data, payload.subarray(1));
-            socket.send(payload.subarray(0, (stats.written as number) + 1));
+            // const payload = new Uint8Array(data.length * 3 + 1);
+            // payload[0] = Command.INPUT.charCodeAt(0);
+            // const stats = textEncoder.encodeInto(data, payload.subarray(1));
+            // socket.send(payload.subarray(0, (stats.written as number) + 1));
+            socket.sendStdin(textEncoder.encode(data));
         } else {
-            const payload = new Uint8Array(data.length + 1);
-            payload[0] = Command.INPUT.charCodeAt(0);
-            payload.set(data, 1);
-            socket.send(payload);
+            // const payload = new Uint8Array(data.length + 1);
+            // payload[0] = Command.INPUT.charCodeAt(0);
+            // payload.set(data, 1);
+            // socket.send(payload);
+            socket.sendStdin(data);
         }
     };
 
@@ -301,15 +303,11 @@ export class Xterm {
             ),
         );
         register(
-            addEventListener(
-                socket,
-                "error",
-                ((e: ErrorEvent) => {
-                    ElMessage.error(e.message);
-                    this.doReconnect = false;
-                    return;
-                }) as EventListener,
-            ),
+            addEventListener(socket, "error", ((e: ErrorEvent) => {
+                ElMessage.error(e.message);
+                this.doReconnect = false;
+                return;
+            }) as EventListener),
         );
         const { terminal } = this;
         if (typeof terminal == "undefined") {
@@ -349,7 +347,7 @@ export class Xterm {
     };
 
     onSocketClose = (event: CloseEvent) => {
-        ElMessage.info("Connection Closed");
+        // ElMessage.info("Connection Closed");
         console.log(
             `[ttyd] websocket connection closed with code: ${event.code}`,
         );
