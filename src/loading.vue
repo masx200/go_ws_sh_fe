@@ -47,7 +47,7 @@
 .loading-panel {
     text-align: center;
     /* background: #000; */
-    color: #bdc0c5;
+    color: lightblue;
     background: #f0f0f0;
     height: 50px;
     line-height: 50px;
