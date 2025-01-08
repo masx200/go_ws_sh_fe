@@ -1,16 +1,29 @@
 <template>
-    <div class="fullscreen-div" v-show="!error && (loading || !data || data?.length == 0)">
-        <Loading v-show="!error && (loading || !data || data?.length == 0)"></Loading>
+    <div
+        v-if="shouldShow"
+        class="fullscreen-div"
+        v-show="!error && (loading || !data || data?.length == 0)"
+    >
+        <Loading
+            v-show="!error && (loading || !data || data?.length == 0)"
+        ></Loading>
     </div>
-    <div class="app-container">
-        <header class="header" v-show="error || !(loading || !data || data?.length == 0)">
+    <div v-if="shouldShow" class="app-container">
+        <header
+            class="header"
+            v-show="error || !(loading || !data || data?.length == 0)"
+        >
             <el-button type="primary" @click="handleLogin">登录</el-button>
             <span :style="loginstyle">{{ loginstate }}</span>
             <el-button type="danger" @click="handleLogout">退出</el-button>
         </header>
 
-        <main class="main-content" v-show="error || !(loading || !data || data?.length == 0)">
-            <div style="
+        <main
+            class="main-content"
+            v-show="error || !(loading || !data || data?.length == 0)"
+        >
+            <div
+                style="
                     height: 100%;
                     display: flex;
                     flex-direction: column;
@@ -18,45 +31,80 @@
                     align-content: center;
                     justify-content: center;
                     align-items: center;
-                ">
-                <div class="flex flex-wrap gap-4 items-center" style="
+                "
+            >
+                <div
+                    class="flex flex-wrap gap-4 items-center"
+                    style="
                         display: flex;
                         align-content: center;
                         justify-content: center;
                         align-items: center;
                         flex-wrap: wrap;
                         flex-direction: column;
-                    ">
+                    "
+                >
                     <el-row align="middle" justify="center">
                         <span>网址</span>
-                        <div style="margin-left: 10px; margin-right: 10px"></div>
-                        <el-select v-loading="loading" :loading="loading" v-model="urlvalue" placeholder="Select"
-                            size="large" style="width: 800px">
-                            <el-option v-for="item in urloptions" :key="item.value" :label="item.label"
-                                :value="item.value" />
+                        <div
+                            style="margin-left: 10px; margin-right: 10px"
+                        ></div>
+                        <el-select
+                            v-loading="loading"
+                            :loading="loading"
+                            v-model="urlvalue"
+                            placeholder="Select"
+                            size="large"
+                            style="width: 800px"
+                        >
+                            <el-option
+                                v-for="item in urloptions"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                            />
                         </el-select>
                     </el-row>
 
                     <hr />
                     <el-row align="middle" justify="center">
                         <span>会话</span>
-                        <div style="margin-left: 10px; margin-right: 10px"></div>
-                        <el-select v-loading="loading" :loading="loading" v-model="sessionvalue" placeholder="Select"
-                            size="large" style="width: 800px">
-                            <el-option v-for="item in options" :key="item.value" :label="item.label"
-                                :value="item.value" /> </el-select>
+                        <div
+                            style="margin-left: 10px; margin-right: 10px"
+                        ></div>
+                        <el-select
+                            v-loading="loading"
+                            :loading="loading"
+                            v-model="sessionvalue"
+                            placeholder="Select"
+                            size="large"
+                            style="width: 800px"
+                        >
+                            <el-option
+                                v-for="item in options"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                            />
+                        </el-select>
                     </el-row>
                 </div>
                 <hr />
 
-                <el-button size="large" type="default" @click="handleconnect">连接</el-button>
+                <el-button size="large" type="default" @click="handleconnect"
+                    >连接</el-button
+                >
             </div>
         </main>
     </div>
 </template>
 
 <script setup lang="ts">
+const shouldShow = computed(() => {
+    return urlvalue.value.length && toeknvalue.value.length;
+});
 const urlvalue = ref("");
+const toeknvalue = ref("");
 onMounted(() => {
     urloptions.value = [
         {
@@ -71,10 +119,16 @@ onMounted(() => {
         },
     ];
     sessionvalue.value = localStorage.getItem("session") ?? "";
+    toeknvalue.value = localStorage.getItem("token") ?? "";
     return (urlvalue.value = localStorage.getItem("url") ?? "");
 });
 async function handleconnect() {
-    router.push("/shell/?server=" + encodeURIComponent(urlvalue.value) + "&session=" + sessionvalue.value);
+    router.push(
+        "/shell/?server=" +
+            encodeURIComponent(urlvalue.value) +
+            "&session=" +
+            sessionvalue.value,
+    );
 }
 const loginstate = ref("");
 const loginstyle = ref("");
