@@ -57,6 +57,7 @@ export interface FlowControl {
 }
 
 export interface XtermOptions {
+    wsprotocol: string
     wsUrl: string;
     // tokenUrl: string;
     flowControl: FlowControl;
@@ -276,7 +277,7 @@ export class Xterm {
 
     @bind
     public connect() {
-        this.socket = new WebSocket(this.options.wsUrl, ["tty"]);
+        this.socket = new WebSocket(this.options.wsUrl, [this.options.wsprotocol]);
         const { socket, register } = this;
 
         socket.binaryType = "arraybuffer";

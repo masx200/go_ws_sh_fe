@@ -1,7 +1,7 @@
 <template>
     <!-- :tokenurl="tokenUrl" -->
     <Terminal id="terminal-container" :wsurl="wsUrl" :clientoptions="clientOptions" :termoptions="termOptions"
-        :flowcontrol="flowControl" />
+        :flowcontrol="flowControl" :wsprotocol="wsprotocol" />
 
 </template>
 
@@ -11,16 +11,16 @@ import Terminal from "./terminal.vue";
 
 import type { ITerminalOptions, ITheme } from "@xterm/xterm";
 import type { ClientOptions, FlowControl } from "../xterm/index";
-const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-const path = window.location.pathname.replace(/[/]+$/, "");
-const wsUrl = [
-    protocol,
-    "//",
-    window.location.host,
-    path,
-    "/ws",
-    window.location.search,
-].join("");
+//const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+// const path = window.location.pathname.replace(/[/]+$/, "");
+// const wsUrl = [
+//     protocol,
+//     "//",
+//     window.location.host,
+//     path,
+//     "/ws",
+//     window.location.search,
+// ].join("");
 // const tokenUrl = [
 //     window.location.protocol,
 //     "//",
@@ -71,13 +71,23 @@ const flowControl = {
 } as FlowControl;
 
 export default defineComponent({
+    props: {
+        wsprotocol: {
+            type: String,
+            required: true,
+        },
+        wsUrl: {
+            type: String,
+            required: true,
+        },
+    },
     name: "App",
     components: {
         Terminal,
     },
     data() {
         return {
-            wsUrl,
+            // wsUrl,
             // tokenUrl,
             clientOptions,
             termOptions,

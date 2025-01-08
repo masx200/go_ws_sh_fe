@@ -32,6 +32,10 @@ export default defineComponent({
         Modal,
     },
     props: {
+        wsprotocol: {
+            type: String,
+            required: true,
+        },
         termoptions: {
             type: Object as PropType<ITerminalOptions>,
             required: true,
@@ -145,7 +149,7 @@ export default defineComponent({
         };
 
         onMounted(async () => {
-            xterm = new Xterm({ ...props, wsUrl: props["wsurl"], termOptions: props.termoptions, /* tokenUrl: props.tokenurl, */ flowControl: props.flowcontrol, clientOptions: props.clientoptions }, showModal);
+            xterm = new Xterm({ ...props, wsUrl: props["wsurl"], termOptions: props.termoptions, /* tokenUrl: props.tokenurl, */ flowControl: props.flowcontrol, clientOptions: props.clientoptions, wsprotocol: props.wsprotocol }, showModal);
             const value = container.value;
             // await xterm.refreshToken();
             if (!value) throw new Error("container is null");
