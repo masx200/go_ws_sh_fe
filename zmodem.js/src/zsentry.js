@@ -340,7 +340,7 @@ Zmodem.Sentry = class ZmodemSentry {
      * ZRINIT/ZRQINIT bytes to the terminal. They’re meant to go to the
      * terminal anyway, so that should be fine.
      *
-     * @private
+     * @ public
      *
      * @param {Array|Uint8Array} array_like - The input bytes.
      *      Each member should be a number between 0 and 255 (inclusive).

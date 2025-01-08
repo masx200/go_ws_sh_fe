@@ -56,7 +56,7 @@ KEEPALIVE_INTERVAL = 5000,
 /**
  * A base class for objects that have events.
  *
- * @private
+ * @ public
  */
 class _Eventer {
     /**
@@ -480,7 +480,7 @@ Zmodem.Session.Receive = class ZmodemReceiveSession extends Zmodem.Session {
     /**
      * Consume input bytes from the sender.
      *
-     * @private
+     * @ public
      * @param {number[]} octets - The bytes to consume.
      */
     _before_consume(octets) {

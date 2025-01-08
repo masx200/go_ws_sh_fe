@@ -2,7 +2,12 @@
     <div :id="id" ref="container">
         <Modal :show="modal">
             <label class="file-label">
-                <input @change="sendFile" class="file-input" type="file" multiple />
+                <input
+                    @change="sendFile"
+                    class="file-input"
+                    type="file"
+                    multiple
+                />
                 <span class="file-cta">Choose files…</span>
             </label>
         </Modal>
@@ -15,9 +20,14 @@ import {
     onMounted,
     onUnmounted,
     ref,
-    type PropType
+    type PropType,
 } from "vue";
-import { Xterm, type ClientOptions, type FlowControl, type XtermOptions } from "../xterm/index";
+import {
+    Xterm,
+    type ClientOptions,
+    type FlowControl,
+    type XtermOptions,
+} from "../xterm/index";
 
 import Modal from "./modal.vue";
 import type { ITerminalOptions } from "@xterm/xterm";
@@ -39,7 +49,8 @@ export default defineComponent({
         termoptions: {
             type: Object as PropType<ITerminalOptions>,
             required: true,
-        }, flowcontrol: {
+        },
+        flowcontrol: {
             type: Object as PropType<FlowControl>,
             required: true,
         },
@@ -149,7 +160,18 @@ export default defineComponent({
         };
 
         onMounted(async () => {
-            xterm = new Xterm({ ...props, wsUrl: props["wsurl"], termOptions: props.termoptions, /* tokenUrl: props.tokenurl, */ flowControl: props.flowcontrol, clientOptions: props.clientoptions, wsprotocol: props.wsprotocol }, showModal);
+            xterm = new Xterm(
+                {
+                    ...props,
+                    wsUrl: props["wsurl"],
+                    termOptions: props.termoptions,
+                    /* tokenUrl: props.tokenurl, */ flowControl:
+                        props.flowcontrol,
+                    clientOptions: props.clientoptions,
+                    wsprotocol: props.wsprotocol,
+                },
+                showModal,
+            );
             const value = container.value;
             // await xterm.refreshToken();
             if (!value) throw new Error("container is null");

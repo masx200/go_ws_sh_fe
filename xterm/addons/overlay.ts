@@ -1,12 +1,12 @@
 // ported from hterm.Terminal.prototype.showOverlay
 // https://chromium.googlesource.com/apps/libapps/+/master/hterm/js/hterm_terminal.js
-import { bind } from "decko";
+
 import { type ITerminalAddon, Terminal } from "@xterm/xterm";
 
 export class OverlayAddon implements ITerminalAddon {
-    private terminal: Terminal | undefined;
-    private overlayNode: HTMLElement;
-    private overlayTimeout?: number;
+    public terminal: Terminal | undefined;
+    public overlayNode: HTMLElement;
+    public overlayTimeout?: number;
 
     constructor() {
         this.overlayNode = document.createElement("div");
@@ -36,8 +36,7 @@ position: absolute;
 
     dispose(): void {}
 
-    @bind
-    showOverlay(msg: string, timeout?: number): void {
+    showOverlay = (msg: string, timeout?: number): void => {
         const { terminal, overlayNode } = this;
         if (typeof terminal == "undefined") {
             throw new Error("terminal is undefined");
@@ -73,5 +72,5 @@ position: absolute;
                 overlayNode.style.opacity = "0.75";
             }, 200);
         }, timeout || 1500);
-    }
+    };
 }

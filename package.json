@@ -1,6 +1,6 @@
 {
     "name": "nuxt-app",
-    "private": true,
+    " public ": true,
     "type": "module",
     "scripts": {
         "build": "nuxt build",
@@ -8,7 +8,7 @@
         "generate": "nuxt generate",
         "preview": "nuxt preview",
         "postinstall": "nuxt prepare",
-        "format":"npx -y prettier -w */**/*.vue"
+        "format": "npx -y prettier -w */**/*.vue"
     },
     "dependencies": {
         "@element-plus/icons-vue": "^2.3.1",

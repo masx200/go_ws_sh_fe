@@ -1,13 +1,12 @@
-import { bind } from "decko";
-import type { IDisposable, ITerminalOptions } from "@xterm/xterm";
-import { Terminal } from "@xterm/xterm";
 import { CanvasAddon } from "@xterm/addon-canvas";
 import { ClipboardAddon } from "@xterm/addon-clipboard";
-import { WebglAddon } from "@xterm/addon-webgl";
 import { FitAddon } from "@xterm/addon-fit";
-import { WebLinksAddon } from "@xterm/addon-web-links";
 import { ImageAddon } from "@xterm/addon-image";
 import { Unicode11Addon } from "@xterm/addon-unicode11";
+import { WebLinksAddon } from "@xterm/addon-web-links";
+import { WebglAddon } from "@xterm/addon-webgl";
+import type { IDisposable, ITerminalOptions } from "@xterm/xterm";
+import { Terminal } from "@xterm/xterm";
 import { OverlayAddon } from "./addons/overlay.ts";
 import { ZmodemAddon } from "./addons/zmodem";
 
@@ -57,7 +56,7 @@ export interface FlowControl {
 }
 
 export interface XtermOptions {
-    wsprotocol: string
+    wsprotocol: string;
     wsUrl: string;
     // tokenUrl: string;
     flowControl: FlowControl;
@@ -79,37 +78,37 @@ function addEventListener(
 }
 
 export class Xterm {
-    private disposables: IDisposable[] = [];
-    private textEncoder = new TextEncoder();
-    private textDecoder = new TextDecoder();
-    private written = 0;
-    private pending = 0;
+    public disposables: IDisposable[] = [];
+    public textEncoder = new TextEncoder();
+    public textDecoder = new TextDecoder();
+    public written = 0;
+    public pending = 0;
 
-    private terminal: Terminal | undefined;
-    private fitAddon = new FitAddon();
-    private overlayAddon = new OverlayAddon();
-    private clipboardAddon = new ClipboardAddon();
-    private webLinksAddon = new WebLinksAddon();
-    private webglAddon?: WebglAddon;
-    private canvasAddon?: CanvasAddon;
-    private zmodemAddon?: ZmodemAddon;
+    public terminal: Terminal | undefined;
+    public fitAddon = new FitAddon();
+    public overlayAddon = new OverlayAddon();
+    public clipboardAddon = new ClipboardAddon();
+    public webLinksAddon = new WebLinksAddon();
+    public webglAddon?: WebglAddon;
+    public canvasAddon?: CanvasAddon;
+    public zmodemAddon?: ZmodemAddon;
 
-    private socket?: WebSocket;
-    private token: string | undefined;
-    private opened = false;
-    private title?: string;
-    private titleFixed?: string;
-    private resizeOverlay = true;
-    private reconnect = true;
-    private doReconnect = true;
+    public socket?: WebSocket;
+    public token: string | undefined;
+    public opened = false;
+    public title?: string;
+    public titleFixed?: string;
+    public resizeOverlay = true;
+    public reconnect = true;
+    public doReconnect = true;
 
-    private writeFunc = (data: ArrayBuffer) =>
+    public writeFunc = (data: ArrayBuffer) =>
         this.writeData(new Uint8Array(data));
 
     constructor(
-        private options: XtermOptions,
-        private sendCb: () => void,
-    ) { }
+        public options: XtermOptions,
+        public sendCb: () => void,
+    ) {}
 
     dispose() {
         for (const d of this.disposables) {
@@ -118,18 +117,16 @@ export class Xterm {
         this.disposables.length = 0;
     }
 
-    @bind
-    private register<T extends IDisposable>(d: T): T {
+    register = <T extends IDisposable>(d: T): T => {
         this.disposables.push(d);
         return d;
-    }
+    };
 
-    @bind
-    public sendFile(files: FileList) {
+    sendFile = (files: FileList) => {
         this.zmodemAddon?.sendFile(files);
-    }
+    };
 
-    // @bind
+    // this.
     // public async refreshToken() {
     //     try {
     //         const resp = await fetch(this.options.tokenUrl);
@@ -142,8 +139,7 @@ export class Xterm {
     //     }
     // }
 
-    @bind
-    private onWindowUnload(event: BeforeUnloadEvent) {
+    onWindowUnload(event: BeforeUnloadEvent) {
         event.preventDefault();
         if (this.socket?.readyState === WebSocket.OPEN) {
             const message =
@@ -154,8 +150,7 @@ export class Xterm {
         return undefined;
     }
 
-    @bind
-    public open(parent: HTMLElement) {
+    open = (parent: HTMLElement) => {
         this.terminal = new Terminal(this.options.termOptions);
         const {
             terminal,
@@ -176,10 +171,9 @@ export class Xterm {
 
         terminal.open(parent);
         fitAddon.fit();
-    }
+    };
 
-    @bind
-    private initListeners() {
+    initListeners = () => {
         const { terminal, fitAddon, overlayAddon, register, sendData } = this;
 
         if (typeof terminal == "undefined") {
@@ -226,10 +220,9 @@ export class Xterm {
         );
         register(addEventListener(window, "resize", () => fitAddon.fit()));
         register(addEventListener(window, "beforeunload", this.onWindowUnload));
-    }
+    };
 
-    @bind
-    public writeData(data: string | Uint8Array) {
+    writeData = (data: string | Uint8Array) => {
         const { terminal, textEncoder } = this;
         const { limit, highWater, lowWater } = this.options.flowControl;
 
@@ -255,10 +248,9 @@ export class Xterm {
             }
             terminal.write(data);
         }
-    }
+    };
 
-    @bind
-    public sendData(data: string | Uint8Array) {
+    sendData = (data: string | Uint8Array) => {
         const { socket, textEncoder } = this;
         if (socket?.readyState !== WebSocket.OPEN) return;
 
@@ -273,11 +265,12 @@ export class Xterm {
             payload.set(data, 1);
             socket.send(payload);
         }
-    }
+    };
 
-    @bind
-    public connect() {
-        this.socket = new WebSocket(this.options.wsUrl, [this.options.wsprotocol]);
+    connect = () => {
+        this.socket = new WebSocket(this.options.wsUrl, [
+            this.options.wsprotocol,
+        ]);
         const { socket, register } = this;
 
         socket.binaryType = "arraybuffer";
@@ -299,10 +292,9 @@ export class Xterm {
         register(
             addEventListener(socket, "error", () => (this.doReconnect = false)),
         );
-    }
+    };
 
-    @bind
-    private onSocketOpen() {
+    onSocketOpen = () => {
         console.log("[ttyd] websocket connection opened");
 
         const { textEncoder, terminal, overlayAddon } = this;
@@ -327,15 +319,15 @@ export class Xterm {
         this.doReconnect = this.reconnect;
         this.initListeners();
         terminal.focus();
-    }
+    };
 
-    @bind
-    private onSocketClose(event: CloseEvent) {
+    onSocketClose = (event: CloseEvent) => {
         console.log(
             `[ttyd] websocket connection closed with code: ${event.code}`,
         );
 
-        const {/*  refreshToken, */ connect, doReconnect, overlayAddon } = this;
+        const { /*  refreshToken, */ connect, doReconnect, overlayAddon } =
+            this;
         overlayAddon.showOverlay("Connection Closed");
         this.dispose();
 
@@ -360,10 +352,10 @@ export class Xterm {
             });
             overlayAddon.showOverlay("Press ⏎ to Reconnect");
         }
-    }
+    };
 
-    // @bind
-    // private parseOptsFromUrlQuery(query: string): Preferences {
+    // this.
+    //  public  parseOptsFromUrlQuery(query: string): Preferences {
     //     const { terminal } = this;
     //     const { clientOptions } = this.options;
     //     const prefs = {} as Preferences;
@@ -403,8 +395,7 @@ export class Xterm {
     //     return prefs;
     // }
 
-    @bind
-    private onSocketData(event: MessageEvent) {
+    onSocketData = (event: MessageEvent) => {
         const { textDecoder } = this;
         const rawData = event.data as ArrayBuffer;
         const cmd = String.fromCharCode(new Uint8Array(rawData)[0]);
@@ -429,10 +420,9 @@ export class Xterm {
                 console.warn(`[ttyd] unknown command: ${cmd}`);
                 break;
         }
-    }
+    };
 
-    @bind
-    private applyPreferences(prefs: Preferences) {
+    applyPreferences = (prefs: Preferences) => {
         const { terminal, fitAddon, register } = this;
         if (prefs.enableZmodem || prefs.enableTrzsz) {
             this.zmodemAddon = new ZmodemAddon({
@@ -549,10 +539,9 @@ export class Xterm {
                     break;
             }
         }
-    }
+    };
 
-    @bind
-    private setRendererType(value: RendererType) {
+    setRendererType = (value: RendererType) => {
         const { terminal } = this;
         const disposeCanvasRenderer = () => {
             try {
@@ -627,5 +616,5 @@ export class Xterm {
             default:
                 break;
         }
-    }
+    };
 }

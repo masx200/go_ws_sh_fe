@@ -1,6 +1,5 @@
 <template>
     <div
-        v-if="shouldShow"
         class="fullscreen-div"
         v-show="!error && (loading || !data || data?.length == 0)"
     >
@@ -123,6 +122,10 @@ onMounted(() => {
     return (urlvalue.value = localStorage.getItem("url") ?? "");
 });
 async function handleconnect() {
+    if (urlvalue.value.length == 0 || sessionvalue.value.length == 0) {
+        ElMessage.error("请选择会话和网址");
+        return;
+    }
     router.push(
         "/shell/?server=" +
             encodeURIComponent(urlvalue.value) +

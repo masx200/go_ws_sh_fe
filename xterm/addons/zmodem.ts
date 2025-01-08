@@ -1,5 +1,5 @@
 import { type IDisposable, type ITerminalAddon, Terminal } from "@xterm/xterm";
-import { bind } from "decko";
+
 import { saveAs } from "file-saver";
 import { TrzszFilter } from "trzsz";
 import * as Zmodem from "../../zmodem.js/src/zmodem_browser";
@@ -15,14 +15,21 @@ export interface ZmodeOptions {
 }
 
 export class ZmodemAddon implements ITerminalAddon {
-    private disposables: IDisposable[] = [];
-    private terminal: Terminal | undefined;
-    private sentry: Zmodem.Sentry | undefined;
-    private session: Zmodem.Session | undefined | null;
-    private denier: (() => void) | undefined;
-    private trzszFilter: TrzszFilter | undefined;
-
-    constructor(private options: ZmodeOptions) {}
+    public disposables: IDisposable[] = [];
+    public terminal: Terminal | undefined;
+    public sentry: Zmodem.Sentry | undefined;
+    public session: Zmodem.Session | undefined | null;
+    public denier: (() => void) | undefined;
+    public trzszFilter: TrzszFilter | undefined;
+    reset = () => {
+        const terminal = this.terminal;
+        if (typeof terminal == "undefined") {
+            throw new Error("terminal is undefined");
+        }
+        terminal.options.disableStdin = false;
+        terminal.focus();
+    };
+    constructor(public options: ZmodeOptions) {}
 
     activate(terminal: Terminal) {
         this.terminal = terminal;
@@ -58,17 +65,7 @@ export class ZmodemAddon implements ITerminalAddon {
         }
     }
 
-    @bind
-    private reset() {
-        const terminal = this.terminal;
-        if (typeof terminal == "undefined") {
-            throw new Error("terminal is undefined");
-        }
-        terminal.options.disableStdin = false;
-        terminal.focus();
-    }
-
-    private addDisposableListener(
+    public addDisposableListener(
         target: EventTarget,
         type: string,
         listener: EventListener,
@@ -79,8 +76,7 @@ export class ZmodemAddon implements ITerminalAddon {
         });
     }
 
-    @bind
-    private trzszInit() {
+    trzszInit = () => {
         const { terminal } = this;
         const { sender, writer, zmodem } = this.options;
         if (typeof terminal == "undefined") {
@@ -141,10 +137,9 @@ export class ZmodemAddon implements ITerminalAddon {
                 return trzszFilter.setTerminalColumns(size.cols);
             }),
         );
-    }
+    };
 
-    @bind
-    private zmodemInit() {
+    zmodemInit = () => {
         const { sender, writer } = this.options;
         const { terminal, reset, zmodemDetect } = this;
         this.session = null;
@@ -168,10 +163,9 @@ export class ZmodemAddon implements ITerminalAddon {
                 }
             }),
         );
-    }
+    };
 
-    @bind
-    private zmodemDetect(detection: Zmodem.Detection): void {
+    zmodemDetect = (detection: Zmodem.Detection): void => {
         const { terminal, receiveFile } = this;
         if (typeof terminal == "undefined") {
             throw new Error("terminal is undefined");
@@ -188,10 +182,9 @@ export class ZmodemAddon implements ITerminalAddon {
         } else {
             receiveFile();
         }
-    }
+    };
 
-    @bind
-    public sendFile(files: FileList) {
+    sendFile = (files: FileList) => {
         const { session, writeProgress } = this;
         Zmodem.Browser.send_files(session, files, {
             //@ts-ignore
@@ -205,10 +198,9 @@ export class ZmodemAddon implements ITerminalAddon {
                 return session.close();
             })
             .catch(() => this.reset());
-    }
+    };
 
-    @bind
-    private receiveFile() {
+    receiveFile = () => {
         const { session, writeProgress } = this;
         if (typeof session == "undefined" || !session) {
             throw new Error("session is undefined");
@@ -229,10 +221,9 @@ export class ZmodemAddon implements ITerminalAddon {
         });
 
         session.start();
-    }
+    };
 
-    @bind
-    private writeProgress(offer: Zmodem.Offer) {
+    writeProgress = (offer: Zmodem.Offer) => {
         const { bytesHuman } = this;
         const file = offer.get_details();
         const name = file.name;
@@ -249,10 +240,10 @@ export class ZmodemAddon implements ITerminalAddon {
                 )
             }\r`,
         );
-    }
+    };
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    private bytesHuman(bytes: any, precision: number): string {
+    public bytesHuman(bytes: any, precision: number): string {
         if (!/^([-+])?|(\.\d+)(\d+(\.\d+)?|(\d+\.)|Infinity)$/.test(bytes)) {
             return "-";
         }

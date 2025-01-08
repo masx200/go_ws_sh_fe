@@ -1,8 +1,13 @@
 <template>
     <!-- :tokenurl="tokenUrl" -->
-    <Terminal id="terminal-container" :wsurl="wsUrl" :clientoptions="clientOptions" :termoptions="termOptions"
-        :flowcontrol="flowControl" :wsprotocol="wsprotocol" />
-
+    <Terminal
+        id="terminal-container"
+        :wsurl="wsUrl"
+        :clientoptions="clientOptions"
+        :termoptions="termOptions"
+        :flowcontrol="flowControl"
+        :wsprotocol="wsprotocol"
+    />
 </template>
 
 <script lang="ts">
