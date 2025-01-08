@@ -303,7 +303,6 @@ export class Xterm {
         if (typeof terminal == "undefined") {
             throw new Error("terminal is undefined");
         }
-
     };
 
     onSocketOpen = () => {
@@ -319,7 +318,7 @@ export class Xterm {
         //     rows: terminal.rows,
         // });
         // this.socket?.send(textEncoder.encode(msg));
-        const ws = this.socket
+        const ws = this.socket;
         if (typeof ws == "undefined") {
             throw new Error("ws is undefined");
         }

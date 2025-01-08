@@ -1,6 +1,8 @@
 import { wsmsg } from "~/src/wsmsg";
-import { compressData } from "./compressData";
+import { compressData, decompressData } from "./compressData";
 import { toUint8Array } from "./toUint8Array";
+import { parse } from "avsc";
+import { Buffer } from "buffer";
 export class ShellWebSocketAdaptor extends WebSocket {
     override async send(
         data: string | ArrayBufferLike | Blob | ArrayBufferView,
@@ -22,20 +24,38 @@ export class ShellWebSocketAdaptor extends WebSocket {
         }
     }
     sendResize(cols: number, rows: number) {
-        this.send(JSON.stringify(["resize", cols, rows]));
+        const rm = new ResizeMessage("resize", cols, rows);
+        this.send(JSON.stringify([rm.type, rm.cols, rm.rows]));
     }
-    override addEventListener<K extends keyof WebSocketEventMap>(
-        type: K,
-        listener: (this: WebSocket, ev: WebSocketEventMap[K]) => any,
-        options?: boolean | AddEventListenerOptions,
-    ): void;
-    override addEventListener(
-        type: string,
-        listener: EventListenerOrEventListenerObject,
-        options?: boolean | AddEventListenerOptions,
-    ): void;
-    override addEventListener(type: any, listener: any, options?: any): void {
-        super.addEventListener(type, listener, options);
+
+    parseMessage(event: MessageEvent): TextMessage | BinaryMessage {
+        const msgcodec = createcodec();
+        const data = event.data;
+        if (typeof data === "string") throw new Error("invalid message type");
+        if (data instanceof Uint8Array) {
+            const wsmsgins = wsmsg.decode(decompressData(data));
+            if (wsmsgins.type === WebSocketMessage.BinaryMessage) {
+                //@ts-ignore
+                const bm = msgcodec.fromBuffer(Buffer.from(wsmsgins.data));
+                return new BinaryMessage(bm.type, bufferToUint8Array(bm.body));
+            }
+            if (wsmsgins.type === WebSocketMessage.TextMessage) {
+                const array = JSON.parse(
+                    new TextDecoder().decode(wsmsgins.data),
+                );
+                if (!Array.isArray(array)) {
+                    throw new Error("invalid message array");
+                }
+                if (array.length !== 2) {
+                    throw new Error("invalid message length");
+                }
+                if (array.every((data) => typeof data === "string")) {
+                    throw new Error("invalid message type");
+                }
+                return new TextMessage(...(array as [string, string]));
+            }
+        }
+        throw new Error("unknown message type");
     }
 }
 
@@ -45,4 +65,66 @@ export const enum WebSocketMessage {
     CloseMessage = 8,
     PingMessage = 9,
     PongMessage = 10,
+}
+export class BinaryMessage {
+    constructor(
+        public type: string,
+        public body: Uint8Array,
+    ) {}
+}
+export class TextMessage {
+    constructor(
+        public type: string,
+        public body: string,
+    ) {}
+}
+export class ResizeMessage {
+    constructor(
+        public type: string,
+        public cols: number,
+        public rows: number,
+    ) {}
+}
+export const MessageSchema = {
+    type: "record",
+    name: "message",
+    fields: [
+        {
+            name: "type",
+            type: "string",
+        },
+        {
+            name: "body",
+            type: "bytes",
+        },
+    ],
+};
+
+export function createcodec(): EncodedDecodeMessageType {
+    const msgcodec: EncodedDecodeMessageType = parse(
+        JSON.stringify(MessageSchema),
+    ) as EncodedDecodeMessageType;
+    return msgcodec;
+}
+export interface EncodedDecodeMessageType {
+    //@ts-ignore
+    fromBuffer(buf: Buffer<Uint8Array>): BinaryMessageAvro;
+    //@ts-ignore
+    toBuffer(em: BinaryMessageAvro): Buffer<Uint8Array>;
+}
+export interface BinaryMessageAvro {
+    type: string;
+    //@ts-ignore
+    body: Buffer<Uint8Array>;
+}
+//@ts-ignore
+export function bufferToUint8Array(buffer: Buffer<Uint8Array>): Uint8Array {
+    //@ts-ignore
+    const uint8Array = new Uint8Array(buffer.length);
+    //@ts-ignore
+    for (let i = 0; i < buffer.length; i++) {
+        //@ts-ignore
+        uint8Array[i] = buffer[i];
+    }
+    return new Uint8Array(uint8Array);
 }
