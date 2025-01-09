@@ -1,7 +1,7 @@
 <template>
     <!-- :tokenurl="tokenUrl" -->
     <Terminal
-        id="terminal-container"
+        :divid="divid"
         :wsurl="wsUrl"
         :clientoptions="clientOptions"
         :termoptions="termOptions"
@@ -12,6 +12,7 @@
 </template>
 
 <script lang="ts">
+const divid = "terminal-container";
 import { defineComponent } from "vue";
 import Terminal from "./terminal.vue";
 
@@ -97,6 +98,7 @@ export default defineComponent({
     },
     data() {
         return {
+            divid,
             // wsUrl,
             // tokenUrl,
             clientOptions,

@@ -1,14 +1,9 @@
 <template>
-    <div
-        class="fullscreen-div"
-        v-show="!(appopts.wsprotocol.length && appopts.wsurl.length)"
-    >
-        <Loading
-            v-show="!(appopts.wsprotocol.length && appopts.wsurl.length)"
-        ></Loading>
+    <div class="fullscreen-div" v-show="loading">
+        <Loading v-show="loading"></Loading>
     </div>
     <App
-        v-if="appopts.wsprotocol.length && appopts.wsurl.length"
+        v-if="!loading"
         :wsprotocol="appopts.wsprotocol"
         v-bind:ws-url="appopts.wsurl"
         :reconnect="reconnect"
@@ -24,6 +19,9 @@ const appopts = reactive({
     wsprotocol: "",
     wsurl: "",
 });
+const loading = computed(
+    () => !(appopts.wsprotocol.length && appopts.wsurl.length),
+);
 onMounted(async () => {
     const session = new URL(location.href).searchParams.get("session");
     const url = new URL(location.href).searchParams.get("server");
@@ -31,13 +29,14 @@ onMounted(async () => {
         ? (await fetchServerInfoServer(url)).serverinfo?.[0].token
         : localStorage?.getItem("token");
     if (!token || !url || !session) {
-        router.push("/");
+        return router.push("/");
     } else {
         appopts.wsprotocol = encodeURIComponent("token=" + token);
         const url1 = new URL(url);
         url1.protocol = url1.protocol.replace("http", "ws");
         url1.pathname = session;
         appopts.wsurl = url1.href;
+        // alert("加载成功");
     }
     // 这里可以添加初始化逻辑
 });

@@ -1,5 +1,5 @@
 <template>
-    <div :id="id" ref="container">
+    <div :id="divid" ref="container">
         <Modal :show="modal">
             <label class="file-label">
                 <input
@@ -66,7 +66,7 @@ export default defineComponent({
             type: Object as PropType<ClientOptions>,
             required: true,
         },
-        id: {
+        divid: {
             type: String,
             required: true,
         },
@@ -164,25 +164,31 @@ export default defineComponent({
         };
 
         onMounted(async () => {
-            const x = await import("../xterm/index.ts");
-            xterm = new x.Xterm(
-                {
-                    ...props,
-                    wsUrl: props["wsurl"],
-                    termOptions: props.termoptions,
-                    /* tokenUrl: props.tokenurl, */ flowControl:
-                        props.flowcontrol,
-                    clientOptions: props.clientoptions,
-                    wsprotocol: props.wsprotocol,
-                    reconnect: props.reconnect,
-                },
-                showModal,
-            );
-            const value = container.value;
-            // await xterm.refreshToken();
-            if (!value) throw new Error("container is null");
-            xterm.open(value);
-            xterm.connect();
+            // alert("Terminal connecting");
+            try {
+                const x = await import("../xterm/index.ts");
+                xterm = new x.Xterm(
+                    {
+                        ...props,
+                        wsUrl: props["wsurl"],
+                        termOptions: props.termoptions,
+                        /* tokenUrl: props.tokenurl, */ flowControl:
+                            props.flowcontrol,
+                        clientOptions: props.clientoptions,
+                        wsprotocol: props.wsprotocol,
+                        reconnect: props.reconnect,
+                    },
+                    showModal,
+                );
+                const value = container.value;
+                // await xterm.refreshToken();
+                if (!value) throw new Error("container is null");
+                xterm.open(value);
+                xterm.connect();
+                // alert("Terminal connected");
+            } catch (error) {
+                alert(String(error));
+            }
         });
 
         onUnmounted(() => {
