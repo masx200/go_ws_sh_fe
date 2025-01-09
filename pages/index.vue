@@ -55,6 +55,11 @@
                             placeholder="Select"
                             size="large"
                             style="width: 800px"
+                            @change="
+                                async (value) => {
+                                    await handleServerChange(value);
+                                }
+                            "
                         >
                             <el-option
                                 v-for="item in urloptions"
@@ -99,6 +104,20 @@
 </template>
 
 <script setup lang="ts">
+async function handleServerChange(value: any) {
+    const server = value;
+    if (server) {
+        await runAsync(
+            (await fetchServerInfoServer(server)).serverinfo?.[0].token ??
+                gettoken() ??
+                "",
+            value,
+        ).then(
+            (a) => console.log(a),
+            (e) => console.error(e),
+        );
+    }
+}
 const shouldShow = computed(() => {
     return urlvalue.value.length && toeknvalue.value.length;
 });
@@ -145,11 +164,12 @@ import { ElButton, ElMessage } from "element-plus";
 import { useRequest } from "vue-hooks-plus/es/useRequest/useRequest";
 import Loading from "~/src/loading.vue";
 import { cleartoken, logout } from "~/src/logout";
-import { gettoken, list } from "../src/list.ts";
 import {
     fetchServerInfoAll,
+    fetchServerInfoServer,
     TableServerInfoDeleteAll,
 } from "~/src/ServerConnectionInfo";
+import { gettoken, list } from "../src/list.ts";
 const sessionvalue = ref("");
 onMounted(() => {
     const url = localStorage?.getItem("server");
@@ -166,9 +186,9 @@ const urloptions: Ref<{ value: string; label: string }[]> = ref<
     { value: string; label: string }[]
 >([]);
 const router = useRouter();
-async function service(token: string) {
+async function service(token: string, server: string) {
     if (!token) throw new Error("token is null");
-    const url = localStorage.getItem("server");
+    const url = server ?? localStorage.getItem("server");
     if (!url) throw new Error("url is null");
     const newLocal_1 = await list({ token }, new URL("/list", url).href);
     if (newLocal_1.username.length) {
@@ -179,13 +199,13 @@ async function service(token: string) {
     return newLocal_1.list;
 }
 onMounted(async () => {
-    await runAsync(gettoken() ?? "").then(
+    await runAsync(gettoken() ?? "", localStorage.getItem("server") ?? "").then(
         (a) => console.log(a),
         (e) => console.error(e),
     );
 });
 const { data, error, loading, runAsync } = useRequest(service, {
-    defaultParams: [""],
+    defaultParams: ["", ""],
     manual: true,
 });
 watch(error, (error) => {
@@ -225,7 +245,7 @@ if (data.value) {
 const handleLogin = () => {
     // 这里可以添加登录逻辑
     //ElMessage.success("登录页面");
-    router.push("/login?redirect=/");
+    return router.push("/login?redirect=/");
 };
 
 const handleLogout = async () => {
@@ -256,11 +276,11 @@ const handleLogout = async () => {
 
             ElMessage.error("退出登录失败:" + String(error));
         } finally {
-            router.push("/login?redirect=/");
+            return router.push("/login?redirect=/");
         }
     } else {
         ElMessage.error("退出登录失败:未登录");
-        router.push("/login?redirect=/");
+        return router.push("/login?redirect=/");
     }
 };
 </script>
