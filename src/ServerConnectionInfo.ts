@@ -29,7 +29,7 @@ export async function updateOrAddIntoTableServerInfo({
     token: string;
     username: string;
 }) {
-    const { serverinfo, tableserver } = await fetchServerInfo(server);
+    const { serverinfo, tableserver } = await fetchServerInfoServer(server);
     if (serverinfo.length) {
         const n = await tableserver.bulkUpdate(
             serverinfo.map((item) => {
@@ -58,8 +58,13 @@ export async function TableServerInfoDeleteAll() {
     const tableserver = createTableServerConnectionInfo();
     await tableserver.clear();
 }
-export async function fetchServerInfo(server: string) {
+export async function fetchServerInfoServer(server: string) {
     const tableserver = createTableServerConnectionInfo();
     const serverinfo = await tableserver.where({ server: server }).toArray();
+    return { serverinfo, tableserver };
+}
+export async function fetchServerInfoAll() {
+    const tableserver = createTableServerConnectionInfo();
+    const serverinfo = await tableserver.toArray();
     return { serverinfo, tableserver };
 }

@@ -104,13 +104,19 @@ const shouldShow = computed(() => {
 });
 const urlvalue = ref("");
 const toeknvalue = ref("");
-onMounted(() => {
-    urloptions.value = [
-        {
-            value: localStorage.getItem("server") ?? "",
-            label: localStorage.getItem("server") ?? "",
-        },
-    ];
+onMounted(async () => {
+    const serverinfo = await fetchServerInfoAll();
+    urloptions.value = serverinfo.serverinfo.length
+        ? serverinfo.serverinfo.map((a) => ({
+              value: a.server,
+              label: a.server,
+          }))
+        : [
+              {
+                  value: localStorage.getItem("server") ?? "",
+                  label: localStorage.getItem("server") ?? "",
+              },
+          ];
     options.value = [
         {
             value: localStorage.getItem("session") ?? "",
@@ -126,7 +132,7 @@ async function handleconnect() {
         ElMessage.error("请选择会话和网址");
         return;
     }
-    router.push(
+    await router.push(
         "/shell/?server=" +
             encodeURIComponent(urlvalue.value) +
             "&session=" +
@@ -140,7 +146,10 @@ import { useRequest } from "vue-hooks-plus/es/useRequest/useRequest";
 import Loading from "~/src/loading.vue";
 import { cleartoken, logout } from "~/src/logout";
 import { gettoken, list } from "../src/list.ts";
-import { TableServerInfoDeleteAll } from "~/src/ServerConnectionInfo";
+import {
+    fetchServerInfoAll,
+    TableServerInfoDeleteAll,
+} from "~/src/ServerConnectionInfo";
 const sessionvalue = ref("");
 onMounted(() => {
     const url = localStorage?.getItem("server");

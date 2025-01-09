@@ -18,7 +18,7 @@
 import Loading from "~/src/loading.vue";
 const reconnect = false;
 import App from "~/src/App.vue";
-import { fetchServerInfo } from "~/src/ServerConnectionInfo";
+import { fetchServerInfoServer } from "~/src/ServerConnectionInfo";
 const router = useRouter();
 const appopts = reactive({
     wsprotocol: "",
@@ -28,7 +28,7 @@ onMounted(async () => {
     const session = new URL(location.href).searchParams.get("session");
     const url = new URL(location.href).searchParams.get("server");
     const token = url
-        ? (await fetchServerInfo(url)).serverinfo?.[0].token
+        ? (await fetchServerInfoServer(url)).serverinfo?.[0].token
         : localStorage?.getItem("token");
     if (!token || !url || !session) {
         router.push("/");
