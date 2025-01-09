@@ -152,7 +152,7 @@ async function handleconnect() {
         return;
     }
     await router.push(
-        "/shell/?server=" +
+        "/shell?server=" +
             encodeURIComponent(urlvalue.value) +
             "&session=" +
             sessionvalue.value,
