@@ -140,6 +140,7 @@ import { useRequest } from "vue-hooks-plus/es/useRequest/useRequest";
 import Loading from "~/src/loading.vue";
 import { cleartoken, logout } from "~/src/logout";
 import { gettoken, list } from "../src/list.ts";
+import { TableServerInfoDeleteAll } from "~/src/ServerConnectionInfo";
 const sessionvalue = ref("");
 onMounted(() => {
     const url = localStorage?.getItem("server");
@@ -219,6 +220,12 @@ const handleLogin = () => {
 };
 
 const handleLogout = async () => {
+    await TableServerInfoDeleteAll().then(
+        () => {
+            ElMessage.success("退出登录成功");
+        },
+        (e) => ElMessage.error("退出登录失败:" + String(error)),
+    );
     // 这里可以添加退出逻辑
     const token = localStorage?.getItem("token");
     if (token) {

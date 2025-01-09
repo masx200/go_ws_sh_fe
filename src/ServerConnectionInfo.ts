@@ -54,3 +54,8 @@ export async function updateOrAddIntoTableServerInfo({
         console.log("add success id", id);
     }
 }
+
+export async function TableServerInfoDeleteAll() {
+    const tableserver = createTableServerConnectionInfo();
+    await tableserver.clear();
+}
