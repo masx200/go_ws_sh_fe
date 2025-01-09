@@ -24,8 +24,8 @@
                         show-password
                     />
                 </el-form-item>
-                <el-form-item label="网址" prop="url">
-                    <el-input v-model="loginForm.url" autocomplete="on" />
+                <el-form-item label="网址" prop="server">
+                    <el-input v-model="loginForm.server" autocomplete="on" />
                 </el-form-item>
                 <el-form-item class="center-button">
                     <el-button
@@ -55,6 +55,7 @@ import type { ValidateFieldsError } from "async-validator";
 import type { FormInstance, FormRules } from "element-plus";
 import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
+import { updateOrAddIntoTableServerInfo } from "~/src/ServerConnectionInfo";
 import { login, savetoken } from "../src/login.ts";
 const loginstate = ref("");
 const loginstyle = ref("");
@@ -62,11 +63,11 @@ const loginFormRef = ref<FormInstance | null>(null);
 const loginForm = reactive({
     username: "",
     password: "",
-    url: "",
+    server: "",
 });
 const router = useRouter();
 const rules = reactive<FormRules<typeof loginForm>>({
-    url: [
+    server: [
         { required: true, message: "请输入网址", trigger: "blur" },
         {
             validator: (rule, value, callback) => {
@@ -114,15 +115,20 @@ const submitForm = (formEl: FormInstance | null) => {
                             username: loginForm.username,
                             password: loginForm.password,
                         },
-                        new URL("/login", loginForm.url).href,
+                        new URL("/login", loginForm.server).href,
                     );
                     console.log(newLocal);
-                    localStorage.setItem("url", loginForm.url);
+                    localStorage.setItem("server", loginForm.server);
                     loginstate.value = "登录成功:" + loginForm.username;
                     loginstyle.value = "color:green";
                     savetoken(newLocal);
                     ElMessage.success("登录成功:" + loginForm.username);
-                    router.push(
+                    await updateOrAddIntoTableServerInfo({
+                        server: loginForm.server,
+                        username: loginForm.username,
+                        token: newLocal.token,
+                    });
+                    await router.push(
                         new URL(location.href).searchParams.get("redirect") ??
                             "/",
                     );

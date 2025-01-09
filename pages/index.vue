@@ -107,8 +107,8 @@ const toeknvalue = ref("");
 onMounted(() => {
     urloptions.value = [
         {
-            value: localStorage.getItem("url") ?? "",
-            label: localStorage.getItem("url") ?? "",
+            value: localStorage.getItem("server") ?? "",
+            label: localStorage.getItem("server") ?? "",
         },
     ];
     options.value = [
@@ -119,7 +119,7 @@ onMounted(() => {
     ];
     sessionvalue.value = localStorage.getItem("session") ?? "";
     toeknvalue.value = localStorage.getItem("token") ?? "";
-    return (urlvalue.value = localStorage.getItem("url") ?? "");
+    return (urlvalue.value = localStorage.getItem("server") ?? "");
 });
 async function handleconnect() {
     if (urlvalue.value.length == 0 || sessionvalue.value.length == 0) {
@@ -142,7 +142,7 @@ import { cleartoken, logout } from "~/src/logout";
 import { gettoken, list } from "../src/list.ts";
 const sessionvalue = ref("");
 onMounted(() => {
-    const url = localStorage?.getItem("url");
+    const url = localStorage?.getItem("server");
     const token = localStorage?.getItem("token");
     if (!token || !url) {
         router.push("/login?redirect=/");
@@ -158,7 +158,7 @@ const urloptions: Ref<{ value: string; label: string }[]> = ref<
 const router = useRouter();
 async function service(token: string) {
     if (!token) throw new Error("token is null");
-    const url = localStorage.getItem("url");
+    const url = localStorage.getItem("server");
     if (!url) throw new Error("url is null");
     const newLocal_1 = await list({ token }, new URL("/list", url).href);
     if (newLocal_1.username.length) {
@@ -179,7 +179,7 @@ const { data, error, loading, runAsync } = useRequest(service, {
     manual: true,
 });
 watch(error, (error) => {
-    const url = localStorage?.getItem("url");
+    const url = localStorage?.getItem("server");
     const token = localStorage?.getItem("token");
     if (!token || !url) {
         router.push("/login?redirect=/");
@@ -223,7 +223,7 @@ const handleLogout = async () => {
     const token = localStorage?.getItem("token");
     if (token) {
         try {
-            const url = localStorage.getItem("url");
+            const url = localStorage.getItem("server");
             if (!url) throw new Error("url is null");
             const newLocal = await logout(
                 {

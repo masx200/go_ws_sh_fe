@@ -49,7 +49,7 @@ export class ShellWebSocketAdaptor extends WebSocket {
     }
 
     parseMessage(event: MessageEvent): TextMessage | BinaryMessage {
-        console.log(event)
+        console.log(event);
         const msgcodec = createcodec();
         const data = event.data;
         if (typeof data === "string") throw new Error("invalid message type");
@@ -64,7 +64,7 @@ export class ShellWebSocketAdaptor extends WebSocket {
                 const array = JSON.parse(
                     new TextDecoder().decode(wsmsgins.data),
                 );
-                console.log(array)
+                console.log(array);
                 if (!Array.isArray(array)) {
                     throw new Error("invalid message array");
                 }
@@ -92,20 +92,20 @@ export class BinaryMessage {
     constructor(
         public type: string,
         public body: Uint8Array,
-    ) { }
+    ) {}
 }
 export class TextMessage {
     constructor(
         public type: string,
         public body: string,
-    ) { }
+    ) {}
 }
 export class ResizeMessage {
     constructor(
         public type: string,
         public cols: number,
         public rows: number,
-    ) { }
+    ) {}
 }
 export const MessageSchema = {
     type: "record",

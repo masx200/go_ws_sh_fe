@@ -27,6 +27,7 @@
         "avsc": "^5.7.7",
         "buffer": "^6.0.3",
         "decko": "^1.2.0",
+        "dexie": "^4.0.10",
         "element-plus": "^2.9.2",
         "file-saver": "^2.0.5",
         "google-protobuf": "^3.21.4",
