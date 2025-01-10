@@ -188,15 +188,21 @@ const urloptions: Ref<{ value: string; label: string }[]> = ref<
 const router = useRouter();
 async function service(token: string, server: string) {
     if (!token) throw new Error("token is null");
-    const url = server ?? localStorage.getItem("server");
-    if (!url) throw new Error("url is null");
-    const newLocal_1 = await list({ token }, new URL("/list", url).href);
+    const urlserver = server ?? localStorage.getItem("server");
+    if (!urlserver) throw new Error("url is null");
+    const newLocal_1 = await list({ token }, new URL("/list", urlserver).href);
     if (newLocal_1.username.length) {
         ElMessage.success("登录成功:" + newLocal_1.username);
         loginstate.value = "登录成功:" + newLocal_1.username;
         loginstyle.value = "color:green";
+        const session = newLocal_1.list[0];
+        localStorage.setItem("token", token);
+        localStorage.setItem("server", server);
+        localStorage.setItem("session", session);
+        return newLocal_1.list;
     }
-    return newLocal_1.list;
+    throw new Error("登录失败,服务端没有session列表");
+    // console.log()
 }
 onMounted(async () => {
     await runAsync(gettoken() ?? "", localStorage.getItem("server") ?? "").then(
@@ -208,17 +214,19 @@ const { data, error, loading, runAsync } = useRequest(service, {
     defaultParams: ["", ""],
     manual: true,
 });
-watch(error, (error) => {
-    const url = localStorage?.getItem("server");
-    const token = localStorage?.getItem("token");
-    if (!token || !url) {
-        router.push("/login?redirect=/");
-        return;
+watch(error, async (error) => {
+    if (error) {
+        const url = localStorage?.getItem("server");
+        const token = localStorage?.getItem("token");
+        if (!token || !url) {
+            await router.push("/login?redirect=/");
+            return;
+        }
+        console.log(error);
+        ElMessage.error("获取列表失败:" + String(error));
+        loginstate.value = "登录失败:" + String(error);
+        loginstyle.value = "color:red";
     }
-    console.log(error);
-    ElMessage.error("获取列表失败:" + String(error));
-    loginstate.value = "登录失败:" + String(error);
-    loginstyle.value = "color:red";
 });
 watch(data, (data) => {
     if (data) {

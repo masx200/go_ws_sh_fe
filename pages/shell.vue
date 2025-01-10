@@ -24,19 +24,22 @@ const loading = computed(
 );
 onMounted(async () => {
     const session = new URL(location.href).searchParams.get("session");
-    const url = new URL(location.href).searchParams.get("server");
-    const token = url
-        ? (await fetchServerInfoServer(url)).serverinfo?.[0].token
+    const server = new URL(location.href).searchParams.get("server");
+    const token = server
+        ? (await fetchServerInfoServer(server)).serverinfo?.[0].token
         : localStorage?.getItem("token");
-    if (!token || !url || !session) {
+    if (!token || !server || !session) {
         return router.push("/");
     } else {
         appopts.wsprotocol = encodeURIComponent("token=" + token);
-        const url1 = new URL(url);
+        const url1 = new URL(server);
         url1.protocol = url1.protocol.replace("http", "ws");
         url1.pathname = session;
         appopts.wsurl = url1.href;
         // alert("加载成功");
+        localStorage.setItem("token", token);
+        localStorage.setItem("server", server);
+        localStorage.setItem("session", session);
     }
     // 这里可以添加初始化逻辑
 });
