@@ -146,16 +146,29 @@ onMounted(async () => {
     toeknvalue.value = localStorage.getItem("token") ?? "";
     return (urlvalue.value = localStorage.getItem("server") ?? "");
 });
+function openNewWindow(strUrl: string) {
+    // const strUrl = "https://www.baidu.com";
+    let a = document.createElement("a");
+    document.body.appendChild(a);
+    // a.style = "display: none";
+    a.target = "_blank";
+    a.href = strUrl;
+    a.click();
+    document.body.removeChild(a);
+}
 async function handleconnect() {
     if (urlvalue.value.length == 0 || sessionvalue.value.length == 0) {
         ElMessage.error("请选择会话和网址");
         return;
     }
-    await router.push(
-        "/shell?server=" +
-            encodeURIComponent(urlvalue.value) +
-            "&session=" +
-            sessionvalue.value,
+    openNewWindow(
+        new URL(
+            "/shell?server=" +
+                encodeURIComponent(urlvalue.value) +
+                "&session=" +
+                sessionvalue.value,
+            location.href,
+        ).href,
     );
 }
 const loginstate = ref("");
