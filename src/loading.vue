@@ -51,7 +51,7 @@
     background: #f0f0f0;
     height: 50px;
     line-height: 50px;
-    transform: scale(10) translate(0%, 80%);
+    transform: scale(5) translate(0%, 100%);
 }
 .loading-panel .loading {
     vertical-align: middle;
