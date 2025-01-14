@@ -151,6 +151,7 @@ function openNewWindow(strUrl: string) {
     let a = document.createElement("a");
     document.body.appendChild(a);
     // a.style = "display: none";
+    a.setAttribute("style", "display: none");
     a.target = "_blank";
     a.href = strUrl;
     a.click();
