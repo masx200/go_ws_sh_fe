@@ -17,7 +17,7 @@ yarn.lock
 .DS_Store
 .fleet
 .idea
-
+deno.lock
 # Local env files
 .env
 .env.*

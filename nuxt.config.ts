@@ -1,6 +1,17 @@
 import { defineNuxtConfig } from "nuxt/config";
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+    pwa: {
+        manifest: {
+            name: "My Nuxt PWA App",
+            short_name: "NuxtPWA",
+            lang: "en",
+            display: "standalone",
+            background_color: "#ffffff",
+            theme_color: "#000000",
+            // 其他manifest属性...
+        },
+    },
     app: {
         head: {
             link: [
@@ -20,7 +31,7 @@ export default defineNuxtConfig({
     elementPlus: {},
     compatibilityDate: "2024-11-01",
     devtools: { enabled: true },
-    modules: ["@element-plus/nuxt"],
+    modules: ["@element-plus/nuxt", "@vite-pwa/nuxt"],
     vite: {
         build: {
             minify: "terser",
