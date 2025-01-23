@@ -2,6 +2,11 @@ import { defineNuxtConfig } from "nuxt/config";
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
     pwa: {
+        workbox: {
+            // 缓存所有 js 和 css 文件
+            globPatterns: ["**/*.{js,css}"],
+        },
+        registerType: "autoUpdate",
         manifest: {
             name: "My Nuxt PWA App",
             short_name: "NuxtPWA",
