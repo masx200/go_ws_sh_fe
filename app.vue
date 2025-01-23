@@ -1,4 +1,5 @@
 <template>
+    <NuxtPwaManifest />
     <div style="height: 100%">
         <NuxtRouteAnnouncer />
         <NuxtLayout>
