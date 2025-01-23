@@ -6,6 +6,9 @@ export default defineNuxtConfig({
             // 缓存所有 js 和 css 文件
             globPatterns: ["**/*.{js,css}"],
         },
+        injectManifest: {
+            globPatterns: ["**/*.{js,css,html,png,svg,ico}"],
+        },
         registerType: "autoUpdate",
         manifest: {
             name: "My Nuxt PWA App",

@@ -8,7 +8,7 @@
         "generate": "nuxt generate",
         "preview": "nuxt preview",
         "postinstall": "nuxt prepare",
-        "format": "npx -y prettier -w */**/*.vue */**/*.css */**/*.ts */**/*.json *.md *.json"
+        "format": "npx -y prettier -w */**/*.vue */**/*.css */**/*.ts */**/*.json *.md *.json *.ts"
     },
     "dependencies": {
         "@element-plus/icons-vue": "^2.3.1",
