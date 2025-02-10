@@ -111,6 +111,9 @@ const submitForm = (formEl: FormInstance | null) => {
                 //   ElMessage.error(error.message || '登录失败')
                 // })
                 try {
+                    const newLocalurl = new URL(loginForm.server);
+                    newLocalurl.hash = "";
+                    loginForm.server = newLocalurl.href;
                     const newLocal = await login(
                         {
                             username: loginForm.username,

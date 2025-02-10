@@ -86,9 +86,17 @@
                     </el-row>
                 </div>
                 <hr />
+                <el-row align="middle" justify="center">
+                    <el-button
+                        size="large"
+                        type="success"
+                        @click="handleconnect"
+                        >连接</el-button
+                    >
 
-                <el-button size="large" type="default" @click="handleconnect"
-                    >连接</el-button
+                    <el-button size="large" type="danger" @click="handledelete"
+                        >删除</el-button
+                    ></el-row
                 >
             </div>
         </main>
@@ -96,6 +104,24 @@
 </template>
 
 <script setup lang="ts">
+async function handledelete() {
+    const server = urlvalue.value;
+
+    if (server.length) {
+        await TableServerInfoDeleteByServer(server);
+
+        const serverinfo = await fetchServerInfoAll();
+        if (serverinfo.serverinfo.length == 0) {
+            router.push("/login?redirect=/");
+        } else {
+            urloptions.value = serverinfo.serverinfo.map((a) => ({
+                value: a.server,
+                label: a.server,
+            }));
+            urlvalue.value = serverinfo.serverinfo[0].server;
+        }
+    }
+}
 const showloading = ref(true);
 async function handleServerChange(value: any) {
     const server = value;
@@ -150,7 +176,10 @@ onMounted(async () => {
         sessionvalue.value = localStorage.getItem("session") ?? "";
         toeknvalue.value = localStorage.getItem("token") ?? "";
         urlvalue.value = localStorage.getItem("server") ?? "";
-        showloading.value = false;
+        if (urlvalue.value.length == 0) {
+            urlvalue.value = serverinfo.serverinfo[0].server;
+            showloading.value = false;
+        }
     } finally {
         showloading.value = false;
     }
@@ -181,6 +210,10 @@ async function handleconnect() {
             (e) => console.error(e),
         );
         showloading.value = false;
+
+        const newLocalurl = new URL(urlvalue.value);
+        newLocalurl.hash = "";
+        urlvalue.value = newLocalurl.href;
         openNewWindow(
             new URL(
                 "/shell?server=" +
@@ -204,6 +237,7 @@ import {
     fetchServerInfoAll,
     fetchServerInfoServer,
     TableServerInfoDeleteAll,
+    TableServerInfoDeleteByServer,
 } from "~/src/ServerConnectionInfo";
 import { gettoken, list } from "../src/list.ts";
 const sessionvalue = ref("");
