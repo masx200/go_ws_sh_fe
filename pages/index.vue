@@ -319,7 +319,7 @@ watch(error, async (error) => {
     }
 });
 watch(data, (data) => {
-    if (data) {
+    if (data?.length) {
         options.value = data.map((item) => {
             return {
                 value: item,
@@ -334,7 +334,7 @@ watch(data, (data) => {
 });
 
 onMounted(() => {
-    if (data.value) {
+    if (data?.value?.length) {
         options.value = data.value?.map((item) => {
             return {
                 value: item,

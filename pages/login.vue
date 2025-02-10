@@ -155,6 +155,10 @@ const submitForm = (formEl: FormInstance | null) => {
                             session: newLocal_1.list,
                         });
                         console.log(newLocal_1.list);
+
+                        requestAnimationFrame(() => {
+                            location.reload();
+                        });
                         return; //newLocal_1.list;
                     }
                     throw new Error("登录失败,服务端没有session列表");
