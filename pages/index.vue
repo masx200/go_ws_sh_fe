@@ -1,26 +1,18 @@
 <template>
-    <div
-        class="fullscreen-div"
-        v-show="!error && (loading || !data || data?.length == 0)"
-    >
-        <Loading
-            v-show="!error && (loading || !data || data?.length == 0)"
-        ></Loading>
+    <div class="fullscreen-div" v-if="showloading || loading">
+        <Loading v-if="showloading || loading"></Loading>
     </div>
-    <div v-if="shouldShow" class="app-container">
-        <header
-            class="header"
-            v-show="error || !(loading || !data || data?.length == 0)"
-        >
+
+    <!-- v-if="shouldShow" -->
+    <div class="app-container" v-if="!(showloading || loading)">
+        <!-- v-if="error || !(loading || !data || data?.length == 0)" -->
+        <header class="header" v-if="!(showloading || loading)">
             <el-button type="primary" @click="handleLogin">登录</el-button>
             <span :style="loginstyle">{{ loginstate }}</span>
             <el-button type="danger" @click="handleLogout">退出</el-button>
         </header>
-
-        <main
-            class="main-content"
-            v-show="error || !(loading || !data || data?.length == 0)"
-        >
+        <!-- v-if="error || !(loading || !data || data?.length == 0)" -->
+        <main class="main-content" v-if="!(showloading || loading)">
             <div
                 style="
                     height: 100%;
@@ -104,47 +96,64 @@
 </template>
 
 <script setup lang="ts">
+const showloading = ref(true);
 async function handleServerChange(value: any) {
     const server = value;
     if (server) {
-        await runAsync(
-            (await fetchServerInfoServer(server)).serverinfo?.[0].token ??
-                gettoken() ??
-                "",
-            value,
-        ).then(
-            (a) => console.log(a),
-            (e) => console.error(e),
-        );
+        try {
+            showloading.value = true;
+            await runAsync(
+                (await fetchServerInfoServer(server)).serverinfo?.[0].token ??
+                    gettoken() ??
+                    "",
+                value,
+            ).then(
+                (a) => console.log(a),
+                (e) => console.error(e),
+            );
+        } finally {
+            showloading.value = false;
+        }
     }
 }
-const shouldShow = computed(() => {
-    return urlvalue.value.length && toeknvalue.value.length;
-});
+// const shouldShow = computed(() => {
+//     return urlvalue.value.length && toeknvalue.value.length;
+// });
 const urlvalue = ref("");
 const toeknvalue = ref("");
 onMounted(async () => {
-    const serverinfo = await fetchServerInfoAll();
-    urloptions.value = serverinfo.serverinfo.length
-        ? serverinfo.serverinfo.map((a) => ({
-              value: a.server,
-              label: a.server,
-          }))
-        : [
-              {
-                  value: localStorage.getItem("server") ?? "",
-                  label: localStorage.getItem("server") ?? "",
-              },
-          ];
-    options.value = [
-        {
-            value: localStorage.getItem("session") ?? "",
-            label: localStorage.getItem("session") ?? "",
-        },
-    ];
-    sessionvalue.value = localStorage.getItem("session") ?? "";
-    toeknvalue.value = localStorage.getItem("token") ?? "";
-    return (urlvalue.value = localStorage.getItem("server") ?? "");
+    try {
+        showloading.value = true;
+        const serverinfo = await fetchServerInfoAll();
+        urloptions.value = serverinfo.serverinfo.length
+            ? serverinfo.serverinfo.map((a) => ({
+                  value: a.server,
+                  label: a.server,
+              }))
+            : [
+                  {
+                      value: localStorage.getItem("server") ?? "",
+                      label: localStorage.getItem("server") ?? "",
+                  },
+              ];
+        options.value = serverinfo.serverinfo
+            .filter((i) => i.server == serverinfo.serverinfo[0].server)
+            .map((a) => a.session)
+            .map((s) => {
+                return s.map((c) => {
+                    return {
+                        value: c,
+                        label: c,
+                    };
+                });
+            })[0];
+        sessionvalue.value = localStorage.getItem("session") ?? "";
+        toeknvalue.value = localStorage.getItem("token") ?? "";
+        urlvalue.value = localStorage.getItem("server") ?? "";
+        showloading.value = false;
+    } finally {
+        showloading.value = false;
+    }
 });
 function openNewWindow(strUrl: string) {
     // const strUrl = "https://www.baidu.com";
@@ -162,20 +171,28 @@ async function handleconnect() {
         ElMessage.error("请选择会话和网址");
         return;
     }
-
-    await runAsync(gettoken() ?? "", localStorage.getItem("server") ?? "").then(
-        (a) => console.log(a),
-        (e) => console.error(e),
-    );
-    openNewWindow(
-        new URL(
-            "/shell?server=" +
-                encodeURIComponent(urlvalue.value) +
-                "&session=" +
-                sessionvalue.value,
-            location.href,
-        ).href,
-    );
+    try {
+        showloading.value = true;
+        await runAsync(
+            gettoken() ?? "",
+            localStorage.getItem("server") ?? "",
+        ).then(
+            (a) => console.log(a),
+            (e) => console.error(e),
+        );
+        showloading.value = false;
+        openNewWindow(
+            new URL(
+                "/shell?server=" +
+                    encodeURIComponent(urlvalue.value) +
+                    "&session=" +
+                    sessionvalue.value,
+                location.href,
+            ).href,
+        );
+    } finally {
+        showloading.value = false;
+    }
 }
 const loginstate = ref("");
 const loginstyle = ref("");
@@ -197,6 +214,17 @@ onMounted(() => {
         router.push("/login?redirect=/");
     }
     // 这里可以添加初始化逻辑
+
+    const session = localStorage?.getItem("session");
+    if (session) {
+        sessionvalue.value = session;
+        options.value = [
+            {
+                value: localStorage.getItem("session") ?? "",
+                label: localStorage.getItem("session") ?? "",
+            },
+        ];
+    }
 });
 const options: Ref<{ value: string; label: string }[]> = ref<
     { value: string; label: string }[]
@@ -206,21 +234,30 @@ const urloptions: Ref<{ value: string; label: string }[]> = ref<
 >([]);
 const router = useRouter();
 async function service(token: string, server: string) {
-    if (!token) throw new Error("token is null");
-    const urlserver = server ?? localStorage.getItem("server");
-    if (!urlserver) throw new Error("url is null");
-    const newLocal_1 = await list({ token }, new URL("/list", urlserver).href);
-    if (newLocal_1.username.length) {
-        ElMessage.success("登录成功:" + newLocal_1.username);
-        loginstate.value = "登录成功:" + newLocal_1.username;
-        loginstyle.value = "color:green";
-        const session = newLocal_1.list[0];
-        localStorage.setItem("token", token);
-        localStorage.setItem("server", server);
-        localStorage.setItem("session", session);
-        return newLocal_1.list;
+    try {
+        showloading.value = true;
+        if (!token) throw new Error("token is null");
+        const urlserver = server ?? localStorage.getItem("server");
+        if (!urlserver) throw new Error("url is null");
+        const newLocal_1 = await list(
+            { token },
+            new URL("/list", urlserver).href,
+        );
+        if (newLocal_1.username.length) {
+            ElMessage.success("登录成功:" + newLocal_1.username);
+            loginstate.value = "登录成功:" + newLocal_1.username;
+            loginstyle.value = "color:green";
+            const session = newLocal_1.list[0];
+            localStorage.setItem("token", token);
+            localStorage.setItem("server", server);
+            localStorage.setItem("session", session);
+            return newLocal_1.list;
+        }
+        throw new Error("登录失败,服务端没有session列表");
+    } finally {
+        showloading.value = false;
     }
-    throw new Error("登录失败,服务端没有session列表");
+
     // console.log()
 }
 // onMounted(async () => {
@@ -261,14 +298,17 @@ watch(data, (data) => {
         }
     }
 });
-if (data.value) {
-    options.value = data.value?.map((item) => {
-        return {
-            value: item,
-            label: item,
-        };
-    });
-}
+
+onMounted(() => {
+    if (data.value) {
+        options.value = data.value?.map((item) => {
+            return {
+                value: item,
+                label: item,
+            };
+        });
+    }
+});
 const handleLogin = () => {
     // 这里可以添加登录逻辑
     //ElMessage.success("登录页面");
@@ -298,6 +338,7 @@ const handleLogout = async () => {
             cleartoken(newLocal);
             localStorage.clear();
             ElMessage.success("退出登录成功");
+            return router.push("/login?redirect=/");
         } catch (error) {
             console.log(error);
 

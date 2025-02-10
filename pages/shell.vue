@@ -1,6 +1,6 @@
 <template>
-    <div class="fullscreen-div" v-show="loading">
-        <Loading v-show="loading"></Loading>
+    <div class="fullscreen-div" v-if="loading">
+        <Loading v-if="loading"></Loading>
     </div>
     <App
         v-if="!loading"
@@ -10,10 +10,10 @@
     ></App>
 </template>
 <script setup lang="ts">
-import Loading from "~/src/loading.vue";
-const reconnect = false;
 import App from "~/src/App.vue";
+import Loading from "~/src/loading.vue";
 import { fetchServerInfoServer } from "~/src/ServerConnectionInfo";
+const reconnect = false;
 const router = useRouter();
 const appopts = reactive({
     wsprotocol: "",

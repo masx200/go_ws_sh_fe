@@ -57,6 +57,7 @@ import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import { updateOrAddIntoTableServerInfo } from "~/src/ServerConnectionInfo";
 import { login, savetoken } from "../src/login.ts";
+import { list } from "~/src/list";
 const loginstate = ref("");
 const loginstyle = ref("");
 const loginFormRef = ref<FormInstance | null>(null);
@@ -123,15 +124,37 @@ const submitForm = (formEl: FormInstance | null) => {
                     loginstyle.value = "color:green";
                     savetoken(newLocal);
                     ElMessage.success("登录成功:" + loginForm.username);
-                    await updateOrAddIntoTableServerInfo({
-                        server: loginForm.server,
-                        username: loginForm.username,
-                        token: newLocal.token,
-                    });
-                    await router.push(
-                        new URL(location.href).searchParams.get("redirect") ??
-                            "/",
+
+                    const urlserver = loginForm.server;
+                    const token = newLocal.token;
+                    const newLocal_1 = await list(
+                        { token },
+                        new URL("/list", urlserver).href,
                     );
+                    const server = loginForm.server;
+                    if (newLocal_1.username.length) {
+                        ElMessage.success("登录成功:" + newLocal_1.username);
+                        loginstate.value = "登录成功:" + newLocal_1.username;
+                        loginstyle.value = "color:green";
+                        const session = newLocal_1.list[0];
+                        localStorage.setItem("token", token);
+                        localStorage.setItem("server", server);
+                        localStorage.setItem("session", session);
+                        await router.push(
+                            new URL(location.href).searchParams.get(
+                                "redirect",
+                            ) ?? "/",
+                        );
+                        await updateOrAddIntoTableServerInfo({
+                            server: loginForm.server,
+                            username: loginForm.username,
+                            token: newLocal.token,
+                            session: newLocal_1.list,
+                        });
+                        console.log(newLocal_1.list);
+                        return; //newLocal_1.list;
+                    }
+                    throw new Error("登录失败,服务端没有session列表");
                 } catch (error) {
                     console.log(error);
                     loginstyle.value = "color:red";
