@@ -162,6 +162,11 @@ async function handleconnect() {
         ElMessage.error("请选择会话和网址");
         return;
     }
+
+    await runAsync(gettoken() ?? "", localStorage.getItem("server") ?? "").then(
+        (a) => console.log(a),
+        (e) => console.error(e),
+    );
     openNewWindow(
         new URL(
             "/shell?server=" +
@@ -218,12 +223,12 @@ async function service(token: string, server: string) {
     throw new Error("登录失败,服务端没有session列表");
     // console.log()
 }
-onMounted(async () => {
-    await runAsync(gettoken() ?? "", localStorage.getItem("server") ?? "").then(
-        (a) => console.log(a),
-        (e) => console.error(e),
-    );
-});
+// onMounted(async () => {
+//     await runAsync(gettoken() ?? "", localStorage.getItem("server") ?? "").then(
+//         (a) => console.log(a),
+//         (e) => console.error(e),
+//     );
+// });
 const { data, error, loading, runAsync } = useRequest(service, {
     defaultParams: ["", ""],
     manual: true,
