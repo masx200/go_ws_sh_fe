@@ -1,9 +1,10 @@
 async function hashPasswordWithSalt(
     password: string,
-    algorithm = "SHA-512",
-    saltlength = 64,
+
+    options: Options = { algorithm: "SHA-512", saltlength: 64 },
 ) {
     // 1. 生成16字节的随机盐值 [[2]][[4]]
+    const { algorithm, saltlength } = options;
     const salt = new Uint8Array(saltlength);
     crypto.getRandomValues(salt);
 
@@ -33,7 +34,10 @@ function toHex(buffer: ArrayBuffer | Uint8Array) {
         .map((b) => b.toString(16).padStart(2, "0"))
         .join("");
 }
-
+export interface Options {
+    algorithm: string;
+    saltlength: number;
+}
 // 使用示例
 
 export { hashPasswordWithSalt };
