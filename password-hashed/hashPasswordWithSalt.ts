@@ -2,7 +2,12 @@ async function hashPasswordWithSalt(
     password: string,
 
     options: Options = { algorithm: "SHA-512", saltlength: 64 },
-) {
+): Promise<{
+    hash: string;
+    // 64字节的哈希值（SHA-512输出512位=64字节）
+    salt: string;
+    algorithm: string;
+}> {
     // 1. 生成16字节的随机盐值 [[2]][[4]]
     const { algorithm, saltlength } = options;
     const salt = new Uint8Array(saltlength);
