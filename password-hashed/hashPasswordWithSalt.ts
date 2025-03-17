@@ -2,12 +2,7 @@ async function hashPasswordWithSalt(
     password: string,
 
     options: Options = { algorithm: "SHA-512", saltlength: 64 },
-): Promise<{
-    hash: string;
-    // 64字节的哈希值（SHA-512输出512位=64字节）
-    salt: string;
-    algorithm: string;
-}> {
+): Promise<HashResult> {
     // 1. 生成16字节的随机盐值 [[2]][[4]]
     const { algorithm, saltlength } = options;
     const salt = new Uint8Array(saltlength);
@@ -27,12 +22,12 @@ async function hashPasswordWithSalt(
 
     // 5. 转换为十六进制字符串 [[3]][[10]]
 
-    return {
+    return new HashResult({
         hash: toHex(hashBuffer),
         // 64字节的哈希值（SHA-512输出512位=64字节）
         salt: toHex(salt),
         algorithm, // 16字节的盐值
-    };
+    });
 }
 function toHex(buffer: ArrayBuffer | Uint8Array) {
     return Array.from(new Uint8Array(buffer))
@@ -47,3 +42,27 @@ export interface Options {
 
 export { hashPasswordWithSalt };
 export { toHex };
+class HashResult {
+    hash: string;
+    salt: string;
+    algorithm: string;
+
+    constructor({
+        hash,
+        salt,
+        algorithm,
+    }: {
+        hash: string;
+        salt: string;
+        algorithm: string;
+    }) {
+        this.hash = hash;
+        this.salt = salt;
+        this.algorithm = algorithm;
+    }
+
+    toString(): string {
+        return `HashResult {\n hash: "${this.hash}",\n salt: "${this.salt}",\n algorithm: "${this.algorithm}" \n}`;
+    }
+}
+export { HashResult };
