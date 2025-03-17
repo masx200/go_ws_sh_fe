@@ -1,10 +1,16 @@
 async function hashPasswordWithSalt(
     password: string,
-
     options: Options = { algorithm: "SHA-512", saltlength: 64 },
 ): Promise<HashResult> {
     // 1. 生成16字节的随机盐值 [[2]][[4]]
     const { algorithm, saltlength } = options;
+
+    //检测算法是否支持 "SHA-256"
+    // "SHA-384"
+    // "SHA-512"
+    if (!["SHA-256", "SHA-384", "SHA-512"].includes(algorithm)) {
+        throw new Error("algorithm not supported");
+    }
     const salt = new Uint8Array(saltlength);
     crypto.getRandomValues(salt);
 
