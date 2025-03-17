@@ -3,6 +3,7 @@
     "public": true,
     "type": "module",
     "scripts": {
+        "test": "vitest run",
         "build": "nuxt build",
         "dev": "nuxt dev",
         "generate": "nuxt generate",
@@ -49,7 +50,9 @@
         "@types/pako": "^2.0.3",
         "prettier": "^3.4.2",
         "ts-protoc-gen": "^0.15.0",
-        "typescript": "5.7.2"
+        "tsx": "^4.19.3",
+        "typescript": "5.7.2",
+        "vitest": "^3.0.9"
     },
     "version": "1.0.0",
     "repository": "https://github.com/masx200/go_ws_sh_fe.git",

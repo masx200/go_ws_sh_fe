@@ -55,8 +55,8 @@ position: absolute;
         const divSize = terminal.element.getBoundingClientRect();
         const overlaySize = overlayNode.getBoundingClientRect();
 
-        overlayNode.style.top =
-            (divSize.height - overlaySize.height) / 2 + "px";
+        overlayNode.style.top = (divSize.height - overlaySize.height) / 2 +
+            "px";
         overlayNode.style.left = (divSize.width - overlaySize.width) / 2 + "px";
 
         if (this.overlayTimeout) clearTimeout(this.overlayTimeout);
