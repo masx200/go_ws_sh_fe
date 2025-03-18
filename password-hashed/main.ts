@@ -24,12 +24,13 @@ const debouncedGenerateHash = debounce(async function () {
         // 修改 HTML 模板为表格形式，并居中显示
         //@ts-ignore
         document.getElementById("hash-table").innerHTML = `${result.hash}`;
-         //@ts-ignore
-         document.getElementById("algorithm-table").innerHTML = `${result.algorithm}`;
-          //@ts-ignore
+        //@ts-ignore
+        document.getElementById("algorithm-table").innerHTML =
+            `${result.algorithm}`;
+        //@ts-ignore
         document.getElementById("password-table").innerHTML = `${password}`;
-         //@ts-ignore
-         document.getElementById("salt-table").innerHTML = `${result.salt}`;
+        //@ts-ignore
+        document.getElementById("salt-table").innerHTML = `${result.salt}`;
     } catch (error) {
         console.error("Hashing failed:", error);
         alert("Hashing process failed");
@@ -68,6 +69,19 @@ document.addEventListener(
                 await debouncedGenerateHash();
             }
         };
+
+        // 通过 id 获取 select 元素
+        const selectElement = document.getElementById("algorithm");
+
+        // 绑定 change 事件
+        //@ts-ignore
+        selectElement.addEventListener("change", async function () {
+            // 执行其他操作...
+            //@ts-ignore
+            if (document.getElementById("password")?.value.length > 0) {
+                await debouncedGenerateHash();
+            }
+        });
     },
     { once: true },
 );
