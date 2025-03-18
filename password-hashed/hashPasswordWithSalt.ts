@@ -3,7 +3,7 @@ async function hashPasswordWithSalt(
     options: Options = { algorithm: "SHA-512", saltlength: 64 },
 ): Promise<HashResult> {
     // 1. 生成16字节的随机盐值 [[2]][[4]]
-    const { algorithm, saltlength } = options;
+    const { algorithm, saltlength, saltHex } = options;
 
     //检测算法是否支持 "SHA-256"
     // "SHA-384"
@@ -11,8 +11,16 @@ async function hashPasswordWithSalt(
     if (!["SHA-256", "SHA-384", "SHA-512"].includes(algorithm)) {
         throw new Error("algorithm not supported");
     }
-    const salt = new Uint8Array(saltlength);
-    crypto.getRandomValues(salt);
+    let salt: Uint8Array;
+    if (saltHex) {
+        // 如果传入了十六进制盐值字符串，将其转换为 Uint8Array
+        salt = hexToUint8Array(saltHex);
+    } else {
+        // 否则，生成随机盐值
+        salt = new Uint8Array(saltlength ?? 64);
+        crypto.getRandomValues(salt);
+    }
+    // crypto.getRandomValues(salt);
 
     // 2. 将密码转换为UTF-8字节数组 [[7]]
     const encoder = new TextEncoder();
@@ -42,10 +50,17 @@ function toHex(buffer: ArrayBuffer | Uint8Array) {
 }
 export interface Options {
     algorithm: string;
-    saltlength: number;
+    saltlength?: number;
+    saltHex?: string;
 }
 // 使用示例
-
+export function hexToUint8Array(hex: string): Uint8Array {
+    const array = new Uint8Array(hex.length / 2);
+    for (let i = 0; i < hex.length; i += 2) {
+        array[i / 2] = parseInt(hex.slice(i, i + 2), 16);
+    }
+    return array;
+}
 export { hashPasswordWithSalt };
 export { toHex };
 class HashResult {

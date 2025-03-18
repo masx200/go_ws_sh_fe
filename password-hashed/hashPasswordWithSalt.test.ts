@@ -1,4 +1,4 @@
-import { expect, test } from "vitest";
+import { beforeEach, describe, expect, test } from "vitest";
 import { hashPasswordWithSalt, type Options } from "./hashPasswordWithSalt";
 
 test("hashPasswordWithSalt with SHA-256", async () => {
@@ -18,7 +18,7 @@ test("hashPasswordWithSalt with SHA-384", async () => {
 });
 
 // 原有的测试用例可以保留，也可以根据需要进行调整
-test("hashPasswordWithSalt", async () => {
+test("hashPasswordWithSalt default", async () => {
     await hashPasswordWithSalt("pass").then((result) => {
         console.log(result.toString());
         // console.log("Hash:", result.hash);
@@ -39,4 +39,18 @@ test("hashPasswordWithSalt with SHA-512", async () => {
         // 长度32的十六进制字符串
         expect(result.algorithm).toBe("SHA-512");
     }, console.error);
+});
+
+describe("hashPasswordWithSalt", () => {
+    test("should use provided saltHex", async () => {
+        let options: Options;
+        options = {
+            algorithm: "SHA-512",
+        };
+        options.saltHex = "1234567890abcdef".repeat(64 / 16);
+
+        const result = await hashPasswordWithSalt("password", options);
+        expect(result.algorithm).toEqual("SHA-512");
+        expect(result.salt).toEqual("1234567890abcdef".repeat(64 / 16));
+    });
 });
