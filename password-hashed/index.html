@@ -1,59 +1,75 @@
 <!DOCTYPE html>
 <html>
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/svg+xml" href="./vite.svg" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Password Hashing with Salt</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                min-height: 100vh;
+                margin: 0;
+            }
 
-<head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="./vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Password Hashing with Salt</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-        }
+            form {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+                width: 300px;
+                /* 设置表单宽度 */
+            }
 
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
+            label {
+                display: flex;
+                flex-direction: column;
+            }
 
-        label {
-            display: flex;
-            flex-direction: column;
-        }
+            button {
+                margin-top: 10px;
+            }
 
-        button {
-            margin-top: 10px;
-        }
-    </style>
-</head>
+            #result {
+                margin-top: 20px;
+                text-align: center;
+            }
+        </style>
+    </head>
 
-<body>
-    <h2>Password Hashing Tool</h2>
-    <form>
-        <label>
-            Password:
-            <input type="password" id="password" required>
-        </label>
-        <button type="button" id="generatepassword">
-            Generate
-        </button>
-        <label>
-            Algorithm:
-            <select id="algorithm">
-                <option value="SHA-256">SHA-256</option>
-                <option value="SHA-384">SHA-384</option>
-                <option value="SHA-512" selected>SHA-512</option>
-            </select>
-        </label>
-        <button type="button" id="button">
-            Generate
-        </button>
-    </form>
-    <div id="result" style="margin-top: 20px"></div>
-    <script type="module" src="./main.ts">
-    </script>
-</body>
-
+    <body>
+        <h2>Password Hashing Tool</h2>
+        <form>
+            <label>
+                Password:
+                <input type="password" id="password" required>
+            </label>
+            <button type="button" id="generatepassword">
+                Generate
+            </button>
+            <label>
+                Algorithm:
+                <select id="algorithm">
+                    <option value="SHA-256">SHA-256</option>
+                    <option value="SHA-384">SHA-384</option>
+                    <option value="SHA-512" selected>SHA-512</option>
+                </select>
+            </label>
+            <button type="button" id="button">
+                Generate
+            </button>
+        </form>
+        <div id="result">
+            <h3>Result:</h3>
+            <p><strong>Algorithm:</strong></p>
+            <p><strong>Password:</strong></p>
+            <p><strong>Salt (hex):</strong></p>
+            <p><strong>Hash (hex):</strong></p>
+        </div>
+        <script type="module" src="./main.ts">
+        </script>
+    </body>
 </html>

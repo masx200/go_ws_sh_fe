@@ -17,16 +17,21 @@ async function generateHash() {
 
     if (!password) {
         //@ts-ignore
-        password = document.getElementById("password").value =
-            generate32BytePassword();
+        password =
+         //@ts-ignore
+            document.getElementById("password").value =
+                generate32BytePassword();
     }
 
     try {
         const result = await hashPasswordWithSalt(password, {
             algorithm,
 
-            saltlength:
-                "SHA-384" == algorithm ? 48 : "SHA-256" == algorithm ? 32 : 64,
+            saltlength: "SHA-384" == algorithm
+                ? 48
+                : "SHA-256" == algorithm
+                ? 32
+                : 64,
         });
         //@ts-ignore
         document.getElementById("result").innerHTML = `
