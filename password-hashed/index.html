@@ -14,13 +14,18 @@
                 justify-content: center;
                 min-height: 100vh;
                 margin: 0;
+                background-image: url(https://bingw.jasonzeng.dev/?index=random);
+                height: 100%;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
             }
 
             form {
                 display: flex;
                 flex-direction: column;
                 gap: 15px;
-                width: 300px;
+                width: 100%;
                 /* 设置表单宽度 */
             }
 
@@ -35,39 +40,80 @@
 
             #result {
                 margin-top: 20px;
-                text-align: center;
+                border-collapse: collapse;
+                width: 100%;
+            }
+
+            #result th,
+            #result td {
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: left;
+            }
+
+            #result th {
+                background-color: #f2f2f2;
             }
         </style>
     </head>
 
     <body>
-        <h2>Password Hashing Tool</h2>
-        <form>
-            <label>
-                Password:
-                <input type="password" id="password" required>
-            </label>
-            <button type="button" id="generatepassword">
-                Generate
-            </button>
-            <label>
-                Algorithm:
-                <select id="algorithm">
-                    <option value="SHA-256">SHA-256</option>
-                    <option value="SHA-384">SHA-384</option>
-                    <option value="SHA-512" selected>SHA-512</option>
-                </select>
-            </label>
-            <button type="button" id="button">
-                Generate
-            </button>
-        </form>
-        <div id="result">
-            <h3>Result:</h3>
-            <p><strong>Algorithm:</strong></p>
-            <p><strong>Password:</strong></p>
-            <p><strong>Salt (hex):</strong></p>
-            <p><strong>Hash (hex):</strong></p>
+        <div
+            style="margin: 0; background-color: white; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center"
+        >
+            <h2>Password Hashing Tool</h2>
+            <form
+                style="display: flex; flex-direction: column; gap: 15px; width: 100%; justify-content: center; align-content: center; align-items: stretch"
+            >
+                <label>
+                    Password:
+                    <input type="password" id="password" required>
+                </label>
+                <button type="button" id="generatepassword">
+                    Generate
+                </button>
+                <label>
+                    Algorithm:
+                    <select id="algorithm">
+                        <option value="SHA-256">SHA-256</option>
+                        <option value="SHA-384">SHA-384</option>
+                        <option value="SHA-512" selected>SHA-512</option>
+                    </select>
+                </label>
+                <button type="button" id="button">
+                    Generate
+                </button>
+            </form>
+            <div id="result">
+                <table
+                    style="margin: 0 auto; border-collapse: collapse; width: 100%"
+                >
+                    <thead>
+                        <tr>
+                            <th>参数</th>
+                            <th>值</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Algorithm:</strong></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Password:</strong></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Salt (hex):</strong></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Hash (hex):</strong></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
         <script type="module" src="./main.ts">
         </script>

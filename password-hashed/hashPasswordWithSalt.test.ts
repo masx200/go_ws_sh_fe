@@ -47,11 +47,11 @@ describe("hashPasswordWithSalt", () => {
         options = {
             algorithm: "SHA-512",
         };
-        options.saltHex = "1234567890abcdef".repeat(64 / 16 * 2);
+        options.saltHex = "1234567890abcdef".repeat((64 / 16) * 2);
 
         const result = await hashPasswordWithSalt("password", options);
         console.log(result.toString());
         expect(result.algorithm).toEqual("SHA-512");
-        expect(result.salt).toEqual("1234567890abcdef".repeat(64 / 16 * 2));
+        expect(result.salt).toEqual("1234567890abcdef".repeat((64 / 16) * 2));
     });
 });
