@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, test } from "vitest";
+import { describe, expect, test } from "vitest";
 import { hashPasswordWithSalt, type Options } from "./hashPasswordWithSalt";
 
 test("hashPasswordWithSalt with SHA-256", async () => {
