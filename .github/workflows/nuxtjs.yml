@@ -69,7 +69,7 @@ jobs:
                   restore-keys: |
                       ${{ runner.os }}-nuxt-build-
             - name: Install dependencies
-              run: npx -y pnpm i --force
+              run:   npx -y pnpm approve-builds && npx -y pnpm i --force
               #${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
             - name: Static HTML export with Nuxt
               run: ${{ steps.detect-package-manager.outputs.manager }} run generate
