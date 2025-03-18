@@ -1,11 +1,24 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
     <head>
+        <link
+            rel="stylesheet"
+            href="./node_modules/bootstrap/dist/css/bootstrap.min.css"
+        />
         <meta charset="UTF-8" />
         <link rel="icon" type="image/svg+xml" href="./vite.svg" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Password Hashing with Salt</title>
         <style>
+            td {
+                word-break: break-all; /* 允许在单词内换行，适合长单词或URL [[2]][[9]] */
+                word-wrap: break-word; /* 允许长单词换行，兼容旧浏览器 [[8]] */
+                white-space: normal; /* 允许自动换行（默认值，但需显式声明以覆盖其他样式） */
+            }
+            table {
+                table-layout: auto;
+                width: 100%; /* 或具体像素值 */
+            }
             body {
                 font-family: Arial, sans-serif;
                 display: flex;
@@ -58,35 +71,82 @@
     </head>
 
     <body>
+        <img
+        style="
+                opacity: 0.7;"
+            width="250px"
+            height="150px"
+            src="./v2-1247d1214f9f61d8cb4ad7ad63bbc3d2_1440w.jpg"
+            class="img-fluid"
+            alt="哈希算法"
+        />
+
         <div
-            style="margin: 0; background-color: white; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center"
+            style="
+                opacity: 0.9;
+                margin: 0;
+                background-color: white;
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: auto;
+            "
         >
-            <h2>Password Hashing Tool</h2>
+            <h1 class="mb-3 fw-semibold lh-1">Password Hashing Tool</h1>
+
             <form
-                style="display: flex; flex-direction: column; gap: 15px; width: 100%; justify-content: center; align-content: center; align-items: stretch"
+                style="
+                    display: flex;
+                    flex-direction: column;
+                    gap: 15px;
+                    width: 100%;
+                    justify-content: center;
+                    align-content: center;
+                    align-items: stretch;
+                "
             >
                 <label>
-                    <span style="text-align: center;">Password:</span>
-                    <input type="password" id="password" required>
+                    <span style="text-align: center"
+                        ><strong>Password:</strong></span
+                    >
+                    <input
+                        type="text"
+                        id="password"
+                        required
+                        class="form-control"
+                    />
                 </label>
-                <button type="button" id="generatepassword">
+                <button
+                    type="button"
+                    id="generatepassword"
+                    class="btn btn-primary"
+                >
                     Generate
                 </button>
                 <label>
-                    <span style="text-align: center;">Algorithm:</span>
-                    <select id="algorithm">
+                    <span style="text-align: center"
+                        ><strong>Algorithm:</strong></span
+                    >
+                    <select id="algorithm" class="form-select">
                         <option value="SHA-256">SHA-256</option>
                         <option value="SHA-384">SHA-384</option>
                         <option value="SHA-512" selected>SHA-512</option>
                     </select>
                 </label>
-                <button type="button" id="button">
+                <button type="button" id="button" class="btn btn-primary">
                     Generate
                 </button>
             </form>
             <div id="result">
                 <table
-                    style="margin: 0 auto; border-collapse: collapse; width: 100%"
+                    class="table table-bordered border-primary"
+                    style="
+                        margin: 0 auto;
+                        border-collapse: collapse;
+                        width: 100%;
+                    "
                 >
                     <thead>
                         <tr>
@@ -115,7 +175,6 @@
                 </table>
             </div>
         </div>
-        <script type="module" src="./main.ts">
-        </script>
+        <script type="module" src="./main.ts"></script>
     </body>
 </html>

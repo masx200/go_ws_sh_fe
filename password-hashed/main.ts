@@ -1,6 +1,6 @@
 //@ts-ignore
 document.getElementById("button").onclick = async () => {
-    await generateHash();
+    await debouncedGenerateHash();
 };
 //@ts-ignore
 document.getElementById("generatepassword").onclick = async () => {
@@ -11,20 +11,20 @@ document.getElementById("password").oninput = async () => {
     //@ts-ignore
 
     if (document.getElementById("password")?.value.length > 0) {
-        await generateHash();
+        await debouncedGenerateHash();
     }
 };
 //@ts-ignore
 document.getElementById("password").onchange = async () => {
     //@ts-ignore
     if (document.getElementById("password")?.value.length > 0) {
-        await generateHash();
+        await debouncedGenerateHash();
     }
 };
+import { debounce } from "lodash-es";
 import { generate32BytePassword } from "./generate32BytePassword.ts";
 import { hashPasswordWithSalt } from "./hashPasswordWithSalt.ts";
-
-async function generateHash() {
+const debouncedGenerateHash = debounce(async function () {
     //@ts-ignore
     let password = document.getElementById("password").value;
     //@ts-ignore
@@ -41,16 +41,13 @@ async function generateHash() {
     try {
         const result = await hashPasswordWithSalt(password, {
             algorithm,
-            saltlength: "SHA-384" == algorithm
-                ? 48
-                : "SHA-256" == algorithm
-                ? 32
-                : 64,
+            saltlength:
+                "SHA-384" == algorithm ? 48 : "SHA-256" == algorithm ? 32 : 64,
         });
         // 修改 HTML 模板为表格形式，并居中显示
         //@ts-ignore
         document.getElementById("result").innerHTML = `
-            <table style="margin: 0 auto; border-collapse: collapse; width: 100%;">
+            <table class="table table-bordered border-primary" style="margin: 0 auto; border-collapse: collapse; width: 100%;">
                 <thead>
                     <tr>
                         <th>参数</th>
@@ -81,9 +78,10 @@ async function generateHash() {
         console.error("Hashing failed:", error);
         alert("Hashing process failed");
     }
-}
-async function generatePassword() {
+});
+
+const generatePassword = debounce(async function () {
     //@ts-ignore
     document.getElementById("password").value = generate32BytePassword();
-    await generateHash();
-}
+    await debouncedGenerateHash();
+});
