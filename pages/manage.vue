@@ -1,8 +1,13 @@
 <template>
-    <UserManagement></UserManagement>
+    <div>
+        <UserManagement></UserManagement>
+        <TokenManagement/>
+    </div>
+    
 </template>
 <script setup lang="ts">
 import UserManagement from "../src/UserManagement.vue";
+import TokenManagement from "../src/TokenManagement.vue";
 
 const router = useRouter();
 import { fetchServerInfoServer } from "~/src/ServerConnectionInfo";
