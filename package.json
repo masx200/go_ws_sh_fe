@@ -12,6 +12,7 @@
         "format": "npx -y prettier -w */**/*.vue */**/*.css */**/*.ts */**/*.json *.md *.json *.ts"
     },
     "dependencies": {
+        "@ant-design/icons-vue": "^7.0.1",
         "@element-plus/icons-vue": "2.3.1",
         "@element-plus/nuxt": "1.1.1",
         "@masx200/zmodem.js": "0.2.10",
@@ -48,14 +49,17 @@
     },
     "devDependencies": {
         "@types/pako": "2.0.3",
+        "ant-design-vue": "^4.2.6",
         "prettier": "3.4.2",
         "ts-protoc-gen": "0.15.0",
-       
         "typescript": "5.7.2",
+        "unplugin-auto-import": "^19.1.1",
+        "unplugin-vue-components": "^28.4.1",
         "vitest": "3.0.9"
     },
     "version": "1.0.0",
     "repository": "https://github.com/masx200/go_ws_sh_fe.git",
     "author": "masx200 <masx200@qq.com>",
-    "license": "MIT"
+    "license": "MIT",
+    "packageManager": "pnpm@9.15.3+sha512.1f79bc245a66eb0b07c5d4d83131240774642caaa86ef7d0434ab47c0d16f66b04e21e0c086eb61e62c77efc4d7f7ec071afad3796af64892fae66509173893a"
 }

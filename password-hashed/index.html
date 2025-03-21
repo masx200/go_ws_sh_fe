@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
     <head>
         <script src="/registerSW.js" defer></script>
@@ -24,35 +24,16 @@
         />
 
         <div
-            style="
-                opacity: 0.8;
-                margin: 0;
-                background-color: white;
-                width: 100%;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                padding: auto;
-            "
+            style="opacity: 0.8; margin: 0; background-color: white; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: auto"
         >
             <h1 class="mb-3 fw-semibold lh-1">Password Hashing Tool</h1>
 
             <form
-                style="
-                    display: flex;
-                    flex-direction: column;
-                    gap: 15px;
-                    width: 100%;
-                    justify-content: center;
-                    align-content: center;
-                    align-items: stretch;
-                "
+                style="display: flex; flex-direction: column; gap: 15px; width: 100%; justify-content: center; align-content: center; align-items: stretch"
             >
                 <label>
-                    <span style="text-align: center"
-                        ><strong>Password:</strong></span
-                    >
+                    <span style="text-align: center"><strong>Password:</strong
+                        ></span>
                     <input
                         type="text"
                         id="password"
@@ -68,9 +49,8 @@
                     Generate
                 </button>
                 <label>
-                    <span style="text-align: center"
-                        ><strong>Algorithm:</strong></span
-                    >
+                    <span style="text-align: center"><strong>Algorithm:</strong
+                        ></span>
                     <select id="algorithm" class="form-select">
                         <option value="SHA-256">SHA-256</option>
                         <option value="SHA-384">SHA-384</option>
@@ -84,11 +64,7 @@
             <div id="result">
                 <table
                     class="table table-bordered border-primary"
-                    style="
-                        margin: 0 auto;
-                        border-collapse: collapse;
-                        width: 100%;
-                    "
+                    style="margin: 0 auto; border-collapse: collapse; width: 100%"
                 >
                     <thead>
                         <tr>
