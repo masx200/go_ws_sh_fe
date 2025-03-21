@@ -87,6 +87,10 @@
                 </div>
                 <hr />
                 <el-row align="middle" justify="center">
+                    <el-button size="large" type="primary" @click="handlemanage"
+                        >管理</el-button
+                    >
+
                     <el-button
                         size="large"
                         type="success"
@@ -104,6 +108,37 @@
 </template>
 
 <script setup lang="ts">
+async function handlemanage() {
+    if (urlvalue.value.length == 0) {
+        ElMessage.error("请选择网址");
+        return;
+    }
+    try {
+        showloading.value = true;
+        await runAsync(gettoken() ?? "", localStorage.getItem("server") ?? "", {
+            type: "token",
+            identifier: localStorage.getItem("identifier") ?? "",
+            username: localStorage.getItem("username") ?? "",
+        }).then(
+            (a) => console.log(a),
+            (e) => console.error(e),
+        );
+        showloading.value = false;
+
+        const newLocalurl = new URL(urlvalue.value);
+        newLocalurl.hash = "";
+        urlvalue.value = newLocalurl.href;
+        openNewWindow(
+            new URL(
+                "/manage?server=" +
+                    encodeURIComponent(urlvalue.value) ,
+                    location.href,
+            ).href,
+        );
+    } finally {
+        showloading.value = false;
+    }
+}
 async function handledelete() {
     const server = urlvalue.value;
 
@@ -204,14 +239,11 @@ async function handleconnect() {
     }
     try {
         showloading.value = true;
-        await runAsync(
-            gettoken() ?? "",
-            localStorage.getItem("server") ?? "",
-      {
-          type: "token",
-          identifier: localStorage.getItem("identifier")?? "",
-          username: localStorage.getItem("username")?? "",
-      }  ).then(
+        await runAsync(gettoken() ?? "", localStorage.getItem("server") ?? "", {
+            type: "token",
+            identifier: localStorage.getItem("identifier") ?? "",
+            username: localStorage.getItem("username") ?? "",
+        }).then(
             (a) => console.log(a),
             (e) => console.error(e),
         );
