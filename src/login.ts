@@ -3,11 +3,14 @@ export const loginUrl = "http://localhost:28080/login";
 export interface LoginCredentials {
     username: string;
     password: string;
+
+    type: string;
 }
 export interface LoginResults {
     username: string;
     token: string;
     message: string;
+    identifier: string;
 }
 
 // 导出一个异步函数，用于登录

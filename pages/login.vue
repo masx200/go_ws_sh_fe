@@ -55,9 +55,9 @@ import type { ValidateFieldsError } from "async-validator";
 import type { FormInstance, FormRules } from "element-plus";
 import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
+import { list } from "~/src/list";
 import { updateOrAddIntoTableServerInfo } from "~/src/ServerConnectionInfo";
 import { login, savetoken } from "../src/login.ts";
-import { list } from "~/src/list";
 const loginstate = ref("");
 const loginstyle = ref("");
 const loginFormRef = ref<FormInstance | null>(null);
@@ -114,25 +114,32 @@ const submitForm = (formEl: FormInstance | null) => {
                     const newLocalurl = new URL(loginForm.server);
                     newLocalurl.hash = "";
                     loginForm.server = newLocalurl.href;
-                    const newLocal = await login(
+                    const loginresult = await login(
                         {
                             username: loginForm.username,
                             password: loginForm.password,
+                            type: "password",
                         },
                         new URL("/login", loginForm.server).href,
                     );
-                    console.log(newLocal);
+                    console.log(loginresult);
                     localStorage.setItem("server", loginForm.server);
                     loginstate.value = "登录成功:" + loginForm.username;
                     loginstyle.value = "color:green";
-                    savetoken(newLocal);
+                    savetoken(loginresult);
                     ElMessage.success("登录成功:" + loginForm.username);
 
                     const urlserver = loginForm.server;
-                    const token = newLocal.token;
+                    const token = loginresult.token;
                     const newLocal_1 = await list(
-                        { token },
-                        new URL("/list", urlserver).href,
+                        {
+                            token,
+
+                            identifier: loginresult.identifier,
+                            type: "token",
+                            username: loginForm.username,
+                        },
+                        new URL("/sessions", urlserver).href,
                     );
                     const server = loginForm.server;
                     if (newLocal_1.username.length) {
@@ -151,8 +158,10 @@ const submitForm = (formEl: FormInstance | null) => {
                         await updateOrAddIntoTableServerInfo({
                             server: loginForm.server,
                             username: loginForm.username,
-                            token: newLocal.token,
+                            token: loginresult.token,
                             session: newLocal_1.list,
+                            type: "token",
+                            identifier: loginresult.identifier,
                         });
                         console.log(newLocal_1.list);
 

@@ -6,6 +6,8 @@ interface ServerConnectionInfo {
     token: string;
     username: string;
     session: string[];
+    type: string;
+    identifier: string;
 }
 export function createTableServerConnectionInfo() {
     const db = new Dexie("GO-WS-SH-Database") as Dexie & {
@@ -16,8 +18,9 @@ export function createTableServerConnectionInfo() {
     };
 
     // Schema declaration:
-    db.version(2).stores({
-        ServerConnectionInfo: "++id, username, token,server,session", // primary key "id" (for the runtime!)
+    db.version(3).stores({
+        ServerConnectionInfo:
+            "++id, username, token,server,session,type,identifier", // primary key "id" (for the runtime!)
     });
     return db.ServerConnectionInfo;
 }
@@ -26,12 +29,15 @@ export async function updateOrAddIntoTableServerInfo({
     token,
     username,
     ...rest
-}: {
-    server: string;
-    token: string;
-    username: string;
-    session: string[];
-}) {
+}: Omit<
+    {
+        server: string;
+        token: string;
+        username: string;
+        session: string[];
+    } & ServerConnectionInfo,
+    "id"
+>) {
     const { serverinfo, tableserver } = await fetchServerInfoServer(server);
     if (serverinfo.length) {
         const n = await tableserver.bulkUpdate(

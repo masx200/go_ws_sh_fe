@@ -48,7 +48,7 @@
                             size="large"
                             style="width: 800px"
                             @change="
-                                async (value) => {
+                                async (value: string) => {
                                     await handleServerChange(value);
                                 }
                             "
@@ -123,17 +123,18 @@ async function handledelete() {
     }
 }
 const showloading = ref(true);
-async function handleServerChange(value: any) {
+async function handleServerChange(value: string) {
     const server = value;
     if (server) {
         try {
             showloading.value = true;
-            await runAsync(
-                (await fetchServerInfoServer(server)).serverinfo?.[0].token ??
-                    gettoken() ??
-                    "",
-                value,
-            ).then(
+            const serverinfooptions = (await fetchServerInfoServer(server))
+                .serverinfo?.[0];
+            await runAsync(serverinfooptions.token ?? gettoken() ?? "", value, {
+                type: "token",
+                identifier: serverinfooptions.identifier ?? "",
+                username: serverinfooptions.username ?? "",
+            }).then(
                 (a) => console.log(a),
                 (e) => console.error(e),
             );
@@ -146,6 +147,7 @@ async function handleServerChange(value: any) {
 //     return urlvalue.value.length && toeknvalue.value.length;
 // });
 const urlvalue = ref("");
+
 const toeknvalue = ref("");
 onMounted(async () => {
     try {
@@ -205,7 +207,11 @@ async function handleconnect() {
         await runAsync(
             gettoken() ?? "",
             localStorage.getItem("server") ?? "",
-        ).then(
+      {
+          type: "token",
+          identifier: localStorage.getItem("identifier")?? "",
+          username: localStorage.getItem("username")?? "",
+      }  ).then(
             (a) => console.log(a),
             (e) => console.error(e),
         );
@@ -267,15 +273,19 @@ const urloptions: Ref<{ value: string; label: string }[]> = ref<
     { value: string; label: string }[]
 >([]);
 const router = useRouter();
-async function service(token: string, server: string) {
+async function service(
+    token: string,
+    server: string,
+    options: { type: string; username: string; identifier: string },
+) {
     try {
         showloading.value = true;
         if (!token) throw new Error("token is null");
         const urlserver = server ?? localStorage.getItem("server");
         if (!urlserver) throw new Error("url is null");
         const newLocal_1 = await list(
-            { token },
-            new URL("/list", urlserver).href,
+            { token, ...options },
+            new URL("/sessions", urlserver).href,
         );
         if (newLocal_1.username.length) {
             ElMessage.success("登录成功:" + newLocal_1.username);
@@ -301,7 +311,15 @@ async function service(token: string, server: string) {
 //     );
 // });
 const { data, error, loading, runAsync } = useRequest(service, {
-    defaultParams: ["", ""],
+    defaultParams: [
+        "",
+        "",
+        {
+            type: "",
+            username: "",
+            identifier: "",
+        },
+    ],
     manual: true,
 });
 watch(error, async (error) => {

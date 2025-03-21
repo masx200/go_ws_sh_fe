@@ -1,7 +1,10 @@
-export const listUrl = "http://localhost:28080/list";
+export const listUrl = "http://localhost:28080/sessions";
 
 export interface listCredentials {
     token: string;
+    type: string;
+    username: string;
+    identifier: string;
 }
 export interface listResults {
     username: string;
