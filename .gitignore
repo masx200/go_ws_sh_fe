@@ -23,3 +23,5 @@ deno.lock
 .env.*
 !.env.example
 pnpm-lock.yaml
+*.gz
+.yarn

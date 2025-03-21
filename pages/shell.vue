@@ -10,6 +10,18 @@
     ></App>
 </template>
 <script setup lang="ts">
+if (typeof window == "undefined") {
+    //@ts-ignore
+    globalThis.window = {};
+}
+if (typeof self == "undefined") {
+    //@ts-ignore
+    globalThis.self = {};
+}
+if (typeof process == "undefined") {
+    //@ts-ignore
+    globalThis.process = {};
+}
 import App from "~/src/App.vue";
 import Loading from "~/src/loading.vue";
 import { fetchServerInfoServer } from "~/src/ServerConnectionInfo";

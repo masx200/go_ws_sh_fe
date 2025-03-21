@@ -35,7 +35,7 @@
     "element-plus": "2.9.2",
     "file-saver": "2.0.5",
     "google-protobuf": "3.21.4",
-    "nuxt": "3.16.0",
+    "nuxt": "3.15.4",
     "pako": "2.1.0",
     "path": "0.12.7",
     "protobufjs": "7.4.0",
@@ -50,7 +50,7 @@
   },
   "devDependencies": {
     "@ant-design-vue/nuxt": "^1.4.6",
-    "@nuxt/kit": "3.16.0",
+    "@nuxt/kit": "3.15.4",
     "@types/pako": "2.0.3",
     "ant-design-vue": "^4.2.6",
     "prettier": "3.4.2",
@@ -64,5 +64,5 @@
   "repository": "https://github.com/masx200/go_ws_sh_fe.git",
   "author": "masx200 <masx200@qq.com>",
   "license": "MIT",
-  "packageManager": "pnpm@9.15.3+sha512.1f79bc245a66eb0b07c5d4d83131240774642caaa86ef7d0434ab47c0d16f66b04e21e0c086eb61e62c77efc4d7f7ec071afad3796af64892fae66509173893a"
+  "packageManager": "yarn@4.7.0"
 }

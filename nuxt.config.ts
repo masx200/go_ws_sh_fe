@@ -8,6 +8,11 @@ import { defineNuxtConfig } from "nuxt/config";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+    plugins: [
+        { src: "~/plugins/server-only.js", mode: "server" },
+
+        { src: "~/plugins/client-only.js", mode: "client" },
+    ],
     pwa: {
         workbox: {
             // 缓存所有 js 和 css 文件
@@ -46,7 +51,7 @@ export default defineNuxtConfig({
     elementPlus: {},
     compatibilityDate: "2024-11-01",
     devtools: { enabled: true },
-    modules: ["@element-plus/nuxt", "@vite-pwa/nuxt"],//, "@ant-design-vue/nuxt"],
+    modules: ["@element-plus/nuxt", "@vite-pwa/nuxt"], //, "@ant-design-vue/nuxt"],
     vite: {
         // resolve: {
         //     alias: [
