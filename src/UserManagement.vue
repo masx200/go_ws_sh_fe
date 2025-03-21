@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="width: 100%">
         <h1>用户管理</h1>
         <!-- 修改用户名和密码 -->
         <a-form :model="userInfo" @finish="handleSubmit">

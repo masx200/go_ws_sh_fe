@@ -1,28 +1,26 @@
 <template>
-    <div style="width: 100%">
-        <h1>令牌管理</h1>
-        <a-form
-            style="width: 100%"
-            :model="formState"
-            @finish="handleCreateToken"
-        >
-            <a-form-item
-                label="令牌名称"
-                name="name"
-                :rules="[{ required: true }]"
-            >
-                <a-input
-                    v-model:value="formState.name"
-                    placeholder="请输入令牌名称"
-                />
-            </a-form-item>
-            <a-button type="primary" html-type="submit">创建新令牌</a-button>
-        </a-form>
-    </div>
+    <a-table
+        :columns="columns"
+        :data-source="tokens"
+        :loading="loading"
+        style="width: 100%"
+    >
+        <template #bodyCell="{ column, record }">
+            <template v-if="column.key === 'action'">
+                <a-popconfirm
+                    title="确定删除该令牌？"
+                    @confirm="handleDeleteToken(record.id)"
+                >
+                    <a href="#">删除</a>
+                </a-popconfirm>
+            </template>
+        </template>
+    </a-table>
 </template>
+
 <script lang="ts">
 import { defineComponent } from "vue";
-import { Form, Input, Button, Table, Popconfirm } from "ant-design-vue";
+import { Table, Popconfirm } from "ant-design-vue";
 
 interface Token {
     id: string;
@@ -33,15 +31,10 @@ interface Token {
 export default defineComponent({
     components: {
         "a-popconfirm": Popconfirm,
-        "a-form": Form,
-        "a-form-item": Form.Item,
-        "a-input": Input,
-        "a-button": Button,
         "a-table": Table,
     },
     data() {
         return {
-            formState: { name: "" },
             tokens: [] as Token[],
             loading: false,
             columns: [
@@ -91,19 +84,6 @@ export default defineComponent({
                 this.tokens = res.data;
             } finally {
                 this.loading = false;
-            }
-        },
-        async handleCreateToken() {
-            try {
-                await this.mockRequest(
-                    "POST",
-                    "/oauth/personal-access-tokens",
-                    this.formState,
-                );
-                this.formState.name = "";
-                await this.fetchTokens();
-            } catch (error) {
-                console.error("创建令牌失败:", error);
             }
         },
         async handleDeleteToken(tokenId: string) {

@@ -409,7 +409,7 @@ const handleLogout = async () => {
     const token = localStorage?.getItem("token");
     const username = localStorage?.getItem("username");
     const identifier = localStorage?.getItem("identifier");
-    if (token&& identifier &&username) {
+    if (token && identifier && username) {
         try {
             const url = localStorage.getItem("server");
             if (!url) throw new Error("url is null");
