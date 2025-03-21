@@ -1,10 +1,10 @@
 import { defineNuxtConfig } from "nuxt/config";
 
-import AutoImport from "unplugin-auto-import/vite";
-//自动导入ui-组件 比如说ant-design-vue  element-plus等
-import Components from "unplugin-vue-components/vite";
-//ant-design-vue
-import { AntDesignVueResolver } from "unplugin-vue-components/resolvers";
+// import AutoImport from "unplugin-auto-import/vite";
+// //自动导入ui-组件 比如说ant-design-vue  element-plus等
+// import Components from "unplugin-vue-components/vite";
+// //ant-design-vue
+// import { AntDesignVueResolver } from "unplugin-vue-components/resolvers";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -46,25 +46,69 @@ export default defineNuxtConfig({
     elementPlus: {},
     compatibilityDate: "2024-11-01",
     devtools: { enabled: true },
-    modules: ["@element-plus/nuxt", "@vite-pwa/nuxt"],
+    modules: ["@element-plus/nuxt", "@vite-pwa/nuxt"],//, "@ant-design-vue/nuxt"],
     vite: {
+        // resolve: {
+        //     alias: [
+        //         "advancedFormat",
+        //         "arraySupport",
+        //         "badMutable",
+        //         "bigIntSupport",
+        //         "buddhistEra",
+        //         "calendar",
+        //         "customParseFormat",
+        //         "dayOfYear",
+        //         "devHelper",
+        //         "duration",
+        //         "isBetween",
+        //         "isLeapYear",
+        //         "isMoment",
+        //         "isoWeek",
+        //         "isoWeeksInYear",
+        //         "isSameOrAfter",
+        //         "isSameOrBefore",
+        //         "isToday",
+        //         "isTomorrow",
+        //         "isYesterday",
+        //         "localeData",
+        //         "localizedFormat",
+        //         "minMax",
+        //         "negativeYear",
+        //         "objectSupport",
+        //         "pluralGetSet",
+        //         "preParsePostFormat",
+        //         "quarterOfYear",
+        //         "relativeTime",
+        //         "timezone",
+        //         "toArray",
+        //         "toObject",
+        //         "updateLocale",
+        //         "utc",
+        //         "weekday",
+        //         "weekOfYear",
+        //         "weekYear",
+        //     ].map((a) => ({
+        //         find: `dayjs/plugin/${a}.js`,
+        //         replacement: "dayjs/esm/plugin/" + a + "/index.js",
+        //     })),
+        // },
         plugins: [
-            AutoImport({
-                //安装两行后你会发现在组件中不用再导入ref，reactive等
-                imports: ["vue", "vue-router"],
-                dts: "src/auto-import.d.ts",
-                //ant-design-vue
-                resolvers: [AntDesignVueResolver()],
-            }),
-            Components({
-                //ant-design-vue   importStyle = false 样式就没了
-                resolvers: [
-                    AntDesignVueResolver({
-                        importStyle: true,
-                        resolveIcons: true,
-                    }),
-                ],
-            }),
+            // AutoImport({
+            //     //安装两行后你会发现在组件中不用再导入ref，reactive等
+            //     imports: ["vue", "vue-router"],
+            //     dts: "src/auto-import.d.ts",
+            //     //ant-design-vue
+            //     resolvers: [AntDesignVueResolver()],
+            // }),
+            // Components({
+            //     //ant-design-vue   importStyle = false 样式就没了
+            //     resolvers: [
+            //         AntDesignVueResolver({
+            //             importStyle: true,
+            //             resolveIcons: true,
+            //         }),
+            //     ],
+            // }),
         ],
         build: {
             minify: "terser",
