@@ -25,20 +25,26 @@ const loading = computed(
 onMounted(async () => {
     const session = new URL(location.href).searchParams.get("session");
     const server = new URL(location.href).searchParams.get("server");
-    const token = server
-        ? (await fetchServerInfoServer(server)).serverinfo?.[0].token
-        : localStorage?.getItem("token");
+    const conninfo = (await fetchServerInfoServer(server || ""))
+        .serverinfo?.[0];
+    const token = server ? conninfo.token : localStorage?.getItem("token");
     if (!token || !server || !session) {
         return router.push("/");
     } else {
-        appopts.wsprotocol = encodeURIComponent("token=" + token);
+        const searchParams = new URLSearchParams();
+        searchParams.set("token", token);
+        searchParams.set("type", "token");
+        searchParams.set("identifier", conninfo.identifier);
+        appopts.wsprotocol = encodeURIComponent(searchParams.toString());
         const url1 = new URL(server);
         url1.protocol = url1.protocol.replace("http", "ws");
         url1.pathname = session;
         appopts.wsurl = url1.href;
         // alert("加载成功");
+        localStorage.setItem("type", "token");
         localStorage.setItem("token", token);
         localStorage.setItem("server", server);
+        localStorage.setItem("identifier", conninfo.identifier);
         localStorage.setItem("session", session);
     }
     // 这里可以添加初始化逻辑

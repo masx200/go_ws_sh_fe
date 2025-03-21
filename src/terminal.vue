@@ -187,7 +187,9 @@ export default defineComponent({
                 xterm.connect();
                 // alert("Terminal connected");
             } catch (error) {
-                alert(String(error));
+                console.error(String(error));
+
+                ElMessage.error(String(error));
             }
         });
 
