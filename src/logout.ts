@@ -1,11 +1,16 @@
 export const logoutUrl = "http://localhost:28080/logout";
 
 export interface logoutCredentials {
+    username: string;
     token: string;
+    delete_identifier: string;
+    identifier: string;
+    type: string;
 }
 export interface logoutResults {
-    token: string;
+    delete_identifier: string;
     message: string;
+    username: string;
 }
 
 export async function logout(

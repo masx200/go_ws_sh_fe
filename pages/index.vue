@@ -130,9 +130,8 @@ async function handlemanage() {
         urlvalue.value = newLocalurl.href;
         openNewWindow(
             new URL(
-                "/manage?server=" +
-                    encodeURIComponent(urlvalue.value) ,
-                    location.href,
+                "/manage?server=" + encodeURIComponent(urlvalue.value),
+                location.href,
             ).href,
         );
     } finally {
@@ -408,12 +407,18 @@ const handleLogout = async () => {
     );
     // 这里可以添加退出逻辑
     const token = localStorage?.getItem("token");
-    if (token) {
+    const username = localStorage?.getItem("username");
+    const identifier = localStorage?.getItem("identifier");
+    if (token&& identifier &&username) {
         try {
             const url = localStorage.getItem("server");
             if (!url) throw new Error("url is null");
             const newLocal = await logout(
                 {
+                    type: "token",
+                    username: username,
+                    identifier: identifier,
+                    delete_identifier: identifier,
                     token: token,
                 },
                 new URL("/logout", url).href,
