@@ -3,12 +3,12 @@
         <h1>用户管理</h1>
         <!-- 修改用户名和密码 -->
         <a-form :model="userInfo" @finish="handleSubmit">
-            <a-form-item
+            <!-- <a-form-item
                 label="用户名"
                 :rules="[{ required: true, message: '请输入用户名' }]"
             >
                 <a-input v-model:value="userInfo.username" />
-            </a-form-item>
+            </a-form-item> -->
             <a-form-item
                 label="密码"
                 :rules="[{ required: true, message: '请输入密码' }]"
@@ -46,7 +46,7 @@ export default defineComponent({
         // 模拟用户信息
         const userInfo = ref({
             username: "testuser",
-            password: "testpassword",
+            password: "",
         });
 
         // 模拟令牌列表

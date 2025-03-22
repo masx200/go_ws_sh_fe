@@ -21,11 +21,11 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { Table, Popconfirm } from "ant-design-vue";
+import type { ColumnsType } from "ant-design-vue/es/table/interface";
 
 interface Token {
-    id: string;
-    name: string;
-    created_at: string;
+    identifier: string;
+    username: string;
 }
 
 export default defineComponent({
@@ -38,11 +38,11 @@ export default defineComponent({
             tokens: [] as Token[],
             loading: false,
             columns: [
-                { title: "令牌ID", dataIndex: "id" },
-                { title: "名称", dataIndex: "name" },
-                { title: "创建时间", dataIndex: "created_at" },
+                { title: "令牌ID", dataIndex: "identifier" },
+                { title: "用户名称", dataIndex: "username" },
+
                 { title: "操作", key: "action" },
-            ] as const,
+            ] as ColumnsType,
         };
     },
     mounted() {
@@ -62,9 +62,9 @@ export default defineComponent({
                         url === "/oauth/personal-access-tokens"
                     ) {
                         const newToken = {
-                            id: Date.now().toString(),
-                            name: data.name,
-                            created_at: new Date().toLocaleString(),
+                            identifier: Date.now().toString(),
+                            username: data.name,
+                            // created_at: new Date().toLocaleString(),
                         };
                         this.tokens.push(newToken);
                         resolve({ data: newToken });
@@ -92,7 +92,7 @@ export default defineComponent({
                     "DELETE",
                     `/oauth/personal-access-tokens/${tokenId}`,
                 );
-                this.tokens = this.tokens.filter((t) => t.id !== tokenId);
+                this.tokens = this.tokens.filter((t) => t.identifier !== tokenId);
             } catch (error) {
                 console.error("删除令牌失败:", error);
             }
