@@ -21,6 +21,8 @@
         <UserManagement v-if="currentTab.includes('password')" />
         <TokenManagement v-if="currentTab.includes('createToken')" />
         <TokenDisplay v-if="currentTab.includes('displayTokens')" />
+        <UserDisplay v-if="currentTab.includes('displayUsers')" />
+        <SessionDisplay v-if="currentTab.includes('displaySessions')" />
     </div>
 </template>
 
@@ -28,31 +30,46 @@
 const menuitems: MenuProps["items"] = [
     {
         key: "password",
-        //  icon: () => h(MailOutlined),
         label: "密码修改",
         title: "密码修改",
         style: {
-            width: "calc(100%/3)",
+            width: "calc(100%/5)",
             textAlign: "center",
         }
     },
     {
         key: "createToken",
-        // icon: () => h(AppstoreOutlined),
         label: "令牌创建",
         title: "令牌创建",
         style: {
-            width: "calc(100%/3)",
+            width: "calc(100%/5)",
             textAlign: "center",
         }
     },
     {
         key: "displayTokens",
-        // icon: () => h(AppstoreOutlined),
         label: "显示令牌",
         title: "显示令牌",
         style: {
-            width: "calc(100%/3)",
+            width: "calc(100%/5)",
+            textAlign: "center",
+        }
+    },
+    {
+        key: "displayUsers",
+        label: "显示用户",
+        title: "显示用户",
+        style: {
+            width: "calc(100%/5)",
+            textAlign: "center",
+        }
+    },
+    {
+        key: "displaySessions",
+        label: "显示会话",
+        title: "显示会话",
+        style: {
+            width: "calc(100%/5)",
             textAlign: "center",
         }
     },
@@ -62,18 +79,18 @@ onMounted(() => {
     const length = menuitems.length;
     items.value = menuitems.map(a => ({
         ...a, style: Object.assign(a?.style || {}, {
-
             width: `calc(100%/${length})`
-        }
-        )
-    }))as  MenuProps["items"]
+        })
+    })) as MenuProps["items"];
 });
 import { ref } from "vue";
 import { Menu as AMenu, type MenuProps } from "ant-design-vue";
 
 import UserManagement from "../src/UserManagement.vue";
 import TokenManagement from "../src/TokenManagement.vue";
-import TokenDisplay from "../src/TokenDisplay.vue"; // 假设存在一个 TokenDisplay.vue 组件
+import TokenDisplay from "../src/TokenDisplay.vue";
+import UserDisplay from "../src/UserDisplay.vue"; // 假设存在 UserDisplay.vue 组件
+import SessionDisplay from "../src/SessionDisplay.vue"; // 假设存在 SessionDisplay.vue 组件
 
 const currentTab = ref(["password"]); // 默认显示密码修改页面
 
