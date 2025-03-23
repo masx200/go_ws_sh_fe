@@ -1,23 +1,40 @@
 <template>
-    <a-table :columns="columns" :data-source="users" :loading="loading" style="width: 100%">
+    <a-table
+        :columns="columns"
+        :data-source="users"
+        :loading="loading"
+        style="width: 100%"
+    >
         <template #bodyCell="{ column, record }">
-            <template v-if="column.key === 'action'">
-                <a-popconfirm title="确定删除该用户？" @confirm="handleDeleteUser(record.username)">
-                    <a href="#">删除</a>
-                </a-popconfirm>
-                <a href="#" @click="handleChangePassword(record.username)">修改密码</a>
+            <template v-if="column.key === 'delete'">
+                <span>
+                    <a-popconfirm
+                        title="确定删除该用户？"
+                        @confirm="handleDeleteUser(record.username)"
+                    >
+                        <a href="#">删除</a>
+                    </a-popconfirm></span
+                >
+            </template>
+            <template v-if="column.key === 'modify'">
+                <span>
+                    <a href="#" @click="handleChangePassword(record.username)"
+                        >修改密码</a
+                    ></span
+                >
             </template>
         </template>
     </a-table>
 </template>
 
 <script lang="ts">
-import type{ listCredentialsInterface,  } from "./listtokens.ts";
+import type { listCredentialsInterface } from "./listtokens.ts";
 import { listcredentials } from "./listcredentials.ts";
 import { defineComponent, ref } from "vue";
-import { Table, Popconfirm } from "ant-design-vue";
+import { Table, Popconfirm, message } from "ant-design-vue";
 import type { ColumnsType } from "ant-design-vue/es/table/interface";
-
+import { useRouter } from "vue-router";
+import { getAuth } from "./SessionDisplay.vue";
 
 interface User {
     username: string;
@@ -27,14 +44,12 @@ interface User {
 }
 
 export default defineComponent({
-    components: {
-        "a-table": Table,
-        "a-popconfirm": Popconfirm
-    },
-    data() {
+    setup() {
+        const router = useRouter();
         return {
-            users: [] as User[],
-            loading: false,
+            router,
+            users: ref([] as User[]),
+            loading: ref(false),
             columns: [
                 { title: "用户名", dataIndex: "username" },
                 { title: "创建时间", dataIndex: "created_at" },
@@ -42,9 +57,14 @@ export default defineComponent({
                 { title: "修改操作", key: "modify" },
                 { title: "删除操作", key: "delete" },
                 // { title: "操作", key: "action" }
-            ] as ColumnsType
+            ] as ColumnsType,
         };
     },
+    components: {
+        "a-table": Table,
+        "a-popconfirm": Popconfirm,
+    },
+
     mounted() {
         this.fetchUsers();
     },
@@ -52,17 +72,17 @@ export default defineComponent({
         async fetchUsers() {
             this.loading = true;
             try {
-                const credentials: listCredentialsInterface = {
-                    authorization: {
-                        username: "your_username",
-                        token: "your_token",
-                        type: "token"
-                    }
-                };
-                const result = await listcredentials(credentials);
+                const { router } = this;
+                const authresult = await getAuth(router);
+                if (!authresult) {
+                    return null;
+                }
+                const { baseurl, credentials } = authresult;
+                const result = await listcredentials(credentials,baseurl);
                 this.users = result.credentials;
             } catch (error) {
                 console.error("获取用户列表失败:", error);
+                message.error("获取会话列表失败"+"\n"+error+"\n"+String(error))
             } finally {
                 this.loading = false;
             }
@@ -74,7 +94,7 @@ export default defineComponent({
         async handleChangePassword(username: string) {
             // 实现修改密码逻辑
             console.log(`修改用户 ${username} 的密码`);
-        }
-    }
+        },
+    },
 });
 </script>
