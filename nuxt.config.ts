@@ -36,18 +36,23 @@ export default defineNuxtConfig({
         head: {
             link: [
                 { rel: "icon", href: "/favicon.ico" },
-                {
-                    rel: "stylesheet",
-                    href: "https://unpkg.com/element-plus@2.9.2/dist/index.css",
-                },
-                {
-                    rel: "stylesheet",
-                    href: "https://unpkg.com/@xterm/xterm@5.5.0/css/xterm.css",
-                },
+                // {
+                //     rel: "stylesheet",
+                //     href: "https://unpkg.com/element-plus@2.9.2/dist/index.css",
+                // },
+                // {
+                //     rel: "stylesheet",
+                //     href: "https://unpkg.com/@xterm/xterm@5.5.0/css/xterm.css",
+                // },
             ],
         },
     },
-    css: ["~/styles/styles.css", "~/styles/xterm.css"],
+    css: ["~/styles/styles.css", "~/styles/xterm.css"
+        ,
+        "~/node_modules/element-plus/dist/index.css",
+        "~/node_modules/@xterm/xterm/css/xterm.css"
+
+    ],
     elementPlus: {},
     compatibilityDate: "2024-11-01",
     devtools: { enabled: true },

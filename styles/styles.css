@@ -9,3 +9,7 @@ body {
 #__nuxt {
     height: 100%;
 }
+body {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+}
