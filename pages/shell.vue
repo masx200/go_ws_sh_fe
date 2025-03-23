@@ -24,7 +24,7 @@ if (typeof process == "undefined") {
 }
 import App from "~/src/App.vue";
 import Loading from "~/src/loading.vue";
-import { fetchServerInfoServer } from "~/src/ServerConnectionInfo";
+import { fetchServerInfoServer } from "~/src/ServerConnectionInfo.ts";
 const reconnect = false;
 const router = useRouter();
 const appopts = reactive({

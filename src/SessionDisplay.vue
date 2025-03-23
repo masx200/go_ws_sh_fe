@@ -1,23 +1,28 @@
 <template>
     <a-table :columns="columns" :data-source="sessions" :loading="loading" style="width: 100%">
         <template #bodyCell="{ column, record }">
-            <template v-if="column.key === 'action'">
-                <a-popconfirm title="确定删除该会话？" @confirm="handleDeleteSession(record.name)">
-                    <a href="#">删除</a>
-                </a-popconfirm>
-                <a href="#" @click="handleChangeAttributes(record.name)">修改属性</a>
+            <template v-if="column.key === 'delete'">
+                <span> <a-popconfirm title="确定删除该会话？" @confirm="handleDeleteSession(record.name)">
+                        <a href="#">删除</a>
+                    </a-popconfirm></span>
+
+            </template>
+            <template v-if="column.key === 'modify'">
+                <span>
+                <a href="#" @click="handleChangeAttributes(record.name)">修改属性</a></span>
             </template>
         </template>
     </a-table>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
-import { Table, Popconfirm } from "ant-design-vue";
+import { Popconfirm, Table } from "ant-design-vue";
 import type { ColumnsType } from "ant-design-vue/es/table/interface";
+import { defineComponent } from "vue";
+import { fetchServerInfoServer } from "~/src/ServerConnectionInfo.ts";
+import { listsessions } from "./listsessions.ts"; // 引入 listsessions 函数
 
 interface Session {
-    // id: string;
     name: string;
     cmd: string;
     args: string;
@@ -27,9 +32,15 @@ interface Session {
 }
 
 export default defineComponent({
+    setup() {
+        const router = useRouter();
+        return {
+            router,
+        };
+    },
     components: {
         "a-table": Table,
-        "a-popconfirm": Popconfirm
+        "a-popconfirm": Popconfirm,
     },
     data() {
         return {
@@ -42,8 +53,9 @@ export default defineComponent({
                 { title: "目录", dataIndex: "dir" },
                 { title: "创建时间", dataIndex: "created_at" },
                 { title: "修改时间", dataIndex: "updated_at" },
-                { title: "操作", key: "action" }
-            ] as ColumnsType
+                { title: "修改操作", key: "modify" },
+                { title: "删除操作", key: "delete" },
+            ] as ColumnsType,
         };
     },
     mounted() {
@@ -51,11 +63,37 @@ export default defineComponent({
     },
     methods: {
         async fetchSessions() {
+            const { router } = this;
             this.loading = true;
             try {
-                // 调用 API 获取会话信息
-                // const res = await api.getSessions();
-                // this.sessions = res.data;
+                const urlserver = new URL(location.href).searchParams.get(
+                    "server",
+                );
+                const conninfo = (await fetchServerInfoServer(urlserver || ""))
+                    .serverinfo?.[0];
+                const token = urlserver
+                    ? conninfo.token
+                    : localStorage?.getItem("token");
+                if (!token || !urlserver) {
+                    return router.push("/");
+                }
+                const result = await listsessions(
+                    {
+                        authorization: {
+                            username: conninfo.username,
+                            token: token,
+                            type: "token",
+                            identifier: conninfo.identifier,
+                        },
+                    },
+                    new URL(urlserver).href,
+                );
+                this.sessions = result.sessions.map((session) => ({
+                    ...session,
+                    args: JSON.stringify(session.args), //.join(" ")
+                }));
+            } catch (error) {
+                console.error("获取会话列表失败:", error);
             } finally {
                 this.loading = false;
             }
@@ -64,7 +102,7 @@ export default defineComponent({
             try {
                 // 调用 API 删除会话
                 // await api.deleteSession(sessionId);
-                this.sessions = this.sessions.filter((s) => s.name !== sessionId);
+                //this.sessions = this.sessions.filter((s) => s.id !== sessionId);
             } catch (error) {
                 console.error("删除会话失败:", error);
             }
@@ -72,7 +110,7 @@ export default defineComponent({
         async handleChangeAttributes(sessionId: string) {
             // 实现修改属性逻辑
             console.log(`修改会话 ${sessionId} 的属性`);
-        }
-    }
+        },
+    },
 });
 </script>

@@ -235,7 +235,7 @@ import {
     TableServerInfoDeleteAll,
     TableServerInfoDeleteByServer,
 } from "~/src/ServerConnectionInfo";
-import { gettoken, listsessions } from "../src/list.ts";
+import { gettoken, listsessions } from "../src/listsessions.ts";
 const sessionvalue = ref("");
 onMounted(() => {
     const url = localStorage?.getItem("server");

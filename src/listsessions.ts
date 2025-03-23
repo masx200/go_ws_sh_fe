@@ -17,6 +17,8 @@ export interface listResults {
         args: string[];
         dir: string;
         cmd: string;
+        created_at: string;
+        updated_at: string;
     }[];
 }
 

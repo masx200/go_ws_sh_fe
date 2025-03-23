@@ -78,11 +78,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue';
 import type { ValidateFieldsError } from 'async-validator';
 import type { FormInstance, FormRules } from 'element-plus';
+import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { listsessions } from '~/src/list';
+import { listsessions } from '~/src/listsessions.ts';
 import { updateOrAddIntoTableServerInfo } from '~/src/ServerConnectionInfo';
 import { login, savetoken } from '../src/login.ts';
 
