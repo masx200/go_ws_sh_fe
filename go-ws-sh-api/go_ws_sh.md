@@ -66,8 +66,10 @@ POST /tokens
 |» token|body|[token](#schematoken)| 是 |none|
 |»» description|body|string| 是 |none|
 |»» username|body|string| 是 |none|
-|»» identifer|body|string| 是 |none|
+|»» identifier|body|string| 是 |none|
 |»» token|body|string| 是 |none|
+|»» updated_at|body|string| 是 |none|
+|»» created_at|body|string| 是 |none|
 
 > 返回示例
 
@@ -102,8 +104,10 @@ POST /tokens
 |» token|[token](#schematoken)|true|none||none|
 |»» description|string|true|none||none|
 |»» username|string|true|none||none|
-|»» identifer|string|true|none||none|
+|»» identifier|string|true|none||none|
 |»» token|string|true|none||none|
+|»» updated_at|string|true|none||none|
+|»» created_at|string|true|none||none|
 |» username|string|true|none||none|
 
 ## PUT 修改令牌
@@ -176,8 +180,10 @@ PUT /tokens
 |» token|[token](#schematoken)|true|none||none|
 |»» description|string|true|none||none|
 |»» username|string|true|none||none|
-|»» identifer|string|true|none||none|
+|»» identifier|string|true|none||none|
 |»» token|string|true|none||none|
+|»» updated_at|string|true|none||none|
+|»» created_at|string|true|none||none|
 
 ## DELETE 删除令牌
 
@@ -211,8 +217,10 @@ DELETE /tokens
 |» token|body|[token](#schematoken)| 是 |none|
 |»» description|body|string| 是 |none|
 |»» username|body|string| 是 |none|
-|»» identifer|body|string| 是 |none|
+|»» identifier|body|string| 是 |none|
 |»» token|body|string| 是 |none|
+|»» updated_at|body|string| 是 |none|
+|»» created_at|body|string| 是 |none|
 |» authorization|body|[authorization](#schemaauthorization)| 是 |none|
 |»» identifer|body|string| 是 |none|
 |»» username|body|string| 是 |none|
@@ -226,13 +234,15 @@ DELETE /tokens
 
 ```json
 {
-  "message": "in labore aliqua",
-  "username": "所丽芳",
+  "message": "tempor",
+  "username": "公伟",
   "token": {
-    "description": "形争多历必去包队。正管铁记样。打必手京华从他者年这。",
-    "username": "卞国良",
-    "identifer": "7",
-    "token": "et amet nostrud"
+    "description": "边太支消二水作写山。参去类。据素队族取只维证除教。清些建石万种单常。有地开斗无点查号。美报行何。有议手已达。",
+    "username": "邶晨阳",
+    "identifer": "84",
+    "token": "fugiat deserunt non ea",
+    "updated_at": "2025-01-26",
+    "created_at": "2025-01-19 09:31:37"
   }
 }
 ```
@@ -254,8 +264,10 @@ DELETE /tokens
 |» token|[token](#schematoken)|true|none||none|
 |»» description|string|true|none||none|
 |»» username|string|true|none||none|
-|»» identifer|string|true|none||none|
+|»» identifier|string|true|none||none|
 |»» token|string|true|none||none|
+|»» updated_at|string|true|none||none|
+|»» created_at|string|true|none||none|
 
 ## GET 显示令牌
 
@@ -294,20 +306,16 @@ GET /tokens
 
 ```json
 {
-  "message": "qui",
-  "username": "马超栋",
+  "message": "aliquip magna laborum",
+  "username": "市熙成",
   "tokens": [
     {
-      "description": "支起天器步管同日处。上单两率利元对学。队加议广及我效光标。类看进。门展科不写义县次该她。次斗变。人火车立己进。手机验类重百然。",
-      "username": "龙家豪",
-      "identifer": "68",
-      "token": "officia deserunt in est enim"
-    },
-    {
-      "description": "前全过过式行保。和感查。及年性成把。积五无特你及。华第也省。",
-      "username": "步建军",
-      "identifer": "58",
-      "token": "proident"
+      "description": "条物先义价级地后。中门队种导力表。只矿处。",
+      "username": "钭苡沫",
+      "identifer": "14",
+      "token": "sint magna id eiusmod aliqua",
+      "updated_at": "2025-10-04",
+      "created_at": "2026-02-08 12:55:32"
     }
   ]
 }
@@ -330,8 +338,10 @@ GET /tokens
 |» tokens|[[token](#schematoken)]|true|none||none|
 |»» description|string|true|none||none|
 |»» username|string|true|none||none|
-|»» identifer|string|true|none||none|
+|»» identifier|string|true|none||none|
 |»» token|string|true|none||none|
+|»» updated_at|string|true|none||none|
+|»» created_at|string|true|none||none|
 
 ## PUT 修改密码
 
@@ -369,6 +379,8 @@ PUT /credentials
 |» credential|body|[credential](#schemacredential)| 是 |none|
 |»» username|body|string| 是 |none|
 |»» password|body|string| 是 |none|
+|»» updated_at|body|string| 是 |none|
+|»» created_at|body|string| 是 |none|
 
 > 返回示例
 
@@ -402,6 +414,8 @@ PUT /credentials
 |» credential|[credential](#schemacredential)|true|none||none|
 |»» username|string|true|none||none|
 |»» password|string|true|none||none|
+|»» updated_at|string|true|none||none|
+|»» created_at|string|true|none||none|
 
 ## DELETE 删除用户
 
@@ -439,6 +453,8 @@ DELETE /credentials
 |» credential|body|[credential](#schemacredential)| 是 |none|
 |»» username|body|string| 是 |none|
 |»» password|body|string| 是 |none|
+|»» updated_at|body|string| 是 |none|
+|»» created_at|body|string| 是 |none|
 
 > 返回示例
 
@@ -472,6 +488,8 @@ DELETE /credentials
 |» credential|[credential](#schemacredential)|true|none||none|
 |»» username|string|true|none||none|
 |»» password|string|true|none||none|
+|»» updated_at|string|true|none||none|
+|»» created_at|string|true|none||none|
 
 ## GET 显示用户
 
@@ -512,20 +530,14 @@ GET /credentials
 {
   "credentials": [
     {
-      "username": "仵晨",
-      "password": "sEyDDGTf5uIBI3G"
-    },
-    {
-      "username": "寻子豪",
-      "password": "HCOvPlHMWA1vBU_"
-    },
-    {
-      "username": "丁国华",
-      "password": "XJ08qHeYUGFOLV5"
+      "username": "老英",
+      "password": "EAr9I5PnZ6ioOdk",
+      "updated_at": "2024-08-11",
+      "created_at": "2025-12-10 13:17:08"
     }
   ],
-  "message": "sed adipisicing dolore eiusmod",
-  "username": "敛鹏"
+  "message": "cillum ea laboris do",
+  "username": "荣佳琪"
 }
 ```
 
@@ -544,6 +556,8 @@ GET /credentials
 |» credentials|[[credential](#schemacredential)]|true|none||none|
 |»» username|string|true|none||none|
 |»» password|string|true|none||none|
+|»» updated_at|string|true|none||none|
+|»» created_at|string|true|none||none|
 |» message|string|true|none||none|
 |» username|string|true|none||none|
 
@@ -584,6 +598,8 @@ POST /credentials
 |» credential|body|[credential](#schemacredential)| 是 |none|
 |»» username|body|string| 是 |none|
 |»» password|body|string| 是 |none|
+|»» updated_at|body|string| 是 |none|
+|»» created_at|body|string| 是 |none|
 
 > 返回示例
 
@@ -615,6 +631,8 @@ POST /credentials
 |» credential|[credential](#schemacredential)|true|none||none|
 |»» username|string|true|none||none|
 |»» password|string|true|none||none|
+|»» updated_at|string|true|none||none|
+|»» created_at|string|true|none||none|
 |» message|string|true|none||none|
 |» username|string|true|none||none|
 
@@ -662,6 +680,8 @@ PUT /sessions
 |»» args|body|[string]| 否 |none|
 |»» dir|body|string| 否 |none|
 |»» cmd|body|string| 否 |none|
+|»» created_at|body|string| 是 |none|
+|»» updated_at|body|string| 是 |none|
 
 > 返回示例
 
@@ -702,6 +722,8 @@ PUT /sessions
 |»» args|[string]|false|none||none|
 |»» dir|string|false|none||none|
 |»» cmd|string|false|none||none|
+|»» created_at|string|true|none||none|
+|»» updated_at|string|true|none||none|
 
 ## DELETE 删除会话
 
@@ -741,6 +763,8 @@ DELETE /sessions
 |»» args|body|[string]| 否 |none|
 |»» dir|body|string| 否 |none|
 |»» cmd|body|string| 否 |none|
+|»» created_at|body|string| 是 |none|
+|»» updated_at|body|string| 是 |none|
 |» authorization|body|[authorization](#schemaauthorization)| 是 |none|
 |»» identifer|body|string| 是 |none|
 |»» username|body|string| 是 |none|
@@ -788,6 +812,8 @@ DELETE /sessions
 |»» args|[string]|false|none||none|
 |»» dir|string|false|none||none|
 |»» cmd|string|false|none||none|
+|»» created_at|string|true|none||none|
+|»» updated_at|string|true|none||none|
 
 ## GET 显示会话
 
@@ -828,26 +854,18 @@ GET /sessions
 {
   "sessions": [
     {
-      "name": "蓬国英",
+      "name": "余桂英",
       "args": [
-        "sint reprehenderit exercitation nostrud"
+        "Ut"
       ],
-      "dir": "dolore in",
-      "cmd": "anim et"
-    },
-    {
-      "name": "双馥君",
-      "args": [
-        "irure Duis",
-        "labore irure",
-        "amet velit fugiat ea"
-      ],
-      "dir": "ipsum",
-      "cmd": "veniam deserunt aliqua"
+      "dir": "enim voluptate occaecat do ipsum",
+      "cmd": "Lorem aliquip",
+      "created_at": "2025-09-08 16:23:31",
+      "updated_at": "2025-09-17"
     }
   ],
-  "message": "mollit id Duis magna proident",
-  "username": "鱼浩晨"
+  "message": "amet ut sunt",
+  "username": "终玉梅"
 }
 ```
 
@@ -868,6 +886,8 @@ GET /sessions
 |»» args|[string]|false|none||none|
 |»» dir|string|false|none||none|
 |»» cmd|string|false|none||none|
+|»» created_at|string|true|none||none|
+|»» updated_at|string|true|none||none|
 |» message|string|true|none||none|
 |» username|string|true|none||none|
 
@@ -916,6 +936,8 @@ POST /sessions
 |»» args|body|[string]| 否 |none|
 |»» dir|body|string| 否 |none|
 |»» cmd|body|string| 否 |none|
+|»» created_at|body|string| 是 |none|
+|»» updated_at|body|string| 是 |none|
 
 > 返回示例
 
@@ -949,8 +971,10 @@ POST /sessions
 |» session|[token](#schematoken)|true|none||none|
 |»» description|string|true|none||none|
 |»» username|string|true|none||none|
-|»» identifer|string|true|none||none|
+|»» identifier|string|true|none||none|
 |»» token|string|true|none||none|
+|»» updated_at|string|true|none||none|
+|»» created_at|string|true|none||none|
 |» message|string|true|none||none|
 |» username|string|true|none||none|
 
@@ -995,8 +1019,10 @@ POST /sessions
 {
   "description": "string",
   "username": "string",
-  "identifer": "string",
-  "token": "string"
+  "identifier": "string",
+  "token": "string",
+  "updated_at": "string",
+  "created_at": "string"
 }
 
 ```
@@ -1007,8 +1033,10 @@ POST /sessions
 |---|---|---|---|---|---|
 |description|string|true|none||none|
 |username|string|true|none||none|
-|identifer|string|true|none||none|
+|identifier|string|true|none||none|
 |token|string|true|none||none|
+|updated_at|string|true|none||none|
+|created_at|string|true|none||none|
 
 <h2 id="tocS_session">session</h2>
 
@@ -1024,7 +1052,9 @@ POST /sessions
     "string"
   ],
   "dir": "string",
-  "cmd": "string"
+  "cmd": "string",
+  "created_at": "string",
+  "updated_at": "string"
 }
 
 ```
@@ -1037,6 +1067,8 @@ POST /sessions
 |args|[string]|false|none||none|
 |dir|string|false|none||none|
 |cmd|string|false|none||none|
+|created_at|string|true|none||none|
+|updated_at|string|true|none||none|
 
 <h2 id="tocS_credential">credential</h2>
 
@@ -1048,7 +1080,9 @@ POST /sessions
 ```json
 {
   "username": "string",
-  "password": "string"
+  "password": "string",
+  "updated_at": "string",
+  "created_at": "string"
 }
 
 ```
@@ -1059,4 +1093,6 @@ POST /sessions
 |---|---|---|---|---|---|
 |username|string|true|none||none|
 |password|string|true|none||none|
+|updated_at|string|true|none||none|
+|created_at|string|true|none||none|
 
