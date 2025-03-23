@@ -7,19 +7,19 @@
             align-items: center;
         ">
         <!-- 添加导航栏 -->
-        <a-menu mode="inline" v-model:openKeys="openKeys" v-model:selectedKeys="currentTab" :items="items" style="
+        <a-menu mode="inline" v-model:openKeys="state_openKeys" v-model:selectedKeys="currentTab" :items="items" style="
                 display: flex;
                 width: 100%;
                 align-content: center;
                 justify-content: center;
                 align-items: baseline;
                 flex-direction: row;
-            " :inlineIndent="0">
+            " :inlineIndent="0" :inlineCollapsed="false" @select="onselect">
+            <!-- @openChange="onOpenChange" -->
         </a-menu>
 
         <!-- 用户管理分组 -->
-        <div v-if="['displayUsers', 'createUser', 'changepassword'].includes(currentTab[0])"
-             style="width: 100%;">
+        <div v-if="['displayUsers', 'createUser', 'changepassword'].includes(currentTab[0])" style="width: 100%;">
             <h2>用户管理</h2>
             <UserDisplay v-if="currentTab.includes('displayUsers')" />
             <CreateUser v-if="currentTab.includes('createUser')" />
@@ -28,7 +28,7 @@
 
         <!-- 令牌管理分组 -->
         <div v-if="['displayTokens', 'createToken', 'editTokenDescription'].includes(currentTab[0])"
-             style="width: 100%;">
+            style="width: 100%;">
             <h2>令牌管理</h2>
             <TokenDisplay v-if="currentTab.includes('displayTokens')" />
             <TokenManagement v-if="currentTab.includes('createToken')" />
@@ -37,7 +37,7 @@
 
         <!-- 会话管理分组 -->
         <div v-if="['displaySessions', 'createSession', 'editSessionAttributes'].includes(currentTab[0])"
-             style="width: 100%;">
+            style="width: 100%;">
             <h2>会话管理</h2>
             <SessionDisplay v-if="currentTab.includes('displaySessions')" />
             <CreateSession v-if="currentTab.includes('createSession')" />
@@ -47,6 +47,27 @@
 </template>
 
 <script setup lang="ts">
+
+import type{SelectInfo}from "ant-design-vue/es/menu/src/interface.d.ts"
+function onselect(keys: SelectInfo) {
+    console.log(keys);
+const firstkeypath = (keys.keyPath?.[0])?.toString();
+if(!firstkeypath)return;
+    state_openKeys.value = [firstkeypath];
+}
+// const rootSubmenuKeys = ref<string[]>(['UsersManage', 'TokenManage', 'SessionManage']);
+// const onOpenChange = (openKeys: (string | number)[]) => {
+//     console.log(openKeys);
+//     console.log(state_openKeys.value);
+//     const latestOpenKey = openKeys.find(key => state_openKeys.value.indexOf(key) === -1);
+//     // debugger;
+// console.log(latestOpenKey)
+//     if (  rootSubmenuKeys.value.indexOf(latestOpenKey) === -1) {
+//         state_openKeys.value = openKeys;
+//     } else {
+//         state_openKeys.value = latestOpenKey ? [latestOpenKey] : [];
+//     }
+// };
 import { Menu as AMenu, type MenuProps } from "ant-design-vue";
 import { ref } from "vue";
 import UserManagement from "../src/UserManagement.vue";
@@ -61,7 +82,10 @@ import UserDisplay from "../src/UserDisplay.vue";
 import TokenDescriptionEdit from "../src/TokenDescriptionEdit.vue";
 import SessionAttributeEdit from "../src/SessionAttributeEdit.vue";
 
-const openKeys = ref<string[]>(['']);
+const state_openKeys = ref<string[]>([]);
+// watch(openKeys, (newValue, oldValue) => {
+//     console.log(newValue, oldValue);
+// })
 const menuitems: ItemType[] = [
     {
         key: "UsersManage",
@@ -200,7 +224,7 @@ const router = useRouter();
 onMounted(async () => {
     const server = new URL(location.href).searchParams.get("server");
     const conninfo = (await fetchServerInfoServer(server || ""))
-       .serverinfo?.[0];
+        .serverinfo?.[0];
     const token = server ? conninfo.token : localStorage?.getItem("token");
     if (!token || !server) {
         return router.push("/");
