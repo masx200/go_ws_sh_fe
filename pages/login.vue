@@ -10,7 +10,8 @@
                             <span>密码登录</span>
                         </div>
                     </template>
-                    <el-form ref="loginFormRef" :model="loginForm" :rules="rules" label-width="auto" class="demo-ruleForm">
+                    <el-form ref="loginFormRef" :model="loginForm" :rules="rules" label-width="auto"
+                        class="demo-ruleForm">
                         <el-form-item label="账号" prop="username">
                             <el-input v-model="loginForm.username" autocomplete="on" />
                         </el-form-item>
@@ -35,17 +36,18 @@
             </el-tab-pane>
             <el-tab-pane label="令牌登录" name="token">
                 <!-- 令牌登录表单 -->
-                <el-card class="box-card"  style="    width: 100%;">
+                <el-card class="box-card" style="    width: 100%;">
                     <template #header>
                         <div class="card-header">
                             <span>令牌登录</span>
                         </div>
                     </template>
-                    <el-form ref="tokenFormRef" :model="tokenForm" :rules="tokenRules" label-width="auto" class="demo-ruleForm">
+                    <el-form ref="tokenFormRef" :model="tokenForm" :rules="tokenRules" label-width="auto"
+                        class="demo-ruleForm">
                         <el-form-item label="账号" prop="username">
                             <el-input v-model="tokenForm.username" autocomplete="on" />
                         </el-form-item>
-                        
+
                         <el-form-item label="令牌" prop="token">
                             <el-input v-model="tokenForm.token" autocomplete="on" />
                         </el-form-item>
@@ -209,10 +211,10 @@ const submitForm = async (formEl: FormInstance | null) => {
                             type: 'password',
                         },
                     },
-                    new URL('/sessions', urlserver).href,
+                    new URL(urlserver).href,
                 );
                 const server = loginForm.server;
-                if (sessionresult.username.length) {
+                if (sessionresult.username.length && sessionresult.sessions.length) {
                     ElMessage.success('登录成功:' + sessionresult.username);
                     loginstate.value = '登录成功:' + sessionresult.username;
                     loginstyle.value = 'color:green';
@@ -268,13 +270,61 @@ const submitTokenForm = async (formEl: FormInstance | null) => {
                 const newLocalurl = new URL(tokenForm.server);
                 newLocalurl.hash = '';
                 tokenForm.server = newLocalurl.href;
+
+
+
+                const urlserver = tokenForm.server;
+                localStorage.setItem('server', tokenForm.server);
+                const sessionresult = await listsessions(
+                    {
+                        authorization: {
+                            username: tokenForm.username,
+                            token: tokenForm.token,
+                            type: 'token',
+                            identifier: tokenForm.identifier,
+                        },
+                    },
+                    new URL(urlserver).href,
+                );
+                const server = tokenForm.server;
+                localStorage.setItem('username', tokenForm.username);
+                if (sessionresult.username.length && sessionresult.sessions.length) {
+                    ElMessage.success('登录成功:' + sessionresult.username);
+                    loginstate.value = '登录成功:' + sessionresult.username;
+                    loginstyle.value = 'color:green';
+                    const session = sessionresult.sessions[0].name;
+                    localStorage.setItem('token', tokenForm.token);
+                    localStorage.setItem('identifier', tokenForm.identifier);
+                    localStorage.setItem('server', server);
+                    localStorage.setItem('session', session);
+                    await router.push(
+                        new URL(location.href).searchParams.get('redirect') ?? '/',
+                    );
+                    await updateOrAddIntoTableServerInfo({
+                        server: tokenForm.server,
+                        username: tokenForm.username,
+                        token: tokenForm.token,
+                        session: sessionresult.sessions.map(a => a.name),
+                        type: 'token',
+                        identifier: tokenForm.identifier,
+                    });
+                    console.log(sessionresult.sessions);
+
+                    requestAnimationFrame(() => {
+                        location.reload();
+                    });
+                    ElMessage.success('令牌登录成功');
+                    await router.push(
+                        new URL(location.href).searchParams.get('redirect') ?? '/',
+                    );
+                    return;
+                }
+                throw new Error('登录失败,服务端没有session列表');
+
                 // 这里需要实现令牌登录的逻辑
                 // const loginresult = await tokenLogin(...)
                 // ...
-                ElMessage.success('令牌登录成功');
-                await router.push(
-                    new URL(location.href).searchParams.get('redirect') ?? '/',
-                );
+
             } catch (error) {
                 console.log(error);
                 loginstyle.value = 'color:red';
@@ -305,7 +355,7 @@ const resetForm = (formEl: FormInstance | null) => {
     justify-content: center;
     align-items: center;
     height: calc(100% - 50px); /* 修改：减去导航栏高度 */
-    /* background-color: #f0f2f5; */
+/* background-color: #f0f2f5; */
 /* }  */
 
 .box-card {
@@ -324,7 +374,8 @@ const resetForm = (formEl: FormInstance | null) => {
     /* display: flex; */
     justify-content: center;
     align-items: center;
-    height: calc(100% - 50px); /* 修改：减去导航栏高度 */
+    height: calc(100% - 50px);
+    /* 修改：减去导航栏高度 */
     /* background-color: #f0f2f5; */
 }
 </style>
