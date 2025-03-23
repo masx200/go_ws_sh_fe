@@ -2,16 +2,17 @@
     <a-table :columns="columns" :data-source="tokens" :loading="loading" style="width: 100%">
         <template #bodyCell="{ column, record }">
             <template v-if="column.key === 'action'">
-                <a-popconfirm title="确定删除该令牌？" @confirm="handleDeleteToken(record.identifier, record.username)">
+                <a-popconfirm title="确定删除该令牌？" @confirm="handleDeleteToken(record.identifier)">
                     <a href="#">删除</a>
                 </a-popconfirm>
+                <a href="#" @click="handleChangeDescription(record.identifier)">修改描述</a>
             </template>
         </template>
     </a-table>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import { Table, Popconfirm } from "ant-design-vue";
 import type { ColumnsType } from "ant-design-vue/es/table/interface";
 
@@ -19,12 +20,14 @@ interface Token {
     identifier: string;
     username: string;
     description: string;
+    created_at: string;
+    updated_at: string;
 }
 
 export default defineComponent({
     components: {
-        "a-popconfirm": Popconfirm,
         "a-table": Table,
+        "a-popconfirm": Popconfirm
     },
     data() {
         return {
@@ -34,64 +37,39 @@ export default defineComponent({
                 { title: "令牌标识", dataIndex: "identifier" },
                 { title: "用户名称", dataIndex: "username" },
                 { title: "描述", dataIndex: "description" },
-
-                { title: "操作", key: "action" },
-            ] as ColumnsType,
+                { title: "创建时间", dataIndex: "created_at" },
+                { title: "修改时间", dataIndex: "updated_at" },
+                { title: "操作", key: "action" }
+            ] as ColumnsType
         };
     },
     mounted() {
         this.fetchTokens();
     },
     methods: {
-        mockRequestGet(method: string, url: string,): Promise<any> {
-            return new Promise((resolve) => {
-                setTimeout(() => {
-                    if (
-                        method === "GET" &&
-                        url === "/oauth/personal-access-tokens"
-                    ) {
-                        resolve({ data: this.tokens });
-                    }
-                }, 0);
-            });
-        },
-        mockRequestDelete(method: string, url: string, data:Pick< Token,"identifier"|"username">): Promise<any> {
-            return new Promise((resolve) => {
-                setTimeout(() => {
-                    console.log(method, url, data)
-                    resolve({ success: true });
-
-                }, 0);
-            });
-        },
         async fetchTokens() {
             this.loading = true;
             try {
-                const res = await this.mockRequestGet(
-                    "GET",
-                    "/oauth/personal-access-tokens",
-                );
-                this.tokens = res.data;
+                // 调用 API 获取令牌信息
+                // const res = await api.getTokens();
+                // this.tokens = res.data;
             } finally {
                 this.loading = false;
             }
         },
-        async handleDeleteToken(tokenId: string, username: string) {
+        async handleDeleteToken(tokenId: string) {
             try {
-                await this.mockRequestDelete(
-                    "DELETE",
-                    `/oauth/personal-access-tokens/${tokenId}`,
-                    {
-                        identifier: tokenId,
-
-                        username: username
-                    },
-                );
+                // 调用 API 删除令牌
+                // await api.deleteToken(tokenId);
                 this.tokens = this.tokens.filter((t) => t.identifier !== tokenId);
             } catch (error) {
                 console.error("删除令牌失败:", error);
             }
         },
-    },
+        async handleChangeDescription(tokenId: string) {
+            // 实现修改描述逻辑
+            console.log(`修改令牌 ${tokenId} 的描述`);
+        }
+    }
 });
 </script>
