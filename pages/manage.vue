@@ -7,95 +7,176 @@
             align-items: center;
         ">
         <!-- 添加导航栏 -->
-        <a-menu v-model:selectedKeys="currentTab" mode="horizontal" :items="items" style="
+        <a-menu mode="inline" v-model:openKeys="openKeys" v-model:selectedKeys="currentTab" :items="items" style="
                 display: flex;
                 width: 100%;
                 align-content: center;
                 justify-content: center;
                 align-items: baseline;
                 flex-direction: row;
-            ">
+            " :inlineIndent="0">
         </a-menu>
 
-        <!-- 根据导航栏选择显示不同的组件 -->
-        <UserManagement v-if="currentTab.includes('password')" />
-        <TokenManagement v-if="currentTab.includes('createToken')" />
-        <TokenDisplay v-if="currentTab.includes('displayTokens')" />
-        <UserDisplay v-if="currentTab.includes('displayUsers')" />
-        <SessionDisplay v-if="currentTab.includes('displaySessions')" />
+        <!-- 用户管理分组 -->
+        <div v-if="['displayUsers', 'createUser', 'changepassword'].includes(currentTab[0])"
+        
+        style="width: 100%;"
+        >
+            <h2>用户管理</h2>
+            <UserDisplay v-if="currentTab.includes('displayUsers')" />
+            <CreateUser v-if="currentTab.includes('createUser')" />
+            <UserManagement v-if="currentTab.includes('changepassword')" />
+        </div>
+
+        <!-- 令牌管理分组 -->
+        <div v-if="['displayTokens', 'createToken'].includes(currentTab[0])"
+        style="width: 100%;">
+            <h2>令牌管理</h2>
+            <TokenDisplay v-if="currentTab.includes('displayTokens')" />
+            <TokenManagement v-if="currentTab.includes('createToken')" />
+        </div>
+
+        <!-- 会话管理分组 -->
+        <div v-if="['displaySessions', 'createSession'].includes(currentTab[0])"
+        style="width: 100%;">
+            <h2>会话管理</h2>
+            <SessionDisplay v-if="currentTab.includes('displaySessions')" />
+            <CreateSession v-if="currentTab.includes('createSession')" />
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
-const menuitems: MenuProps["items"] = [
+import { Menu as AMenu, type MenuProps } from "ant-design-vue";
+import { ref } from "vue";
+import UserManagement from "../src/UserManagement.vue";
+
+import type { ItemType } from 'ant-design-vue';
+import { fetchServerInfoServer } from "~/src/ServerConnectionInfo";
+import CreateSession from "../src/CreateSession.vue"; // 假设存在 CreateSession.vue 组件
+import CreateUser from "../src/CreateUser.vue"; // 假设存在 CreateUser.vue 组件
+import SessionDisplay from "../src/SessionDisplay.vue";
+import TokenDisplay from "../src/TokenDisplay.vue";
+import TokenManagement from "../src/TokenManagement.vue";
+import UserDisplay from "../src/UserDisplay.vue";
+const openKeys = ref<string[]>(['']);
+const menuitems: ItemType[] = [
     {
-        key: "password",
-        label: "密码修改",
-        title: "密码修改",
+        key: "UsersManage",
+        label: "管理用户",
+        title: "管理用户",
         style: {
-            width: "calc(100%/5)",
+            width: "calc(100%/3)",
             textAlign: "center",
-        }
+            paddingLeft: "0px",
+        },
+        children: [
+            {
+                key: "displayUsers",
+                label: "显示用户",
+                title: "显示用户",
+                style: {
+                    width: "calc(100%)",
+                    textAlign: "center",
+                    paddingLeft: "0px",
+                }
+            },
+            {
+                key: "createUser",
+                label: "创建用户",
+                title: "创建用户",
+                style: {
+                    width: "calc(100%)",
+                    textAlign: "center",
+                    paddingLeft: "0px",
+                }
+            },
+            {
+                key: "changepassword",
+                label: "修改密码",
+                title: "修改密码",
+                style: {
+                    width: "calc(100%)",
+                    textAlign: "center",
+                    paddingLeft: "0px",
+                }
+            },
+        ]
     },
     {
-        key: "createToken",
-        label: "令牌创建",
-        title: "令牌创建",
+        key: "TokenManage",
+        label: "管理令牌",
+        title: "管理令牌",
         style: {
-            width: "calc(100%/5)",
+            width: "calc(100%/3)",
             textAlign: "center",
-        }
+            paddingLeft: "0px",
+        },
+        children: [
+            {
+                key: "displayTokens",
+                label: "显示令牌",
+                title: "显示令牌",
+                style: {
+                    width: "calc(100%)",
+                    textAlign: "center",
+                }
+            },
+            {
+                key: "createToken",
+                label: "创建令牌",
+                title: "创建令牌",
+                style: {
+                    width: "calc(100%)",
+                    textAlign: "center",
+                },
+            }],
     },
+
     {
-        key: "displayTokens",
-        label: "显示令牌",
-        title: "显示令牌",
+        key: "SessionManage",
+        label: "管理会话",
+        title: "管理会话",
         style: {
-            width: "calc(100%/5)",
+            width: "calc(100%/3)",
             textAlign: "center",
-        }
-    },
-    {
-        key: "displayUsers",
-        label: "显示用户",
-        title: "显示用户",
-        style: {
-            width: "calc(100%/5)",
-            textAlign: "center",
-        }
-    },
-    {
-        key: "displaySessions",
-        label: "显示会话",
-        title: "显示会话",
-        style: {
-            width: "calc(100%/5)",
-            textAlign: "center",
-        }
-    },
-] satisfies MenuProps["items"];
-const items = ref<MenuProps["items"]>(menuitems);
-onMounted(() => {
+            paddingLeft: "0px",
+        },
+        children: [
+            {
+                key: "displaySessions",
+                label: "显示会话",
+                title: "显示会话",
+                style: {
+                    width: "calc(100%)",
+                    textAlign: "center",
+                }
+            },
+            {
+                key: "createSession",
+                label: "创建会话",
+                title: "创建会话",
+                style: {
+                    width: "calc(100%)",
+                    textAlign: "center",
+                }
+            },
+        ]
+    }] satisfies ItemType[];
+const items = computed<ItemType[]>(() => {
+
     const length = menuitems.length;
-    items.value = menuitems.map(a => ({
+    return menuitems.map(a => ({
         ...a, style: Object.assign(a?.style || {}, {
             width: `calc(100%/${length})`
         })
-    })) as MenuProps["items"];
+    })) as ItemType[];
 });
-import { ref } from "vue";
-import { Menu as AMenu, type MenuProps } from "ant-design-vue";
 
-import UserManagement from "../src/UserManagement.vue";
-import TokenManagement from "../src/TokenManagement.vue";
-import TokenDisplay from "../src/TokenDisplay.vue";
-import UserDisplay from "../src/UserDisplay.vue"; // 假设存在 UserDisplay.vue 组件
-import SessionDisplay from "../src/SessionDisplay.vue"; // 假设存在 SessionDisplay.vue 组件
 
-const currentTab = ref(["password"]); // 默认显示密码修改页面
+const currentTab = ref(["displayUsers"]); // 默认显示用户页面
 
 const router = useRouter();
-import { fetchServerInfoServer } from "~/src/ServerConnectionInfo";
 onMounted(async () => {
     const server = new URL(location.href).searchParams.get("server");
     const conninfo = (await fetchServerInfoServer(server || ""))
@@ -103,7 +184,6 @@ onMounted(async () => {
     const token = server ? conninfo.token : localStorage?.getItem("token");
     if (!token || !server) {
         return router.push("/");
-    } else {
     }
 });
 </script>
