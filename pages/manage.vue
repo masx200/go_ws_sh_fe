@@ -19,9 +19,7 @@
 
         <!-- 用户管理分组 -->
         <div v-if="['displayUsers', 'createUser', 'changepassword'].includes(currentTab[0])"
-        
-        style="width: 100%;"
-        >
+             style="width: 100%;">
             <h2>用户管理</h2>
             <UserDisplay v-if="currentTab.includes('displayUsers')" />
             <CreateUser v-if="currentTab.includes('createUser')" />
@@ -29,19 +27,21 @@
         </div>
 
         <!-- 令牌管理分组 -->
-        <div v-if="['displayTokens', 'createToken'].includes(currentTab[0])"
-        style="width: 100%;">
+        <div v-if="['displayTokens', 'createToken', 'editTokenDescription'].includes(currentTab[0])"
+             style="width: 100%;">
             <h2>令牌管理</h2>
             <TokenDisplay v-if="currentTab.includes('displayTokens')" />
             <TokenManagement v-if="currentTab.includes('createToken')" />
+            <TokenDescriptionEdit v-if="currentTab.includes('editTokenDescription')" />
         </div>
 
         <!-- 会话管理分组 -->
-        <div v-if="['displaySessions', 'createSession'].includes(currentTab[0])"
-        style="width: 100%;">
+        <div v-if="['displaySessions', 'createSession', 'editSessionAttributes'].includes(currentTab[0])"
+             style="width: 100%;">
             <h2>会话管理</h2>
             <SessionDisplay v-if="currentTab.includes('displaySessions')" />
             <CreateSession v-if="currentTab.includes('createSession')" />
+            <SessionAttributeEdit v-if="currentTab.includes('editSessionAttributes')" />
         </div>
     </div>
 </template>
@@ -50,15 +50,17 @@
 import { Menu as AMenu, type MenuProps } from "ant-design-vue";
 import { ref } from "vue";
 import UserManagement from "../src/UserManagement.vue";
-
 import type { ItemType } from 'ant-design-vue';
 import { fetchServerInfoServer } from "~/src/ServerConnectionInfo";
-import CreateSession from "../src/CreateSession.vue"; // 假设存在 CreateSession.vue 组件
-import CreateUser from "../src/CreateUser.vue"; // 假设存在 CreateUser.vue 组件
+import CreateSession from "../src/CreateSession.vue";
+import CreateUser from "../src/CreateUser.vue";
 import SessionDisplay from "../src/SessionDisplay.vue";
 import TokenDisplay from "../src/TokenDisplay.vue";
 import TokenManagement from "../src/TokenManagement.vue";
 import UserDisplay from "../src/UserDisplay.vue";
+import TokenDescriptionEdit from "../src/TokenDescriptionEdit.vue";
+import SessionAttributeEdit from "../src/SessionAttributeEdit.vue";
+
 const openKeys = ref<string[]>(['']);
 const menuitems: ItemType[] = [
     {
@@ -129,10 +131,19 @@ const menuitems: ItemType[] = [
                 style: {
                     width: "calc(100%)",
                     textAlign: "center",
-                },
-            }],
+                }
+            },
+            {
+                key: "editTokenDescription",
+                label: "修改令牌",
+                title: "修改令牌",
+                style: {
+                    width: "calc(100%)",
+                    textAlign: "center",
+                }
+            }
+        ]
     },
-
     {
         key: "SessionManage",
         label: "管理会话",
@@ -161,10 +172,20 @@ const menuitems: ItemType[] = [
                     textAlign: "center",
                 }
             },
+            {
+                key: "editSessionAttributes",
+                label: "修改会话",
+                title: "修改会话",
+                style: {
+                    width: "calc(100%)",
+                    textAlign: "center",
+                }
+            }
         ]
-    }] satisfies ItemType[];
-const items = computed<ItemType[]>(() => {
+    }
+] satisfies ItemType[];
 
+const items = computed<ItemType[]>(() => {
     const length = menuitems.length;
     return menuitems.map(a => ({
         ...a, style: Object.assign(a?.style || {}, {
@@ -173,14 +194,13 @@ const items = computed<ItemType[]>(() => {
     })) as ItemType[];
 });
 
-
 const currentTab = ref(["displayUsers"]); // 默认显示用户页面
 
 const router = useRouter();
 onMounted(async () => {
     const server = new URL(location.href).searchParams.get("server");
     const conninfo = (await fetchServerInfoServer(server || ""))
-        .serverinfo?.[0];
+       .serverinfo?.[0];
     const token = server ? conninfo.token : localStorage?.getItem("token");
     if (!token || !server) {
         return router.push("/");
