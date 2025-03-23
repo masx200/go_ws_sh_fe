@@ -1,25 +1,38 @@
-export const logoutUrl = "http://localhost:28080/logout";
+export const logoutUrl = "http://localhost:28080/";
+
 
 export interface logoutCredentials {
-    username: string;
-    token: string;
-    delete_identifier: string;
-    identifier: string;
-    type: string;
+    authorization: {
+        username: string;
+
+        token: string;
+        identifier: string;
+        type: string;
+    },
+    "token": {
+        "identifier": string;
+        username: string;
+    }
+
 }
 export interface logoutResults {
-    delete_identifier: string;
+
     message: string;
     username: string;
+    "token": {
+        "identifier": string;
+        username: string;
+    }
 }
 
 export async function logout(
     credentials: logoutCredentials,
-    url = logoutUrl,
+    baseurl = logoutUrl,
 ): Promise<logoutResults> {
+    const url = new URL("/tokens", baseurl).href;
     try {
         const response = await fetch(url, {
-            method: "POST",
+            method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
             },

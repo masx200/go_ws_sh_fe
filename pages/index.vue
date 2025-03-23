@@ -13,8 +13,7 @@
         </header>
         <!-- v-if="error || !(loading || !data || data?.length == 0)" -->
         <main class="main-content" v-if="!(showloading || loading)">
-            <div
-                style="
+            <div style="
                     height: 100%;
                     display: flex;
                     flex-direction: column;
@@ -22,86 +21,46 @@
                     align-content: center;
                     justify-content: center;
                     align-items: center;
-                "
-            >
-                <div
-                    class="flex flex-wrap gap-4 items-center"
-                    style="
+                ">
+                <div class="flex flex-wrap gap-4 items-center" style="
                         display: flex;
                         align-content: center;
                         justify-content: center;
                         align-items: center;
                         flex-wrap: wrap;
                         flex-direction: column;
-                    "
-                >
+                    ">
                     <el-row align="middle" justify="center">
                         <span>网址</span>
-                        <div
-                            style="margin-left: 10px; margin-right: 10px"
-                        ></div>
-                        <el-select
-                            v-loading="loading"
-                            :loading="loading"
-                            v-model="urlvalue"
-                            placeholder="Select"
-                            size="large"
-                            style="width: 800px"
-                            @change="
-                                async (value: string) => {
-                                    await handleServerChange(value);
-                                }
-                            "
-                        >
-                            <el-option
-                                v-for="item in urloptions"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                            />
+                        <div style="margin-left: 10px; margin-right: 10px"></div>
+                        <el-select v-loading="loading" :loading="loading" v-model="urlvalue" placeholder="Select"
+                            size="large" style="width: 800px" @change="async (value: string) => {
+        await handleServerChange(value);
+    }
+        ">
+                            <el-option v-for="item in urloptions" :key="item.value" :label="item.label"
+                                :value="item.value" />
                         </el-select>
                     </el-row>
 
                     <hr />
                     <el-row align="middle" justify="center">
                         <span>会话</span>
-                        <div
-                            style="margin-left: 10px; margin-right: 10px"
-                        ></div>
-                        <el-select
-                            v-loading="loading"
-                            :loading="loading"
-                            v-model="sessionvalue"
-                            placeholder="Select"
-                            size="large"
-                            style="width: 800px"
-                        >
-                            <el-option
-                                v-for="item in options"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                            />
+                        <div style="margin-left: 10px; margin-right: 10px"></div>
+                        <el-select v-loading="loading" :loading="loading" v-model="sessionvalue" placeholder="Select"
+                            size="large" style="width: 800px">
+                            <el-option v-for="item in options" :key="item.value" :label="item.label"
+                                :value="item.value" />
                         </el-select>
                     </el-row>
                 </div>
                 <hr />
                 <el-row align="middle" justify="center">
-                    <el-button size="large" type="primary" @click="handlemanage"
-                        >管理</el-button
-                    >
+                    <el-button size="large" type="primary" @click="handlemanage">管理</el-button>
 
-                    <el-button
-                        size="large"
-                        type="success"
-                        @click="handleconnect"
-                        >连接</el-button
-                    >
+                    <el-button size="large" type="success" @click="handleconnect">连接</el-button>
 
-                    <el-button size="large" type="danger" @click="handledelete"
-                        >删除</el-button
-                    ></el-row
-                >
+                    <el-button size="large" type="danger" @click="handledelete">删除</el-button></el-row>
             </div>
         </main>
     </div>
@@ -189,15 +148,15 @@ onMounted(async () => {
         const serverinfo = await fetchServerInfoAll();
         urloptions.value = serverinfo.serverinfo.length
             ? serverinfo.serverinfo.map((a) => ({
-                  value: a.server,
-                  label: a.server,
-              }))
+                value: a.server,
+                label: a.server,
+            }))
             : [
-                  {
-                      value: localStorage.getItem("server") ?? "",
-                      label: localStorage.getItem("server") ?? "",
-                  },
-              ];
+                {
+                    value: localStorage.getItem("server") ?? "",
+                    label: localStorage.getItem("server") ?? "",
+                },
+            ];
         options.value = serverinfo.serverinfo
             .filter((i) => i.server == serverinfo.serverinfo[0].server)
             .map((a) => a.session)
@@ -254,9 +213,9 @@ async function handleconnect() {
         openNewWindow(
             new URL(
                 "/shell?server=" +
-                    encodeURIComponent(urlvalue.value) +
-                    "&session=" +
-                    sessionvalue.value,
+                encodeURIComponent(urlvalue.value) +
+                "&session=" +
+                sessionvalue.value,
                 location.href,
             ).href,
         );
@@ -316,15 +275,15 @@ async function service(
         if (!urlserver) throw new Error("url is null");
         const sessionresult = await listsessions(
             {
-                            authorization: {
-                                username:options.username,
-                                token: token,
-                                identifier: options.identifier,
-                                type: "token",
-                            },
+                authorization: {
+                    username: options.username,
+                    token: token,
+                    identifier: options.identifier,
+                    type: "token",
+                },
 
-                        },
-                        new URL("/sessions", urlserver).href,
+            },
+            new URL("/sessions", urlserver).href,
         );
         if (sessionresult.username.length) {
             ElMessage.success("登录成功:" + sessionresult.username);
@@ -421,18 +380,23 @@ const handleLogout = async () => {
         try {
             const url = localStorage.getItem("server");
             if (!url) throw new Error("url is null");
-            const newLocal = await logout(
+            const logoutresult = await logout(
                 {
-                    type: "token",
-                    username: username,
-                    identifier: identifier,
-                    delete_identifier: identifier,
-                    token: token,
+                    authorization: {
+                        type: "token",
+                        username: username,
+                        identifier: identifier,
+
+                        token: token,
+                    }, token: {
+                        identifier: identifier,
+                        username: username,
+                    }
                 },
-                new URL("/logout", url).href,
+                new URL(url).href,
             );
-            console.log(newLocal);
-            cleartoken(newLocal);
+            console.log(logoutresult);
+            cleartoken(logoutresult);
             localStorage.clear();
             ElMessage.success("退出登录成功");
             return router.push("/login?redirect=/");
