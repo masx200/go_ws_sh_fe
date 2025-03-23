@@ -30,11 +30,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
-import { Table, Popconfirm } from "ant-design-vue";
+import { Popconfirm, Table, message } from "ant-design-vue";
 import type { ColumnsType } from "ant-design-vue/es/table/interface";
+import { defineComponent, ref } from "vue";
+import { useRouter } from "vue-router";
 import { listtokens } from "./listtokens";
-import type { listCredentialsInterface } from "./listtokens.ts";
+import { getAuth } from "./SessionDisplay.vue";
 
 interface Token {
     description: string;
@@ -46,14 +47,12 @@ interface Token {
 }
 
 export default defineComponent({
-    components: {
-        "a-table": Table,
-        "a-popconfirm": Popconfirm,
-    },
-    data() {
+    setup() {
+        const router = useRouter();
         return {
-            tokens: [] as Token[],
-            loading: false,
+            router,
+            tokens: ref([] as Token[]),
+            loading: ref(false),
             columns: [
                 { title: "令牌标识", dataIndex: "identifier" },
                 { title: "用户名称", dataIndex: "username" },
@@ -66,24 +65,29 @@ export default defineComponent({
             ] as ColumnsType,
         };
     },
+    components: {
+        "a-table": Table,
+        "a-popconfirm": Popconfirm,
+    },
+
     mounted() {
         this.fetchTokens();
     },
     methods: {
         async fetchTokens() {
             this.loading = true;
+            const { router } = this;
             try {
-                const credentials: listCredentialsInterface = {
-                    authorization: {
-                        username: "your_username",
-                        token: "your_token",
-                        type: "token",
-                    },
-                };
-                const result = await listtokens(credentials);
+                const authresult = await getAuth(router);
+                if (!authresult) {
+                    return null;
+                }
+                const { baseurl, credentials } = authresult;
+                const result = await listtokens(credentials, baseurl);
                 this.tokens = result.tokens;
             } catch (error) {
                 console.error("获取令牌列表失败:", error);
+                message.error("获取会话列表失败"+"\n"+error+"\n"+String(error))
             } finally {
                 this.loading = false;
             }
@@ -97,5 +101,4 @@ export default defineComponent({
             console.log(`修改令牌 ${identifier} 的描述`);
         },
     },
-});
-</script>
+});</script>
