@@ -1,16 +1,27 @@
-export const loginUrl = "http://localhost:28080/login";
+export const loginUrl = "http://localhost:28080/";
 
 export interface LoginCredentials {
-    username: string;
-    password: string;
+    authorization: {
+        username: string;
+        password: string;
 
-    type: string;
+        type: string;
+    };
+    token: {
+        description: string;
+        username: string;
+    };
 }
 export interface LoginResults {
     username: string;
-    token: string;
+    token: {
+        description: string;
+
+        token: string;
+        identifier: string;
+    };
+
     message: string;
-    identifier: string;
 }
 
 // 导出一个异步函数，用于登录
@@ -18,14 +29,16 @@ export async function login(
     // 登录凭证
     credentials: LoginCredentials,
     // 登录URL，默认为loginUrl
-    url = loginUrl,
+    baseurl = loginUrl,
 ): Promise<LoginResults> {
+    const url = new URL("/tokens", baseurl).href;
     try {
         // 发送POST请求，将登录凭证作为请求体
         const response = await fetch(url, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "x-HTTP-method-override": "POST",
             },
             body: JSON.stringify(credentials),
         });
@@ -46,6 +59,10 @@ export async function login(
 }
 export function savetoken(result: LoginResults) {
     Object.entries(result).forEach(([key, value]) => {
+        if (typeof value === "object") return;
+        localStorage.setItem(key, value);
+    });
+    Object.entries(result.token).forEach(([key, value]) => {
         localStorage.setItem(key, value);
     });
 }

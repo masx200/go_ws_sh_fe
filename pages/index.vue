@@ -276,7 +276,7 @@ import {
     TableServerInfoDeleteAll,
     TableServerInfoDeleteByServer,
 } from "~/src/ServerConnectionInfo";
-import { gettoken, list } from "../src/list.ts";
+import { gettoken, listsessions } from "../src/list.ts";
 const sessionvalue = ref("");
 onMounted(() => {
     const url = localStorage?.getItem("server");
@@ -308,25 +308,33 @@ async function service(
     token: string,
     server: string,
     options: { type: string; username: string; identifier: string },
-) {
+): Promise<string[]> {
     try {
         showloading.value = true;
         if (!token) throw new Error("token is null");
         const urlserver = server ?? localStorage.getItem("server");
         if (!urlserver) throw new Error("url is null");
-        const newLocal_1 = await list(
-            { token, ...options },
-            new URL("/sessions", urlserver).href,
+        const sessionresult = await listsessions(
+            {
+                            authorization: {
+                                username:options.username,
+                                token: token,
+                                identifier: options.identifier,
+                                type: "token",
+                            },
+
+                        },
+                        new URL("/sessions", urlserver).href,
         );
-        if (newLocal_1.username.length) {
-            ElMessage.success("登录成功:" + newLocal_1.username);
-            loginstate.value = "登录成功:" + newLocal_1.username;
+        if (sessionresult.username.length) {
+            ElMessage.success("登录成功:" + sessionresult.username);
+            loginstate.value = "登录成功:" + sessionresult.username;
             loginstyle.value = "color:green";
-            const session = newLocal_1.list[0];
+            const session = sessionresult.sessions[0].name;
             localStorage.setItem("token", token);
             localStorage.setItem("server", server);
             localStorage.setItem("session", session);
-            return newLocal_1.list;
+            return sessionresult.sessions.map((a) => a.name);
         }
         throw new Error("登录失败,服务端没有session列表");
     } finally {

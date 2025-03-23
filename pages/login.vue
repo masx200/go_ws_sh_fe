@@ -6,38 +6,20 @@
                     <span>登录</span>
                 </div>
             </template>
-            <el-form
-                ref="loginFormRef"
-                :model="loginForm"
-                :rules="rules"
-                label-width="auto"
-                class="demo-ruleForm"
-            >
+            <el-form ref="loginFormRef" :model="loginForm" :rules="rules" label-width="auto" class="demo-ruleForm">
                 <el-form-item label="账号" prop="username">
                     <el-input v-model="loginForm.username" autocomplete="on" />
                 </el-form-item>
                 <el-form-item label="密码" prop="password">
-                    <el-input
-                        v-model="loginForm.password"
-                        type="password"
-                        autocomplete="on"
-                        show-password
-                    />
+                    <el-input v-model="loginForm.password" type="password" autocomplete="on" show-password />
                 </el-form-item>
                 <el-form-item label="网址" prop="server">
                     <el-input v-model="loginForm.server" autocomplete="on" />
                 </el-form-item>
                 <el-form-item class="center-button">
-                    <el-button
-                        size="large"
-                        :loading="loading"
-                        type="primary"
-                        @click="submitForm(loginFormRef)"
-                        >登录</el-button
-                    >
-                    <el-button size="large" @click="resetForm(loginFormRef)"
-                        >重置</el-button
-                    >
+                    <el-button size="large" :loading="loading" type="primary"
+                        @click="submitForm(loginFormRef)">登录</el-button>
+                    <el-button size="large" @click="resetForm(loginFormRef)">重置</el-button>
                 </el-form-item>
             </el-form>
             <template #footer>
@@ -55,7 +37,7 @@ import type { ValidateFieldsError } from "async-validator";
 import type { FormInstance, FormRules } from "element-plus";
 import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
-import { list } from "~/src/list";
+import { listsessions } from "~/src/list";
 import { updateOrAddIntoTableServerInfo } from "~/src/ServerConnectionInfo";
 import { login, savetoken } from "../src/login.ts";
 const loginstate = ref("");
@@ -116,11 +98,17 @@ const submitForm = (formEl: FormInstance | null) => {
                     loginForm.server = newLocalurl.href;
                     const loginresult = await login(
                         {
-                            username: loginForm.username,
-                            password: loginForm.password,
-                            type: "password",
+                            authorization: {
+                                username: loginForm.username,
+                                password: loginForm.password,
+                                type: "password",
+                            },
+                            token: {
+                                description: navigator.userAgent,
+                                username: loginForm.username,
+                            },
                         },
-                        new URL("/login", loginForm.server).href,
+                        loginForm.server,
                     );
                     console.log(loginresult);
                     localStorage.setItem("server", loginForm.server);
@@ -131,23 +119,25 @@ const submitForm = (formEl: FormInstance | null) => {
 
                     const urlserver = loginForm.server;
                     const token = loginresult.token;
-                    const newLocal_1 = await list(
+                    const sessionresult = await listsessions(
                         {
-                            token,
+                            authorization: {
+                                username: loginForm.username,
+                                password: loginForm.password,
+                                type: "password",
+                            },
 
-                            identifier: loginresult.identifier,
-                            type: "token",
-                            username: loginForm.username,
                         },
                         new URL("/sessions", urlserver).href,
                     );
                     const server = loginForm.server;
-                    if (newLocal_1.username.length) {
-                        ElMessage.success("登录成功:" + newLocal_1.username);
-                        loginstate.value = "登录成功:" + newLocal_1.username;
+                    if (sessionresult.username.length) {
+                        ElMessage.success("登录成功:" + sessionresult.username);
+                        loginstate.value = "登录成功:" + sessionresult.username;
                         loginstyle.value = "color:green";
-                        const session = newLocal_1.list[0];
-                        localStorage.setItem("token", token);
+                        const session = sessionresult.sessions[0].name;
+                        localStorage.setItem("token", token.token);
+                        localStorage.setItem("identifier", token.identifier);
                         localStorage.setItem("server", server);
                         localStorage.setItem("session", session);
                         await router.push(
@@ -158,12 +148,12 @@ const submitForm = (formEl: FormInstance | null) => {
                         await updateOrAddIntoTableServerInfo({
                             server: loginForm.server,
                             username: loginForm.username,
-                            token: loginresult.token,
-                            session: newLocal_1.list,
+                            token: loginresult.token.token,
+                            session: sessionresult.sessions.map(a=>a.name),
                             type: "token",
-                            identifier: loginresult.identifier,
+                            identifier: loginresult.token.identifier,
                         });
-                        console.log(newLocal_1.list);
+                        console.log(sessionresult.sessions);
 
                         requestAnimationFrame(() => {
                             location.reload();

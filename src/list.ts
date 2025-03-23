@@ -1,26 +1,36 @@
-export const listUrl = "http://localhost:28080/sessions";
+export const listUrl = "http://localhost:28080/";
 
 export interface listCredentials {
-    token: string;
-    type: string;
-    username: string;
-    identifier: string;
+    authorization: {
+        username: string;
+        password?: string;
+        token?: string
+        identifier?: string
+        type: string;
+    };
 }
 export interface listResults {
     username: string;
     message: string;
-    list: string[];
+    sessions: {
+        name: string;
+        args: string[];
+        dir: string;
+        cmd: string;
+    }[];
 }
 
-export async function list(
+export async function listsessions(
     credentials: listCredentials,
-    url = listUrl,
+    baseurl = listUrl,
 ): Promise<listResults> {
+    const url = new URL("/sessions", baseurl).href;
     try {
         const response = await fetch(url, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "x-HTTP-method-override": "GET",
             },
             body: JSON.stringify(credentials),
         });

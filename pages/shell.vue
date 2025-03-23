@@ -45,6 +45,7 @@ onMounted(async () => {
     } else {
         const searchParams = new URLSearchParams();
         searchParams.set("token", token);
+        searchParams.set("username", conninfo.username);
         searchParams.set("type", "token");
         searchParams.set("identifier", conninfo.identifier);
         appopts.wsprotocol = encodeURIComponent(searchParams.toString());

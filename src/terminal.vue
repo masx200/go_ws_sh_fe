@@ -26,15 +26,15 @@ import {
     type Xterm,
     type ClientOptions,
     type FlowControl,
-    type XtermOptions,
+    // type XtermOptions,
 } from "../xterm/index";
 
 import Modal from "./modal.vue";
 import type { ITerminalOptions } from "@xterm/xterm";
 
-interface Props extends XtermOptions {
-    id: string;
-}
+// interface Props extends XtermOptions {
+//     id: string;
+// }
 
 export default defineComponent({
     name: "Terminal",
