@@ -50,7 +50,7 @@
 
 import type{SelectInfo}from "ant-design-vue/es/menu/src/interface.d.ts"
 function onselect(keys: SelectInfo) {
-    console.log(keys);
+    // console.log(keys);
 const firstkeypath = (keys.keyPath?.[0])?.toString();
 if(!firstkeypath)return;
     state_openKeys.value = [firstkeypath];
