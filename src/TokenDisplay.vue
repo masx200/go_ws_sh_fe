@@ -4,6 +4,7 @@
         :data-source="tokens"
         :loading="loading"
         style="width: 100%"
+        :row-key="(record) => record.identifier"
     >
         <template #bodyCell="{ column, record }">
             <template v-if="column.key === 'delete'">
@@ -87,7 +88,9 @@ export default defineComponent({
                 this.tokens = result.tokens;
             } catch (error) {
                 console.error("获取令牌列表失败:", error);
-                message.error("获取会话列表失败"+"\n"+error+"\n"+String(error))
+                message.error(
+                    "获取会话列表失败" + "\n" + error + "\n" + String(error),
+                );
             } finally {
                 this.loading = false;
             }
@@ -101,4 +104,5 @@ export default defineComponent({
             console.log(`修改令牌 ${identifier} 的描述`);
         },
     },
-});</script>
+});
+</script>

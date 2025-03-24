@@ -4,6 +4,7 @@
         :data-source="users"
         :loading="loading"
         style="width: 100%"
+        :row-key="(record) => record.username"
     >
         <template #bodyCell="{ column, record }">
             <template v-if="column.key === 'delete'">
@@ -77,11 +78,13 @@ export default defineComponent({
                     return null;
                 }
                 const { baseurl, credentials } = authresult;
-                const result = await listcredentials(credentials,baseurl);
+                const result = await listcredentials(credentials, baseurl);
                 this.users = result.credentials;
             } catch (error) {
                 console.error("获取用户列表失败:", error);
-                message.error("获取会话列表失败"+"\n"+error+"\n"+String(error))
+                message.error(
+                    "获取会话列表失败" + "\n" + error + "\n" + String(error),
+                );
             } finally {
                 this.loading = false;
             }

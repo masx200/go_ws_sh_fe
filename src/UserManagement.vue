@@ -5,13 +5,19 @@
         <a-form :model="userInfo" @finish="handleSubmit">
             <a-form-item
                 label="用户名"
-                :rules="[{ required: true, message: '请输入用户名' }]"
+                :rules="[
+                    { required: true, message: '请输入用户名' },
+                    { min: 4, message: '用户名长度至少为4位', trigger: 'blur' },
+                ]"
             >
                 <a-input v-model:value="userInfo.username" />
             </a-form-item>
             <a-form-item
                 label="密码"
-                :rules="[{ required: true, message: '请输入密码' }]"
+                :rules="[
+                    { required: true, message: '请输入密码' },
+                    { min: 4, message: '用户名长度至少为4位', trigger: 'blur' },
+                ]"
             >
                 <a-input-password v-model:value="userInfo.password" />
             </a-form-item>
@@ -32,6 +38,8 @@ import {
     Table,
     message,
 } from "ant-design-vue";
+import { modifyPassword } from "./modifyPassword.ts";
+import { getAuth } from "./SessionDisplay.vue";
 
 export default defineComponent({
     components: {
@@ -43,6 +51,7 @@ export default defineComponent({
         "a-table": Table,
     },
     setup() {
+        const router = useRouter();
         // 模拟用户信息
         const userInfo = ref({
             username: "",
@@ -75,9 +84,37 @@ export default defineComponent({
         // ];
 
         // 处理表单提交
-        const handleSubmit = () => {
-            // 这里可以添加实际的修改逻辑
-            message.success("用户名和密码修改成功");
+        const handleSubmit =async () => {
+            try {
+
+                const authresult = await getAuth(router);
+                if (!authresult) {
+                    return null;
+                }
+                const { baseurl, credentials } = authresult;
+                // 根据 go_ws_sh.openapi.json 实现创建用户的 API 调用
+                // const response = await axios.post("/api/users", userInfo.value);
+
+                const result = await modifyPassword(
+                    {
+                        ...credentials,
+
+                        credential: {
+                            username: userInfo.value.username,
+                            password: userInfo.value.password,
+                        },
+                    },
+                    baseurl,
+                );
+                console.log(result);
+                // 这里可以添加实际的修改逻辑
+                message.success("用户名和密码修改成功");
+            } catch (error) {
+                console.error("用户创建失败:", error);
+                message.error(
+                    "用户创建失败" + "\n" + error + "\n" + String(error),
+                );
+            }
         };
 
         // 创建令牌
