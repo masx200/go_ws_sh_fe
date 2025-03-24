@@ -47,4 +47,4 @@ jobs:
                   tag_name: Continuous-integration-${{ github.sha }}
 
                   files: |
-                      dist/*.tgz
+                      ./static/*.tgz
