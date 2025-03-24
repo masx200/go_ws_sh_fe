@@ -45,34 +45,34 @@ export default defineComponent({
     setup() {
         // 模拟用户信息
         const userInfo = ref({
-            username: "testuser",
+            username: "",
             password: "",
         });
 
-        // 模拟令牌列表
-        const tokens = ref([
-            { id: 1, token: "token123" },
-            { id: 2, token: "token456" },
-        ]);
+        // // 模拟令牌列表
+        // const tokens = ref([
+        //     { id: 1, token: "token123" },
+        //     { id: 2, token: "token456" },
+        // ]);
 
         // 表格列配置
-        const columns = [
-            {
-                title: "ID",
-                dataIndex: "id",
-                key: "id",
-            },
-            {
-                title: "令牌",
-                dataIndex: "token",
-                key: "token",
-            },
-            {
-                title: "操作",
-                dataIndex: "actions",
-                key: "actions",
-            },
-        ];
+        // const columns = [
+        //     {
+        //         title: "ID",
+        //         dataIndex: "id",
+        //         key: "id",
+        //     },
+        //     {
+        //         title: "令牌",
+        //         dataIndex: "token",
+        //         key: "token",
+        //     },
+        //     {
+        //         title: "操作",
+        //         dataIndex: "actions",
+        //         key: "actions",
+        //     },
+        // ];
 
         // 处理表单提交
         const handleSubmit = () => {
@@ -81,30 +81,30 @@ export default defineComponent({
         };
 
         // 创建令牌
-        const createToken = () => {
-            // 这里可以添加实际的创建逻辑
-            const newToken = {
-                id: tokens.value.length + 1,
-                token: `token${tokens.value.length + 1}`,
-            };
-            tokens.value.push(newToken);
-            message.success("令牌创建成功");
-        };
+        // const createToken = () => {
+        //     // 这里可以添加实际的创建逻辑
+        //     const newToken = {
+        //         id: tokens.value.length + 1,
+        //         token: `token${tokens.value.length + 1}`,
+        //     };
+        //     tokens.value.push(newToken);
+        //     message.success("令牌创建成功");
+        // };
 
         // 删除令牌
-        const deleteToken = (id: number) => {
-            // 这里可以添加实际的删除逻辑
-            tokens.value = tokens.value.filter((token) => token.id !== id);
-            message.success("令牌删除成功");
-        };
+        // const deleteToken = (id: number) => {
+        //     // 这里可以添加实际的删除逻辑
+        //     tokens.value = tokens.value.filter((token) => token.id !== id);
+        //     message.success("令牌删除成功");
+        // };
 
         return {
             userInfo,
-            tokens,
-            columns,
+            // tokens,
+            // columns,
             handleSubmit,
-            createToken,
-            deleteToken,
+            // createToken,
+            // deleteToken,
         };
     },
 });

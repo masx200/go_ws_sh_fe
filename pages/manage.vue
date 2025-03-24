@@ -57,7 +57,7 @@
         >
             <h2>令牌管理</h2>
             <TokenDisplay v-if="currentTab.includes('displayTokens')" />
-            <TokenManagement v-if="currentTab.includes('createToken')" />
+            <CreateToken v-if="currentTab.includes('createToken')" />
             <TokenDescriptionEdit
                 v-if="currentTab.includes('editTokenDescription')"
             />
@@ -95,7 +95,7 @@ onMounted(async () => {
     if (open) {
         state_openKeys.value = [open];
     }
-})
+});
 import type { SelectInfo } from "ant-design-vue/es/menu/src/interface.d.ts";
 async function onselect(keys: SelectInfo) {
     // console.log(keys);
@@ -123,19 +123,19 @@ async function onselect(keys: SelectInfo) {
 //         state_openKeys.value = latestOpenKey ? [latestOpenKey] : [];
 //     }
 // };
-import { Menu as AMenu, type MenuProps } from "ant-design-vue";
-import { ref } from "vue";
-import UserManagement from "../src/UserManagement.vue";
 import type { ItemType } from "ant-design-vue";
+import { Menu as AMenu } from "ant-design-vue";
+import { ref } from "vue";
 import { fetchServerInfoServer } from "~/src/ServerConnectionInfo";
 import CreateSession from "../src/CreateSession.vue";
+import CreateToken from "../src/CreateToken.vue";
 import CreateUser from "../src/CreateUser.vue";
-import SessionDisplay from "../src/SessionDisplay.vue";
-import TokenDisplay from "../src/TokenDisplay.vue";
-import TokenManagement from "../src/TokenManagement.vue";
-import UserDisplay from "../src/UserDisplay.vue";
-import TokenDescriptionEdit from "../src/TokenDescriptionEdit.vue";
 import SessionAttributeEdit from "../src/SessionAttributeEdit.vue";
+import SessionDisplay from "../src/SessionDisplay.vue";
+import TokenDescriptionEdit from "../src/TokenDescriptionEdit.vue";
+import TokenDisplay from "../src/TokenDisplay.vue";
+import UserDisplay from "../src/UserDisplay.vue";
+import UserManagement from "../src/UserManagement.vue";
 
 const state_openKeys = ref<string[]>([]);
 // watch(openKeys, (newValue, oldValue) => {
