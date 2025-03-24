@@ -39,7 +39,7 @@ jobs:
             - name: Static HTML export with Nuxt
               run: npm run generate
             - run: mkdir -v -p ./static
-            - run: tar -czvf ./static/web-content.tgz -C dist . --exclude=*.tgz
+            - run: tar -czvf ./static/web-content.tgz -C dist --exclude=*.tgz . 
             - name: Release
               uses: softprops/action-gh-release@v2
               if: startsWith(github.ref, 'refs/heads/main')
