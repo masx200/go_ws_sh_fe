@@ -2,7 +2,7 @@ export const listUrl = "http://localhost:28080/";
 
 export interface listCredentials {
     authorization: {
-        username: string;
+        username?: string;
         password?: string;
         token?: string
         identifier?: string

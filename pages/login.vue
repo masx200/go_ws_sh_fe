@@ -79,12 +79,13 @@
                         label-width="auto"
                         class="demo-ruleForm"
                     >
-                        <el-form-item label="账号" prop="username">
+                     <!--<el-form-item label="账号" prop="username">
                             <el-input
                                 v-model="tokenForm.username"
                                 autocomplete="on"
                             />
                         </el-form-item>
+                    -->   
 
                         <el-form-item label="令牌" prop="token">
                             <el-input
@@ -187,7 +188,7 @@ const loginForm = reactive({
 });
 
 const tokenForm = reactive({
-    username: "",
+    // username: "",
     server: "",
     token: "",
     identifier: "",
@@ -245,10 +246,10 @@ const tokenRules = reactive<FormRules<typeof tokenForm>>({
             trigger: "blur",
         },
     ],
-    username: [
-        { required: true, message: "请输入账号", trigger: "blur" },
-        { min: 3, max: 30, message: "长度在 3 到 30 个字符", trigger: "blur" },
-    ],
+    // username: [
+    //     { required: true, message: "请输入账号", trigger: "blur" },
+    //     { min: 3, max: 30, message: "长度在 3 到 30 个字符", trigger: "blur" },
+    // ],
     token: [{ required: true, message: "请输入令牌", trigger: "blur" }],
     identifier: [{ required: true, message: "请输入标识", trigger: "blur" }],
 });
@@ -367,7 +368,7 @@ const submitTokenForm = async (formEl: FormInstance | null) => {
                     const sessionresult = await listsessions(
                         {
                             authorization: {
-                                username: tokenForm.username,
+                                //username: tokenForm.username,
                                 token: tokenForm.token,
                                 type: "token",
                                 identifier: tokenForm.identifier,
@@ -376,7 +377,7 @@ const submitTokenForm = async (formEl: FormInstance | null) => {
                         new URL(urlserver).href,
                     );
                     const server = tokenForm.server;
-                    localStorage.setItem("username", tokenForm.username);
+                    localStorage.setItem("username", sessionresult.username);
                     if (
                         sessionresult.username.length &&
                         sessionresult.sessions.length
@@ -399,7 +400,7 @@ const submitTokenForm = async (formEl: FormInstance | null) => {
                         );
                         await updateOrAddIntoTableServerInfo({
                             server: tokenForm.server,
-                            username: tokenForm.username,
+                            username: sessionresult.username,
                             token: tokenForm.token,
                             session: sessionresult.sessions.map((a) => a.name),
                             type: "token",
