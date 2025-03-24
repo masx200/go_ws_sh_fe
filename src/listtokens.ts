@@ -2,7 +2,7 @@ export const listUrl = "http://localhost:28080/";
 
 export interface listCredentialsInterface {
     authorization: {
-        username: string;
+        username?: string;
         password?: string;
         token?: string;
         identifier?: string;
@@ -27,7 +27,7 @@ export interface listTokenResults {
 // 新增：获取令牌列表的函数
 export async function listtokens(
     credentials: listCredentialsInterface,
-    baseurl = listUrl
+    baseurl = listUrl,
 ): Promise<listTokenResults> {
     const url = new URL("/tokens", baseurl).href;
     try {
@@ -35,9 +35,9 @@ export async function listtokens(
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "x-HTTP-method-override": "GET"
+                "x-HTTP-method-override": "GET",
             },
-            body: JSON.stringify(credentials)
+            body: JSON.stringify(credentials),
         });
 
         if (!response.ok) {
@@ -52,5 +52,3 @@ export async function listtokens(
         throw error;
     }
 }
-
-

@@ -28,12 +28,11 @@
 </template>
 
 <script lang="ts">
-import type { listCredentialsInterface } from "./listtokens.ts";
-import { listcredentials } from "./listcredentials.ts";
-import { defineComponent, ref } from "vue";
-import { Table, Popconfirm, message } from "ant-design-vue";
+import { Popconfirm, Table, message } from "ant-design-vue";
 import type { ColumnsType } from "ant-design-vue/es/table/interface";
+import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
+import { listcredentials } from "./listcredentials.ts";
 import { getAuth } from "./SessionDisplay.vue";
 
 interface User {

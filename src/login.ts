@@ -2,7 +2,7 @@ export const loginUrl = "http://localhost:28080/";
 
 export interface LoginCredentials {
     authorization: {
-        username: string;
+        username?: string;
         password: string;
 
         type: string;

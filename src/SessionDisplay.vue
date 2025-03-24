@@ -29,7 +29,7 @@
 
 <script lang="ts">
 import { type Router, useRouter } from "vue-router";
-import { Popconfirm, Table,message } from "ant-design-vue";
+import { Popconfirm, Table, message } from "ant-design-vue";
 import type { ColumnsType } from "ant-design-vue/es/table/interface";
 import { defineComponent } from "vue";
 import { fetchServerInfoServer } from "~/src/ServerConnectionInfo.ts";
@@ -51,7 +51,7 @@ export async function getAuth(router: Router): Promise<{
         .serverinfo?.[0];
     const token = urlserver ? conninfo.token : localStorage?.getItem("token");
     if (!token || !urlserver) {
-        router.push("/");
+        await router.push("/");
         return null;
     }
 
@@ -130,7 +130,9 @@ export default defineComponent({
                 }));
             } catch (error) {
                 console.error("获取会话列表失败:", error);
-                message.error("获取会话列表失败"+"\n"+error+"\n"+String(error))
+                message.error(
+                    "获取会话列表失败" + "\n" + error + "\n" + String(error),
+                );
             } finally {
                 this.loading = false;
             }
