@@ -38,3 +38,12 @@ jobs:
             - run: npm run build
             - name: Static HTML export with Nuxt
               run: npm run generate
+            - run: tar  zcvf ./dist/web.tgz ./* -C dist --exclude=*.tgz
+            - name: Release
+              uses: softprops/action-gh-release@v2
+              if: startsWith(github.ref, 'refs/heads/main')
+              with:
+                  tag_name: Continuous-integration-${{ github.sha }}
+
+                  files: |
+                      dist/*.tgz
