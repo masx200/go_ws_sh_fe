@@ -31,7 +31,7 @@
         "buffer": "6.0.3",
         "dayjs": "^1.11.13",
         "decko": "1.2.0",
-        "dexie": "4.0.10",
+        "dexie": "4.0.11",
         "element-plus": "2.9.2",
         "file-saver": "2.0.5",
         "google-protobuf": "3.21.4",
