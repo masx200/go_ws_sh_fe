@@ -13,7 +13,8 @@
         </header>
         <!-- v-if="error || !(loading || !data || data?.length == 0)" -->
         <main class="main-content" v-if="!(showloading || loading)">
-            <div style="
+            <div
+                style="
                     height: 100%;
                     display: flex;
                     flex-direction: column;
@@ -21,46 +22,86 @@
                     align-content: center;
                     justify-content: center;
                     align-items: center;
-                ">
-                <div class="flex flex-wrap gap-4 items-center" style="
+                "
+            >
+                <div
+                    class="flex flex-wrap gap-4 items-center"
+                    style="
                         display: flex;
                         align-content: center;
                         justify-content: center;
                         align-items: center;
                         flex-wrap: wrap;
                         flex-direction: column;
-                    ">
+                    "
+                >
                     <el-row align="middle" justify="center">
                         <span>网址</span>
-                        <div style="margin-left: 10px; margin-right: 10px"></div>
-                        <el-select v-loading="loading" :loading="loading" v-model="urlvalue" placeholder="Select"
-                            size="large" style="width: 800px" @change="async (value: string) => {
-        await handleServerChange(value);
-    }
-        ">
-                            <el-option v-for="item in urloptions" :key="item.value" :label="item.label"
-                                :value="item.value" />
+                        <div
+                            style="margin-left: 10px; margin-right: 10px"
+                        ></div>
+                        <el-select
+                            v-loading="loading"
+                            :loading="loading"
+                            v-model="urlvalue"
+                            placeholder="Select"
+                            size="large"
+                            style="width: 800px"
+                            @change="
+                                async (value: string) => {
+                                    await handleServerChange(value);
+                                }
+                            "
+                        >
+                            <el-option
+                                v-for="item in urloptions"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                            />
                         </el-select>
                     </el-row>
 
                     <hr />
                     <el-row align="middle" justify="center">
                         <span>会话</span>
-                        <div style="margin-left: 10px; margin-right: 10px"></div>
-                        <el-select v-loading="loading" :loading="loading" v-model="sessionvalue" placeholder="Select"
-                            size="large" style="width: 800px">
-                            <el-option v-for="item in options" :key="item.value" :label="item.label"
-                                :value="item.value" />
+                        <div
+                            style="margin-left: 10px; margin-right: 10px"
+                        ></div>
+                        <el-select
+                            v-loading="loading"
+                            :loading="loading"
+                            v-model="sessionvalue"
+                            placeholder="Select"
+                            size="large"
+                            style="width: 800px"
+                        >
+                            <el-option
+                                v-for="item in options"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                            />
                         </el-select>
                     </el-row>
                 </div>
                 <hr />
                 <el-row align="middle" justify="center">
-                    <el-button size="large" type="primary" @click="handlemanage">管理</el-button>
+                    <el-button size="large" type="primary" @click="handlemanage"
+                        >管理</el-button
+                    >
 
-                    <el-button size="large" type="success" @click="handleconnect">连接</el-button>
+                    <el-button
+                        size="large"
+                        type="success"
+                        @click="handleconnect"
+                        >连接</el-button
+                    >
 
-                    <el-button size="large" type="danger" @click="handledelete">删除</el-button></el-row>
+                    <el-button size="large" type="danger" @click="handledelete"
+                        >删除</el-button
+                    ></el-row
+                >
             </div>
         </main>
     </div>
@@ -148,15 +189,15 @@ onMounted(async () => {
         const serverinfo = await fetchServerInfoAll();
         urloptions.value = serverinfo.serverinfo.length
             ? serverinfo.serverinfo.map((a) => ({
-                value: a.server,
-                label: a.server,
-            }))
+                  value: a.server,
+                  label: a.server,
+              }))
             : [
-                {
-                    value: localStorage.getItem("server") ?? "",
-                    label: localStorage.getItem("server") ?? "",
-                },
-            ];
+                  {
+                      value: localStorage.getItem("server") ?? "",
+                      label: localStorage.getItem("server") ?? "",
+                  },
+              ];
         options.value = serverinfo.serverinfo
             .filter((i) => i.server == serverinfo.serverinfo[0].server)
             .map((a) => a.session)
@@ -213,9 +254,9 @@ async function handleconnect() {
         openNewWindow(
             new URL(
                 "/shell?server=" +
-                encodeURIComponent(urlvalue.value) +
-                "&session=" +
-                sessionvalue.value,
+                    encodeURIComponent(urlvalue.value) +
+                    "&session=" +
+                    sessionvalue.value,
                 location.href,
             ).href,
         );
@@ -234,6 +275,7 @@ import {
     fetchServerInfoServer,
     TableServerInfoDeleteAll,
     TableServerInfoDeleteByServer,
+    updateOrAddIntoTableServerInfo,
 } from "~/src/ServerConnectionInfo";
 import { gettoken, listsessions } from "../src/listsessions.ts";
 const sessionvalue = ref("");
@@ -281,11 +323,12 @@ async function service(
                     identifier: options.identifier,
                     type: "token",
                 },
-
             },
-            new URL("/sessions", urlserver).href,
+            new URL(urlserver).href,
         );
-        if (sessionresult.username.length) {
+        if (sessionresult.username.length && sessionresult.sessions.length) {
+            const username = sessionresult.username;
+            const identifier = options.identifier;
             ElMessage.success("登录成功:" + sessionresult.username);
             loginstate.value = "登录成功:" + sessionresult.username;
             loginstyle.value = "color:green";
@@ -293,6 +336,21 @@ async function service(
             localStorage.setItem("token", token);
             localStorage.setItem("server", server);
             localStorage.setItem("session", session);
+
+            localStorage.setItem("token", token);
+            localStorage.setItem("identifier", identifier);
+            localStorage.setItem("server", server);
+            localStorage.setItem("session", session);
+            await updateOrAddIntoTableServerInfo({
+                server: server,
+                username: username,
+                token: token,
+                session: sessionresult.sessions.map((a) => a.name),
+                type: "token",
+                identifier: identifier,
+            });
+            console.log(sessionresult.sessions);
+
             return sessionresult.sessions.map((a) => a.name);
         }
         throw new Error("登录失败,服务端没有session列表");
@@ -388,10 +446,11 @@ const handleLogout = async () => {
                         identifier: identifier,
 
                         token: token,
-                    }, token: {
+                    },
+                    token: {
                         identifier: identifier,
                         username: username,
-                    }
+                    },
                 },
                 new URL(url).href,
             );
