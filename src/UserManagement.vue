@@ -119,6 +119,13 @@ export default defineComponent({
                 console.log(result);
                 // 这里可以添加实际的修改逻辑
                 message.success("用户名和密码修改成功");
+                const url = new URL(window.location.href);
+                url.searchParams.set("tab", "displayUsers");
+
+                console.log(url);
+                // await router.push(url.href.slice(url.origin.length));//居然不管用
+                history.pushState(null, "", url.href.slice(url.origin.length));
+                location.reload();
             } catch (error) {
                 console.error("用户创建失败:", error);
                 message.error(

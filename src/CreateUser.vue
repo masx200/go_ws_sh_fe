@@ -78,9 +78,19 @@ export default defineComponent({
                 );
                 console.log(result);
                 message.success("用户创建成功");
+
+                const url = new URL(window.location.href);
+                url.searchParams.set("tab", "displayUsers");
+
+                console.log(url);
+                // await router.push(url.href.slice(url.origin.length));//居然不管用
+                history.pushState(null, "", url.href.slice(url.origin.length));
+                location.reload();
             } catch (error) {
                 console.error("用户创建失败:", error);
-                message.error("用户创建失败"+"\n"+error+"\n"+String(error));
+                message.error(
+                    "用户创建失败" + "\n" + error + "\n" + String(error),
+                );
             }
         };
 
