@@ -35,6 +35,7 @@ import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
 import { listcredentials } from "./listcredentials.ts";
 import { getAuth } from "./SessionDisplay.vue";
+import { deleteUser } from "./deleteUser";
 
 interface User {
     username: string;
@@ -90,12 +91,49 @@ export default defineComponent({
             }
         },
         async handleDeleteUser(username: string) {
-            // 实现删除用户逻辑
             console.log(`删除用户: ${username}`);
+            const { router } = this;
+            const authresult = await getAuth(router);
+            if (!authresult) {
+                return null;
+            }
+            const { baseurl, credentials } = authresult;
+            try {
+                const result = await deleteUser(
+                    {
+                        ...credentials,
+
+                        credential: {
+                            username: username,
+                        },
+                    },
+                    baseurl,
+                );
+                console.log("User deleted successfully:", result);
+                message.success("用户删除成功");
+                console.log(`删除用户: ${username}`);
+
+                location.reload();
+            } catch (error) {
+                console.error("User deletion failed:", error);
+                message.error(
+                    "用户删除失败" + "\n" + error + "\n" + String(error),
+                );
+            }
+            // 实现删除用户逻辑
         },
         async handleChangePassword(username: string) {
+            // const { router } = this;
             // 实现修改密码逻辑
             console.log(`修改用户 ${username} 的密码`);
+
+            const url = new URL(window.location.href);
+            url.searchParams.set("tab", "changepassword");
+            url.searchParams.set("username", username);
+            console.log(url);
+            // await router.push(url.href.slice(url.origin.length));//居然不管用
+            history.pushState(null, "", url.href.slice(url.origin.length));
+            location.reload();
         },
     },
 });

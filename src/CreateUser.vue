@@ -52,6 +52,10 @@ export default defineComponent({
         });
 
         const handleCreateUser = async () => {
+            if (!userInfo.value.username || !userInfo.value.password) {
+                message.error("请输入用户名和密码");
+                return;
+            }
             try {
                 const authresult = await getAuth(router);
                 if (!authresult) {

@@ -51,6 +51,13 @@ export default defineComponent({
         "a-table": Table,
     },
     setup() {
+        onMounted(async () => {
+            const url = new URL(window.location.href);
+            const username = url.searchParams.get("username");
+            if (username) {
+                userInfo.value.username = username;
+            }
+        });
         const router = useRouter();
         // 模拟用户信息
         const userInfo = ref({
@@ -84,9 +91,12 @@ export default defineComponent({
         // ];
 
         // 处理表单提交
-        const handleSubmit =async () => {
+        const handleSubmit = async () => {
+            if (!userInfo.value.username || !userInfo.value.password) {
+                message.error("请输入用户名和密码");
+                return;
+            }
             try {
-
                 const authresult = await getAuth(router);
                 if (!authresult) {
                     return null;
