@@ -1,12 +1,17 @@
 <template>
     <div>
         <h2>修改令牌描述</h2>
-        <a-form :model="tokenInfo" @finish="handleUpdateTokenDescription">
+        <a-form
+            :model="tokenInfo"
+            ref="formRef"
+            :rules="rules"
+            @finish="handleUpdateTokenDescription"
+        >
             <a-form-item
                 label="令牌标识"
                 :rules="[{ required: true, message: '请输入令牌标识' }]"
             >
-                <a-input v-model:value="tokenInfo.identifier"  />
+                <a-input v-model:value="tokenInfo.identifier" />
             </a-form-item>
             <a-form-item
                 label="新描述"
@@ -30,12 +35,12 @@ export default defineComponent({
         "a-form": Form,
         "a-form-item": Form.Item,
         "a-input": Input,
-        "a-button": Button
+        "a-button": Button,
     },
     setup() {
         const tokenInfo = ref({
             identifier: "",
-            description: ""
+            description: "",
         });
 
         const handleUpdateTokenDescription = async () => {
@@ -50,8 +55,8 @@ export default defineComponent({
 
         return {
             tokenInfo,
-            handleUpdateTokenDescription
+            handleUpdateTokenDescription,
         };
-    }
+    },
 });
 </script>

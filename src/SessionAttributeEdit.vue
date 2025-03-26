@@ -1,7 +1,12 @@
 <template>
     <div>
         <h2>修改会话属性</h2>
-        <a-form :model="sessionInfo" @finish="handleUpdateSessionAttributes">
+        <a-form
+            :model="sessionInfo"
+            ref="formRef"
+            :rules="rules"
+            @finish="handleUpdateSessionAttributes"
+        >
             <!-- <a-form-item
                 label="会话 ID"
                 :rules="[{ required: true, message: '请输入会话 ID' }]"
@@ -48,7 +53,7 @@ export default defineComponent({
         "a-form": Form,
         "a-form-item": Form.Item,
         "a-input": Input,
-        "a-button": Button
+        "a-button": Button,
     },
     setup() {
         const sessionInfo = ref({
@@ -56,7 +61,7 @@ export default defineComponent({
             name: "",
             cmd: "",
             args: "",
-            dir: ""
+            dir: "",
         });
 
         const handleUpdateSessionAttributes = async () => {
@@ -71,8 +76,8 @@ export default defineComponent({
 
         return {
             sessionInfo,
-            handleUpdateSessionAttributes
+            handleUpdateSessionAttributes,
         };
-    }
+    },
 });
 </script>

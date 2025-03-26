@@ -1,11 +1,11 @@
 import type { listCredentialResults } from "./listCredentialResults";
-import { listUrl, type listCredentialsInterface } from "./listtokens";
+import { type listCredentialsInterface, listUrl } from "./listtokens";
 
 // 新增：获取凭证列表的函数
 
 export async function listcredentials(
     credentials: listCredentialsInterface,
-    baseurl = listUrl
+    baseurl = listUrl,
 ): Promise<listCredentialResults> {
     const url = new URL("/credentials", baseurl).href;
     try {
@@ -13,9 +13,9 @@ export async function listcredentials(
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "x-HTTP-method-override": "GET"
+                "x-HTTP-method-override": "GET",
             },
-            body: JSON.stringify(credentials)
+            body: JSON.stringify(credentials),
         });
 
         if (!response.ok) {

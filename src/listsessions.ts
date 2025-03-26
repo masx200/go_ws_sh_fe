@@ -4,8 +4,8 @@ export interface listCredentials {
     authorization: {
         username?: string;
         password?: string;
-        token?: string
-        identifier?: string
+        token?: string;
+        identifier?: string;
         type: string;
     };
 }

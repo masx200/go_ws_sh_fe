@@ -79,13 +79,13 @@
                         label-width="auto"
                         class="demo-ruleForm"
                     >
-                     <!--<el-form-item label="账号" prop="username">
+                        <!--<el-form-item label="账号" prop="username">
                             <el-input
                                 v-model="tokenForm.username"
                                 autocomplete="on"
                             />
                         </el-form-item>
-                    -->   
+                    -->
 
                         <el-form-item label="令牌" prop="token">
                             <el-input
@@ -168,11 +168,11 @@ onMounted(() => {
     const tab = url.searchParams.get("tab");
     if (tab === "token") {
         activeTab.value = "token";
-        return
+        return;
     }
     if (tab === "password") {
         activeTab.value = "password";
-        return
+        return;
     }
 });
 const loading = ref(false);

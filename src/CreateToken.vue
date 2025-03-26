@@ -1,12 +1,26 @@
 <template>
     <div style="width: 100%">
         <h1>令牌管理</h1>
-        <a-form style="width: 100%" :model="formState" @finish="handleCreateToken">
+        <a-form
+            style="width: 100%"
+            :model="formState"
+            @finish="handleCreateToken"
+            ref="formRef"
+            :rules="rules"
+        >
             <!-- <a-form-item label="令牌用户" name="username" :rules="[{ required: true }]">
                 <a-input v-model:value="formState.username" placeholder="请输入令牌用户" />
             </a-form-item> -->
-            <a-form-item label="令牌描述" name="description" :rules="[{ required: true }]">
-                <a-input v-model:value="formState.description" placeholder="请输入令牌描述" />
+            <a-form-item
+            
+                label="令牌描述"
+                name="description"
+                :rules="[{ required: true }]"
+            >
+                <a-input
+                    v-model:value="formState.description"
+                    placeholder="请输入令牌描述"
+                />
             </a-form-item>
             <a-button type="primary" html-type="submit">创建新令牌</a-button>
         </a-form>
@@ -15,6 +29,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { Form, Input, Button, Table, Popconfirm } from "ant-design-vue";
+import type { Rule } from "ant-design-vue/es/form/interface";
 
 // interface Token {
 //     username: string;
@@ -23,6 +38,18 @@ import { Form, Input, Button, Table, Popconfirm } from "ant-design-vue";
 // }
 
 export default defineComponent({
+    setup() {
+        const formRef = ref();
+        return {
+            formRef,
+            rules: {
+                description: [
+                    { required: true, message: '请输入令牌描述', trigger: 'blur' },
+                    { min: 5, max: 100, message: '令牌描述长度应在 5 到 100 个字符之间', trigger: 'blur' }
+                ]
+            } as Record<string, Rule[]>,
+        };
+    },
     components: {
         "a-popconfirm": Popconfirm,
         "a-form": Form,
@@ -33,11 +60,12 @@ export default defineComponent({
     },
     data() {
         return {
-            formState: { description: "", 
-            
-            // username: "" 
         
-        },
+            formState: {
+                description: "",
+
+                // username: ""
+            },
             // tokens: [] as Token[],
             loading: false,
             // columns: [
@@ -71,6 +99,8 @@ export default defineComponent({
         // },
 
         async handleCreateToken() {
+
+            await this.formRef.validate();
             try {
                 // await this.mockRequest(
                 //     "POST",
@@ -79,12 +109,10 @@ export default defineComponent({
                 // );
                 // this.formState.username = "";
                 this.formState.description = "";
-
             } catch (error) {
                 console.error("创建令牌失败:", error);
             }
         },
-
     },
 });
 </script>

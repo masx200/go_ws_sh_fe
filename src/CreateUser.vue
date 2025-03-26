@@ -1,8 +1,14 @@
 <template>
     <div>
         <h2>创建用户</h2>
-        <a-form :model="userInfo" @finish="handleCreateUser">
+        <a-form
+            ref="formRef"
+            :rules="rules"
+            :model="userInfo"
+            @finish="handleCreateUser"
+        >
             <a-form-item
+                name="username"
                 label="用户名"
                 :rules="[
                     { required: true, message: '请输入用户名' },
@@ -13,6 +19,7 @@
                 <a-input v-model:value="userInfo.username" />
             </a-form-item>
             <a-form-item
+                name="password"
                 label="密码"
                 :rules="[
                     { required: true, message: '请输入密码' },
@@ -34,6 +41,7 @@ import { defineComponent, ref } from "vue";
 import { Form, Input, InputPassword, Button, message } from "ant-design-vue";
 import { getAuth } from "./SessionDisplay.vue";
 import { createUser } from "./createUser";
+import type { Rule } from "ant-design-vue/es/form";
 // import axios from "axios";
 
 export default defineComponent({
@@ -45,6 +53,7 @@ export default defineComponent({
         "a-button": Button,
     },
     setup() {
+        const formRef = ref();
         const router = useRouter();
         const userInfo = ref({
             username: "",
@@ -52,6 +61,9 @@ export default defineComponent({
         });
 
         const handleCreateUser = async () => {
+
+            await formRef.value
+                .validateFields()
             if (!userInfo.value.username || !userInfo.value.password) {
                 message.error("请输入用户名和密码");
                 return;
@@ -95,6 +107,18 @@ export default defineComponent({
         };
 
         return {
+            formRef,
+            rules: {
+                
+                username: [
+                    { required: true, message: '请输入用户名', trigger: 'blur' },
+                    { min: 4, message: '用户名长度至少为4位', trigger: 'blur' }
+                ],
+                password: [
+                    { required: true, message: '请输入密码', trigger: 'blur' },
+                    { min: 4, message: '密码长度至少为4位', trigger: 'blur' }
+                ]
+            }as Record<string, Rule[]>,
             userInfo,
             router,
             handleCreateUser,

@@ -4,7 +4,7 @@
         :data-source="sessions"
         :loading="loading"
         style="width: 100%"
-         :row-key="(record) => record.name"
+        :row-key="(record) => record.name"
     >
         <template #bodyCell="{ column, record }">
             <template v-if="column.key === 'delete'">

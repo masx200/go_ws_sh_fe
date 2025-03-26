@@ -76,10 +76,11 @@ export default defineComponent({
 
         // 处理表单提交
         const handleSubmit = async () => {
+            // console.log(formRef.value
+            // .validateFields)
             await formRef.value
                 .validateFields()
                 .then(async () => {
-                   
                     console.log("userInfo", userInfo.value);
                     if (!userInfo.value.username || !userInfo.value.password) {
                         message.error("请输入用户名和密码");
