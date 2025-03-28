@@ -87,17 +87,16 @@
                         </el-form-item>
                     -->
 
-                        <el-form-item label="令牌" prop="token">
-                            <el-input
-                                v-model="tokenForm.token"
-                                autocomplete="on"
-                                type="password"
-                            />
-                        </el-form-item>
                         <el-form-item label="标识" prop="identifier">
                             <el-input
                                 v-model="tokenForm.identifier"
                                 autocomplete="on"
+                            /> </el-form-item
+                        ><el-form-item label="令牌" prop="token">
+                            <el-input
+                                v-model="tokenForm.token"
+                                autocomplete="on"
+                                type="password"
                             />
                         </el-form-item>
                         <el-form-item label="网址" prop="server">
