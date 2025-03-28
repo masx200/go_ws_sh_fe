@@ -46,6 +46,9 @@
 import { defineComponent, ref } from "vue";
 import { Form, Input, Button, message } from "ant-design-vue";
 import type { Rule } from "ant-design-vue/es/form/interface";
+import { getAuth } from "./SessionDisplay.vue";
+import { createsession } from "./createsession";
+import { routepushdisplaySessions } from "./routepush";
 // import axios from "axios";
 
 export default defineComponent({
@@ -56,6 +59,7 @@ export default defineComponent({
         "a-button": Button,
     },
     setup() {
+        const router = useRouter();
         const formRef = ref();
         const sessionInfo = ref({
             name: "",
@@ -69,9 +73,33 @@ export default defineComponent({
                 .validateFields()
                 .then(async () => {
                     try {
+                        const authresult = await getAuth(router);
+                        if (!authresult) {
+                            return null;
+                        }
+                        const { baseurl, credentials } = authresult;
+
+                        const result = await createsession(
+                            {
+                                ...credentials,
+
+                                session: {
+                                    name: sessionInfo.value.name,
+                                    cmd: sessionInfo.value.cmd,
+                                    args: JSON.parse(sessionInfo.value.args),
+                                    dir: sessionInfo.value.dir,
+                                },
+                            },
+                            baseurl,
+                        );
+                        console.log(result);
+                        message.success("会话创建成功");
+
                         // 根据 go_ws_sh.openapi.json 实现创建会话的 API 调用
                         // const response = await axios.post("/api/sessions", sessionInfo.value);
                         message.success("会话创建成功");
+
+                        routepushdisplaySessions()
                     } catch (error) {
                         console.error("会话创建失败:", error);
                         message.error("会话创建失败");

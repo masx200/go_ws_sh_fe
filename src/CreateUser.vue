@@ -42,6 +42,7 @@ import { Form, Input, InputPassword, Button, message } from "ant-design-vue";
 import { getAuth } from "./SessionDisplay.vue";
 import { createUser } from "./createUser";
 import type { Rule } from "ant-design-vue/es/form";
+import { routepushdisplayUsers } from "./routepush";
 // import axios from "axios";
 
 export default defineComponent({
@@ -90,14 +91,7 @@ export default defineComponent({
                 );
                 console.log(result);
                 message.success("用户创建成功");
-
-                const url = new URL(window.location.href);
-                url.searchParams.set("tab", "displayUsers");
-
-                console.log(url);
-                // await router.push(url.href.slice(url.origin.length));//居然不管用
-                history.pushState(null, "", url.href.slice(url.origin.length));
-                location.reload();
+                routepushdisplayUsers()
             } catch (error) {
                 console.error("用户创建失败:", error);
                 message.error(
