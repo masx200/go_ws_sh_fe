@@ -37,7 +37,9 @@ export async function logout(
         });
 
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            throw new Error(
+                `HTTP error! Status: ${response.status}\nurl:${response.url}`,
+            );
         }
 
         // 如果需要处理响应数据，可以在这里进行

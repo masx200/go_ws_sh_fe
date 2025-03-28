@@ -45,7 +45,9 @@ export async function modifyPassword(
         });
 
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            throw new Error(
+                `HTTP error! Status: ${response.status}\nurl:${response.url}`,
+            );
         }
 
         const data = (await response.json()) as modifyPasswordResults;
