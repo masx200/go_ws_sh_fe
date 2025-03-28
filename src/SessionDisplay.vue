@@ -35,6 +35,7 @@ import type { ColumnsType } from "ant-design-vue/es/table/interface";
 import { defineComponent } from "vue";
 import { fetchServerInfoServer } from "~/src/ServerConnectionInfo.ts";
 import { listsessions, type listResults } from "./listsessions.ts"; // 引入 listsessions 函数
+import { routepushEditSessions } from "./routepush";
 
 export async function getAuth(router: Router): Promise<{
     baseurl: string;
@@ -147,9 +148,10 @@ export default defineComponent({
                 console.error("删除会话失败:", error);
             }
         },
-        async handleChangeAttributes(sessionId: string) {
+        async handleChangeAttributes(sessionname: string) {
             // 实现修改属性逻辑
-            console.log(`修改会话 ${sessionId} 的属性`);
+            console.log(`修改会话 ${sessionname} 的属性`);
+            routepushEditSessions(sessionname);
         },
     },
 });

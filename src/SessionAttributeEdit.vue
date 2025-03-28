@@ -57,6 +57,13 @@ import { getAuth } from "./SessionDisplay.vue";
 import { editSession } from "./editsession";
 
 export default defineComponent({
+    mounted() {
+        const url = new URL(window.location.href);
+        const sessionname = url.searchParams.get("sessionname");
+        if (sessionname) {
+            this.sessionInfo.name = sessionname;
+        }
+    },
     components: {
         "a-form": Form,
         "a-form-item": Form.Item,
@@ -78,25 +85,25 @@ export default defineComponent({
             await formRef.value.validateFields();
             try {
                 const authresult = await getAuth(router);
-                        if (!authresult) {
-                            return null;
-                        }
-                        const { baseurl, credentials } = authresult;
+                if (!authresult) {
+                    return null;
+                }
+                const { baseurl, credentials } = authresult;
 
-                        const result = await editSession(
-                            {
-                                ...credentials,
+                const result = await editSession(
+                    {
+                        ...credentials,
 
-                                session: {
-                                    name: sessionInfo.value.name,
-                                    cmd: sessionInfo.value.cmd,
-                                    args: JSON.parse(sessionInfo.value.args),
-                                    dir: sessionInfo.value.dir,
-                                },
-                            },
-                            baseurl,
-                        );
-                        console.log(result);
+                        session: {
+                            name: sessionInfo.value.name,
+                            cmd: sessionInfo.value.cmd,
+                            args: JSON.parse(sessionInfo.value.args),
+                            dir: sessionInfo.value.dir,
+                        },
+                    },
+                    baseurl,
+                );
+                console.log(result);
                 // 调用 API 更新会话属性
                 // await api.updateSessionAttributes(sessionInfo.value);
                 console.log("会话属性修改成功");
