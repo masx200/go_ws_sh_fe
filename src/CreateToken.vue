@@ -12,7 +12,6 @@
                 <a-input v-model:value="formState.username" placeholder="请输入令牌用户" />
             </a-form-item> -->
             <a-form-item
-            
                 label="令牌描述"
                 name="description"
                 :rules="[{ required: true }]"
@@ -28,8 +27,18 @@
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
-import { Form, Input, Button, Table, Popconfirm } from "ant-design-vue";
+import {
+    Form,
+    Input,
+    Button,
+    Table,
+    Popconfirm,
+    message,
+} from "ant-design-vue";
 import type { Rule } from "ant-design-vue/es/form/interface";
+import { getAuth } from "./SessionDisplay.vue";
+import { login } from "./login";
+import { routepushdisplayTokens } from "./routepush";
 
 // interface Token {
 //     username: string;
@@ -39,14 +48,25 @@ import type { Rule } from "ant-design-vue/es/form/interface";
 
 export default defineComponent({
     setup() {
+        const router = useRouter();
         const formRef = ref();
         return {
+            router,
             formRef,
             rules: {
                 description: [
-                    { required: true, message: '请输入令牌描述', trigger: 'blur' },
-                    { min: 5, max: 100, message: '令牌描述长度应在 5 到 100 个字符之间', trigger: 'blur' }
-                ]
+                    {
+                        required: true,
+                        message: "请输入令牌描述",
+                        trigger: "blur",
+                    },
+                    {
+                        min: 5,
+                        max: 100,
+                        message: "令牌描述长度应在 5 到 100 个字符之间",
+                        trigger: "blur",
+                    },
+                ],
             } as Record<string, Rule[]>,
         };
     },
@@ -60,7 +80,6 @@ export default defineComponent({
     },
     data() {
         return {
-        
             formState: {
                 description: "",
 
@@ -78,39 +97,35 @@ export default defineComponent({
     },
 
     methods: {
-        // mockRequest(method: string, url: string, data: Token): Promise<any> {
-        //     return new Promise((resolve) => {
-        //         setTimeout(() => {
-        //             if (
-        //                 method === "POST" &&
-        //                 url === "/oauth/personal-access-tokens"
-        //             ) {
-        //                 const newToken = {
-        //                     description: data.description,
-        //                     // id: Date.now().toString(),
-        //                     username: data.username,
-        //                     // created_at: new Date().toLocaleString(),
-        //                 };
-        //                 this.tokens.push(newToken);
-        //                 resolve({ data: newToken });
-        //             }
-        //         }, 0);
-        //     });
-        // },
-
         async handleCreateToken() {
-
             await this.formRef.validate();
+            const { router } = this;
             try {
-                // await this.mockRequest(
-                //     "POST",
-                //     "/oauth/personal-access-tokens",
-                //     this.formState,
-                // );
-                // this.formState.username = "";
+                const authresult = await getAuth(router);
+                if (!authresult) {
+                    return null;
+                }
+                const { baseurl, credentials } = authresult;
+
+                const result = await login(
+                    {
+                        ...credentials,
+
+                        token: {
+                            description: this.formState.description,
+                            username: credentials.authorization.username,
+                        },
+                    },
+                    baseurl,
+                );
+                console.log(result);
+                message.success("令牌创建成功");
                 this.formState.description = "";
+
+                routepushdisplayTokens();
             } catch (error) {
                 console.error("创建令牌失败:", error);
+                message.error("创建创建失败");
             }
         },
     },

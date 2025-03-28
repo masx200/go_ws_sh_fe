@@ -97,7 +97,7 @@ export default defineComponent({
 
                         // 根据 go_ws_sh.openapi.json 实现创建会话的 API 调用
                         // const response = await axios.post("/api/sessions", sessionInfo.value);
-                        message.success("会话创建成功");
+                        //message.success("会话创建成功");
 
                         routepushdisplaySessions()
                     } catch (error) {
