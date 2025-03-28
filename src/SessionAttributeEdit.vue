@@ -14,7 +14,7 @@
                 <a-input v-model:value="sessionInfo.id" disabled />
             </a-form-item> -->
             <a-form-item
-            name="name"
+                name="name"
                 label="会话名称"
                 :rules="[{ required: true, message: '请输入会话名称' }]"
             >
@@ -50,8 +50,11 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-import { Form, Input, Button } from "ant-design-vue";
+import { Form, Input, Button, message } from "ant-design-vue";
 import type { Rule } from "ant-design-vue/es/form/interface";
+import { routepushdisplaySessions } from "./routepush";
+import { getAuth } from "./SessionDisplay.vue";
+import { editSession } from "./editsession";
 
 export default defineComponent({
     components: {
@@ -61,6 +64,7 @@ export default defineComponent({
         "a-button": Button,
     },
     setup() {
+        const router = useRouter();
         const formRef = ref();
         const sessionInfo = ref({
             // id: "",
@@ -71,18 +75,41 @@ export default defineComponent({
         });
 
         const handleUpdateSessionAttributes = async () => {
-            await formRef.value
-                .validateFields()
+            await formRef.value.validateFields();
             try {
+                const authresult = await getAuth(router);
+                        if (!authresult) {
+                            return null;
+                        }
+                        const { baseurl, credentials } = authresult;
+
+                        const result = await editSession(
+                            {
+                                ...credentials,
+
+                                session: {
+                                    name: sessionInfo.value.name,
+                                    cmd: sessionInfo.value.cmd,
+                                    args: JSON.parse(sessionInfo.value.args),
+                                    dir: sessionInfo.value.dir,
+                                },
+                            },
+                            baseurl,
+                        );
+                        console.log(result);
                 // 调用 API 更新会话属性
                 // await api.updateSessionAttributes(sessionInfo.value);
                 console.log("会话属性修改成功");
+                routepushdisplaySessions();
             } catch (error) {
                 console.error("修改会话属性失败:", error);
+                message.error("会话修改失败");
             }
         };
 
-        return {formRef, rules: {
+        return {
+            formRef,
+            rules: {
                 name: [
                     {
                         required: true,
@@ -123,6 +150,7 @@ export default defineComponent({
             } as Record<string, Rule[]>,
             sessionInfo,
             handleUpdateSessionAttributes,
+            router,
         };
     },
 });

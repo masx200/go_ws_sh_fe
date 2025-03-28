@@ -99,7 +99,7 @@ export default defineComponent({
                         // const response = await axios.post("/api/sessions", sessionInfo.value);
                         //message.success("会话创建成功");
 
-                        routepushdisplaySessions()
+                        routepushdisplaySessions();
                     } catch (error) {
                         console.error("会话创建失败:", error);
                         message.error("会话创建失败");
@@ -113,6 +113,7 @@ export default defineComponent({
 
         return {
             formRef,
+            router,
             rules: {
                 name: [
                     {
