@@ -26,8 +26,14 @@
         <!-- 新增令牌信息展示区域 -->
         <div v-if="showTokenInfo" style="margin-top: 20px">
             <p>令牌创建成功</p>
-            <p>令牌标识: {{ tokenInfo.identifier }}</p>
-            <p>令牌密码: {{ tokenInfo.password }}</p>
+            <a-table
+                :columns="tokenInfoColumns"
+                :data-source="tokenInfoSource"
+                :pagination="false"
+                bordered
+            ></a-table>
+            <!-- <p>令牌标识: {{ tokenInfo.identifier }}</p>
+            <p>令牌密码: {{ tokenInfo.password }}</p> -->
             <a-button type="primary" @click="handleTokenSaved"
                 >我已保存令牌</a-button
             >
@@ -48,6 +54,7 @@ import type { Rule } from "ant-design-vue/es/form/interface";
 import { getAuth } from "./SessionDisplay.vue";
 import { login } from "./login";
 import { routepushdisplayTokens } from "./routepush";
+import type { ColumnsType } from "ant-design-vue/es/table/interface";
 
 // interface Token {
 //     username: string;
@@ -89,6 +96,43 @@ export default defineComponent({
     },
     data() {
         return {
+            tokenInfoSource: [] as { type: string; value: string }[],
+            tokenInfoColumns: [
+                {
+                    title: "信息类型",
+                    dataIndex: "type",
+                    key: "type",
+                    ellipsis: false,
+                    customCell: () => {
+                        return {
+                            style: {
+                                wordWrap: "break-word",
+                                wordBreak: "break-all",
+                                whiteSpace: "normal",
+                                // minHeight: "50px",
+                                // width: "50px",
+                            },
+                        };
+                    },
+                },
+                {
+                    title: "值",
+                    dataIndex: "value",
+                    key: "value",
+                    ellipsis: false,
+                    customCell: () => {
+                        return {
+                            style: {
+                                wordWrap: "break-word",
+                                wordBreak: "break-all",
+                                whiteSpace: "normal",
+                                // minHeight: "50px",
+                                // width: "50px",
+                            },
+                        };
+                    },
+                },
+            ]as ColumnsType<any>,
             formState: {
                 description: "",
 
@@ -143,6 +187,17 @@ export default defineComponent({
                     identifier: result.token.identifier,
                     password: result.token.token,
                 };
+
+                this.tokenInfoSource = [
+                    {
+                        type: "令牌标识",
+                        value: result.token.identifier,
+                    },
+                    {
+                        type: "令牌密码",
+                        value: result.token.token,
+                    },
+                ];
                 this.showTokenInfo = true;
                 message.success("令牌创建成功");
                 // this.formState.description = "";
