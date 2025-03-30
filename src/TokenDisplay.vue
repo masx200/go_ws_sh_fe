@@ -37,6 +37,7 @@ import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
 import { listtokens } from "./listtokens";
 import { getAuth } from "./SessionDisplay.vue";
+import { deleteToken } from "./deleteToken";
 
 interface Token {
     description: string;
@@ -98,10 +99,35 @@ export default defineComponent({
         async handleDeleteToken(identifier: string) {
             // 实现删除令牌逻辑
             console.log(`删除令牌: ${identifier}`);
+            const { router } = this;
+            try {
+                const authresult = await getAuth(router);
+                if (!authresult) {
+                    return null;
+                }
+                const { baseurl, credentials } = authresult;
+
+                console.log(
+                    await deleteToken(credentials, baseurl, identifier),
+                );
+                message.success("令牌删除成功");
+                this.fetchTokens(); // 刷新列表
+            } catch (error) {
+                console.error("删除令牌失败:", error);
+                message.error("删除令牌失败: " + (error as Error).message);
+            }
         },
         async handleChangeDescription(identifier: string) {
             // 实现修改描述逻辑
             console.log(`修改令牌 ${identifier} 的描述`);
+
+            const url = new URL(window.location.href);
+            url.searchParams.set("tab", "editTokenDescription");
+            url.searchParams.set("identifier", identifier);
+            console.log(url);
+            // await router.push(url.href.slice(url.origin.length));//居然不管用
+            history.pushState(null, "", url.href.slice(url.origin.length));
+            location.reload();
         },
     },
 });

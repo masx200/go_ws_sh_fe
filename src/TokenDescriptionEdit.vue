@@ -30,8 +30,10 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-import { Form, Input, Button } from "ant-design-vue";
+import { Form, Input, Button, message } from "ant-design-vue";
 import type { Rule } from "ant-design-vue/es/form/interface";
+import { getAuth } from "./SessionDisplay.vue";
+import { updateTokenDescription } from "./updateTokenDescription";
 
 export default defineComponent({
     components: {
@@ -41,6 +43,14 @@ export default defineComponent({
         "a-button": Button,
     },
     setup() {
+        const router = useRouter();
+        onMounted(() => {
+            const url = new URL(window.location.href);
+            const identifier = url.searchParams.get("identifier");
+            if (identifier) {
+                tokenInfo.value.identifier = identifier;
+            }
+        });
         const formRef = ref();
         const tokenInfo = ref({
             identifier: "",
@@ -50,11 +60,37 @@ export default defineComponent({
         const handleUpdateTokenDescription = async () => {
             await formRef.value.validateFields();
             try {
+                const authresult = await getAuth(router);
+                if (!authresult) {
+                    return null;
+                }
+                const { baseurl, credentials } = authresult;
+                const { identifier, description } = tokenInfo.value;
+                console.log(
+                    await updateTokenDescription(
+                        credentials,
+                        baseurl,
+                        identifier,
+                        description,
+                    ),
+                );
+                message.success("令牌修改成功");
                 // 调用 API 更新令牌描述
                 // await api.updateTokenDescription(tokenInfo.value);
                 console.log("令牌描述修改成功");
+
+                const url = new URL(window.location.href);
+                url.searchParams.set("tab", "displayTokens");
+
+                console.log(url);
+                // await router.push(url.href.slice(url.origin.length));//居然不管用
+                history.pushState(null, "", url.href.slice(url.origin.length));
+                location.reload();
             } catch (error) {
                 console.error("修改令牌描述失败:", error);
+                message.error(
+                    "修改令牌描述失败" + "\n" + error + "\n" + String(error),
+                );
             }
         };
 

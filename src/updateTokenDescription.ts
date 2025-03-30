@@ -1,0 +1,40 @@
+import type { listCredentialsInterface } from "./listtokens";
+
+export async function updateTokenDescription(
+    credentials: listCredentialsInterface,
+    baseurl: string,
+    identifier: string,
+    description: string,
+): Promise<typeof updateresult> {
+    const url = new URL("/tokens", baseurl).href;
+    try {
+        const response = await fetch(url, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                token: { identifier, description },
+                authorization: credentials.authorization,
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error(
+                `HTTP error! Status: ${response.status}\nurl:${response.url}`,
+            );
+        }
+
+        const data = await response.json();
+        console.log("update token description successful:", data);
+        return data;
+    } catch (error) {
+        console.error("update token description failed:", error);
+        throw error;
+    }
+}
+const updateresult = {
+    message: "Token deleted successfully",
+    token: { identifier: "1904548698307932160", username: "admin" },
+    username: "admin",
+};
