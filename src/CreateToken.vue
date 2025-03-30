@@ -23,6 +23,15 @@
             </a-form-item>
             <a-button type="primary" html-type="submit">创建新令牌</a-button>
         </a-form>
+        <!-- 新增令牌信息展示区域 -->
+        <div v-if="showTokenInfo" style="margin-top: 20px">
+            <p>令牌创建成功</p>
+            <p>令牌标识: {{ tokenInfo.identifier }}</p>
+            <p>令牌密码: {{ tokenInfo.password }}</p>
+            <a-button type="primary" @click="handleTokenSaved"
+                >我已保存令牌</a-button
+            >
+        </div>
     </div>
 </template>
 <script lang="ts">
@@ -87,6 +96,11 @@ export default defineComponent({
             },
             // tokens: [] as Token[],
             loading: false,
+            showTokenInfo: false,
+            tokenInfo: {
+                identifier: "",
+                password: "",
+            },
             // columns: [
             //     { title: "令牌标识", dataIndex: "identifier" },
             //     { title: "用户", dataIndex: "username" },
@@ -97,6 +111,11 @@ export default defineComponent({
     },
 
     methods: {
+        handleTokenSaved() {
+            this.showTokenInfo = false;
+            this.formState.description = "";
+            routepushdisplayTokens();
+        },
         async handleCreateToken() {
             await this.formRef.validate();
             const { router } = this;
@@ -119,10 +138,16 @@ export default defineComponent({
                     baseurl,
                 );
                 console.log(result);
+                // 显示令牌信息
+                this.tokenInfo = {
+                    identifier: result.token.identifier,
+                    password: result.token.token,
+                };
+                this.showTokenInfo = true;
                 message.success("令牌创建成功");
-                this.formState.description = "";
+                // this.formState.description = "";
 
-                routepushdisplayTokens();
+                // routepushdisplayTokens();
             } catch (error) {
                 console.error("创建令牌失败:", error);
                 message.error("创建创建失败");
