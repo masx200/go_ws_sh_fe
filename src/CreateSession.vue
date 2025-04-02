@@ -102,7 +102,7 @@ export default defineComponent({
                         routepushdisplaySessions();
                     } catch (error) {
                         console.error("会话创建失败:", error);
-                        message.error("会话创建失败");
+                        message.error("会话创建失败"+"\n"+String(error));
                     }
                 })
                 .catch((error: any) => {
