@@ -237,6 +237,7 @@ async function handleconnect() {
         return;
     }
     try {
+        const sessionvaluedata = sessionvalue.value;
         showloading.value = true;
         await runAsync(gettoken() ?? "", localStorage.getItem("server") ?? "", {
             type: "token",
@@ -256,7 +257,7 @@ async function handleconnect() {
                 "/shell?server=" +
                     encodeURIComponent(urlvalue.value) +
                     "&session=" +
-                    sessionvalue.value,
+                    sessionvaluedata,
                 location.href,
             ).href,
         );
