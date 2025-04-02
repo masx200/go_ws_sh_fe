@@ -121,9 +121,9 @@ export default defineComponent({
                         );
                         location.reload();
                     } catch (error) {
-                        console.error("用户创建失败:", error);
+                        console.error("用户修改失败:", error);
                         message.error(
-                            "用户创建失败" +
+                            "用户修改失败" +
                                 "\n" +
                                 error +
                                 "\n" +

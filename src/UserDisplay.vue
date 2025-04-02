@@ -113,7 +113,8 @@ export default defineComponent({
                 message.success("用户删除成功");
                 console.log(`删除用户: ${username}`);
 
-                location.reload();
+                // location.reload();
+                await this.fetchUsers();
             } catch (error) {
                 console.error("User deletion failed:", error);
                 message.error(

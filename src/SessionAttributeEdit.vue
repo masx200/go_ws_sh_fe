@@ -110,7 +110,7 @@ export default defineComponent({
                 routepushdisplaySessions();
             } catch (error) {
                 console.error("修改会话属性失败:", error);
-                message.error("会话修改失败");
+                message.error("会话修改失败" + "\n" + String(error));
             }
         };
 
