@@ -36,6 +36,7 @@ import { defineComponent } from "vue";
 import { fetchServerInfoServer } from "~/src/ServerConnectionInfo.ts";
 import { listsessions, type listResults } from "./listsessions.ts"; // 引入 listsessions 函数
 import { routepushEditSessions } from "./routepush";
+import { deletesession } from "./deletesession";
 
 export async function getAuth(router: Router): Promise<{
     baseurl: string;
@@ -139,14 +140,45 @@ export default defineComponent({
                 this.loading = false;
             }
         },
-        async handleDeleteSession(sessionId: string) {
+        async handleDeleteSession(sessionname: string) {
+            const { router } = this;
+            this.loading = true;
             try {
-                // 调用 API 删除会话
-                // await api.deleteSession(sessionId);
-                //this.sessions = this.sessions.filter((s) => s.id !== sessionId);
+                const authresult = await getAuth(router);
+                if (!authresult) {
+                    return null;
+                }
+                const { baseurl, credentials } = authresult;
+
+                const result = await deletesession(
+                    {
+                        authorization: credentials.authorization,
+                        session: {
+                            name: sessionname,
+                        },
+                    },
+                    baseurl,
+                );
+                if (!result) {
+                    return;
+                }
+                // 调用 API 获取会话列表
+                // const response = await api.getSessions();
+                // this.sessions = response.data;
+
+                message.success("会话删除成功");
+                await this.fetchSessions();
             } catch (error) {
                 console.error("删除会话失败:", error);
+                message.error(
+                    "删除会话列表失败" + "\n" + error + "\n" + String(error),
+                );
+            } finally {
+                this.loading = false;
             }
+            // 调用 API 删除会话
+            // await api.deleteSession(sessionId);
+            //this.sessions = this.sessions.filter((s) => s.id !== sessionId);
         },
         async handleChangeAttributes(sessionname: string) {
             // 实现修改属性逻辑
