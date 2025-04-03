@@ -44,7 +44,13 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-import { Form, Input, Button, message } from "ant-design-vue";
+import {
+    Form,
+    Input,
+    Button,
+    message,
+    type FormInstance,
+} from "ant-design-vue";
 import type { Rule } from "ant-design-vue/es/form/interface";
 import { getAuth } from "./SessionDisplay.vue";
 import { createsession } from "./createsession";
@@ -60,7 +66,7 @@ export default defineComponent({
     },
     setup() {
         const router = useRouter();
-        const formRef = ref();
+        const formRef = ref<FormInstance>();
         const sessionInfo = ref({
             name: "",
             cmd: "",
@@ -70,7 +76,7 @@ export default defineComponent({
 
         const handleCreateSession = async () => {
             await formRef.value
-                .validateFields()
+                ?.validateFields()
                 .then(async () => {
                     try {
                         const authresult = await getAuth(router);
@@ -102,7 +108,7 @@ export default defineComponent({
                         routepushdisplaySessions();
                     } catch (error) {
                         console.error("会话创建失败:", error);
-                        message.error("会话创建失败"+"\n"+String(error));
+                        message.error("会话创建失败" + "\n" + String(error));
                     }
                 })
                 .catch((error: any) => {

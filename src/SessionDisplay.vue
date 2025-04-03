@@ -6,7 +6,37 @@
         style="width: 100%"
         :row-key="(record) => record.name"
     >
-        <template #bodyCell="{ column, record }">
+        <!-- <template slot="args" slot-scope="args">
+            <ul style="list-style: none; padding: 0; margin: 0">
+                <li v-for="(arg, index) in args" :key="index">
+                    <a-tag color="blue">{{ arg }}</a-tag>
+                    <!-- 使用 Ant Design 的 Tag 组件 -->
+        <!-- </li> -->
+        <!-- </ul> -->
+        <!-- </template> -->
+        <template #bodyCell="{ column, record, text, value, index }">
+            <template v-if="column.key === 'args'">
+                <ul
+                    style="
+                        display: flex;
+                        list-style: none;
+                        padding: 0px;
+                        margin: 0px;
+                        flex-direction: column;
+                        align-content: center;
+                        justify-content: center;
+                        align-items: center;
+                        flex-wrap: wrap;
+                    "
+                >
+                    <li
+                        v-for="(arg, index) in JSON.parse(record.args)"
+                        :key="index"
+                    >
+                        <a-tag color="blue">{{ arg }}</a-tag>
+                    </li>
+                </ul>
+            </template>
             <template v-if="column.key === 'delete'">
                 <span>
                     <a-popconfirm
@@ -30,7 +60,7 @@
 
 <script lang="ts">
 import { type Router, useRouter } from "vue-router";
-import { Popconfirm, Table, message } from "ant-design-vue";
+import { Popconfirm, Table, Tag, message } from "ant-design-vue";
 import type { ColumnsType } from "ant-design-vue/es/table/interface";
 import { defineComponent } from "vue";
 import { fetchServerInfoServer } from "~/src/ServerConnectionInfo.ts";
@@ -98,7 +128,11 @@ export default defineComponent({
             columns: [
                 { title: "会话名称", dataIndex: "name" },
                 { title: "命令", dataIndex: "cmd" },
-                { title: "参数", dataIndex: "args" },
+                {
+                    title: "参数",
+                    dataIndex: "args",
+                    key: "args",
+                },
                 { title: "目录", dataIndex: "dir" },
                 { title: "创建时间", dataIndex: "created_at" },
                 { title: "修改时间", dataIndex: "updated_at" },
@@ -108,6 +142,7 @@ export default defineComponent({
         };
     },
     components: {
+        "a-tag": Tag,
         "a-table": Table,
         "a-popconfirm": Popconfirm,
     },
