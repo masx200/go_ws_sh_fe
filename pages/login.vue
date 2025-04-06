@@ -24,12 +24,14 @@
                     >
                         <el-form-item label="账号" prop="username">
                             <el-input
+                                name="username"
                                 v-model="loginForm.username"
                                 autocomplete="on"
                             />
                         </el-form-item>
                         <el-form-item label="密码" prop="password">
                             <el-input
+                                name="password"
                                 v-model="loginForm.password"
                                 type="password"
                                 autocomplete="on"
@@ -38,6 +40,7 @@
                         </el-form-item>
                         <el-form-item label="网址" prop="server">
                             <el-input
+                                name="server"
                                 v-model="loginForm.server"
                                 autocomplete="on"
                             />
@@ -89,18 +92,22 @@
 
                         <el-form-item label="标识" prop="identifier">
                             <el-input
+                                name="identifier"
                                 v-model="tokenForm.identifier"
                                 autocomplete="on"
                             /> </el-form-item
                         ><el-form-item label="令牌" prop="token">
                             <el-input
+                                name="token"
                                 v-model="tokenForm.token"
                                 autocomplete="on"
                                 type="password"
+                                show-password
                             />
                         </el-form-item>
                         <el-form-item label="网址" prop="server">
                             <el-input
+                                name="server"
                                 v-model="tokenForm.server"
                                 autocomplete="on"
                             />

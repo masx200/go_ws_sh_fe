@@ -37,32 +37,32 @@
                 <a-input v-model:value="sessionInfo.args" />
             </a-form-item> -->
                 <div
-                    v-for="(domain, index) in dynamicValidateForm.domains"
-                    :key="domain.key"
+                    v-for="(arg, index) in dynamicValidateForm.args"
+                    :key="arg.key"
                 >
                     <el-form-item
                         :label="'参数' + '[' + index + ']'"
-                        :prop="'domains.' + index + '.value'"
+                        :prop="'args.' + index + '.value'"
                         :rules="{
                             required: true,
                             message: '参数不能为空',
                             trigger: 'blur',
                         }"
                     >
-                        <el-input v-model="domain.value" />
+                        <el-input v-model="arg.value" />
                     </el-form-item>
 
                     <el-form-item
                         ><el-button
                             class="mt-2"
-                            @click.prevent="removeDomain(domain)"
+                            @click.prevent="removearg(arg)"
                         >
                             删除参数
                         </el-button></el-form-item
                     >
                 </div>
                 <el-form-item>
-                    <el-button @click="addDomain">添加参数</el-button>
+                    <el-button @click="addarg">添加参数</el-button>
                 </el-form-item>
                 <a-form-item
                     name="dir"
@@ -100,7 +100,7 @@ import { getAuth } from "./SessionDisplay.vue";
 import { createsession } from "./createsession";
 import { routepushdisplaySessions } from "./routepush";
 // import axios from "axios";
-interface DomainItem {
+interface argItem {
     key: number;
     value: string;
 }
@@ -117,28 +117,28 @@ export default defineComponent({
         const resetForm = (formEl: FormInstanceELEMENT | undefined) => {
             if (!formEl) return;
             formEl.resetFields();
-            dynamicValidateForm.domains.length = 0;
+            dynamicValidateForm.args.length = 0;
             formRef?.value?.resetFields();
         };
-        const removeDomain = (item: DomainItem) => {
-            const index = dynamicValidateForm.domains.indexOf(item);
+        const removearg = (item: argItem) => {
+            const index = dynamicValidateForm.args.indexOf(item);
             if (index !== -1) {
-                dynamicValidateForm.domains.splice(index, 1);
+                dynamicValidateForm.args.splice(index, 1);
             }
         };
 
-        const addDomain = () => {
-            dynamicValidateForm.domains.push({
+        const addarg = () => {
+            dynamicValidateForm.args.push({
                 key: Date.now(),
                 value: "",
             });
         };
 
         const dynamicValidateForm = reactive<{
-            domains: DomainItem[];
+            args: argItem[];
             //   email: string
         }>({
-            domains: [
+            args: [
                 {
                     key: 1,
                     value: "",
@@ -177,7 +177,7 @@ export default defineComponent({
                                         session: {
                                             name: sessionInfo.value.name,
                                             cmd: sessionInfo.value.cmd,
-                                            args: dynamicValidateForm.domains
+                                            args: dynamicValidateForm.args
                                                 .map((item) => item.value)
                                                 .filter(Boolean),
                                             // args: JSON.parse(sessionInfo.value.args),
@@ -214,8 +214,8 @@ export default defineComponent({
         };
 
         return {
-            addDomain,
-            removeDomain,
+            addarg,
+            removearg,
             resetForm,
             formRefelement,
             dynamicValidateForm,
