@@ -4,6 +4,8 @@
 
 go_ws_sh_fe
 
+https://github.com/masx200/go_ws_sh
+
 ## 编译前端网页
 
 ```shell
