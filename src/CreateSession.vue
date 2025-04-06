@@ -45,7 +45,7 @@
                         :prop="'domains.' + index + '.value'"
                         :rules="{
                             required: true,
-                            message: 'domain can not be null',
+                            message: '参数不能为空',
                             trigger: 'blur',
                         }"
                     >
