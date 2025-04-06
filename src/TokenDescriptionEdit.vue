@@ -82,8 +82,8 @@ export default defineComponent({
                         console.log("令牌描述获取成功");
                         message.success("令牌描述获取成功");
                     } else {
-                        console.error("令牌描述获取失败");
-                        message.error("令牌描述获取失败");
+                        console.error("令牌描述获取失败" + "\n" + "令牌不存在");
+                        message.error("令牌描述获取失败" + "\n" + "令牌不存在");
                     }
                 }
             } catch (error) {
