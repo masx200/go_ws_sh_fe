@@ -1,10 +1,18 @@
-import type { listCredentialsInterface } from "./listtokens";
-
+export interface listCredentialsInterface {
+    authorization: {
+        username?: string;
+        password?: string;
+        token?: string;
+        identifier?: string;
+        type: string;
+    };
+}
 export async function updateTokenDescription(
     credentials: listCredentialsInterface,
     baseurl: string,
     identifier: string,
     description: string,
+    username: string,
 ): Promise<typeof updateresult> {
     const url = new URL("/tokens", baseurl).href;
     try {
@@ -14,7 +22,7 @@ export async function updateTokenDescription(
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                token: { identifier, description },
+                token: { identifier, description, username: username },
                 authorization: credentials.authorization,
             }),
         });

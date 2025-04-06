@@ -15,6 +15,13 @@
                 <a-input v-model:value="tokenInfo.identifier" />
             </a-form-item>
             <a-form-item
+                name="username"
+                label="用户名"
+                :rules="[{ required: true, message: '请输入用户名' }]"
+            >
+                <a-input v-model:value="tokenInfo.username" />
+            </a-form-item>
+            <a-form-item
                 name="description"
                 label="新描述"
                 :rules="[{ required: true, message: '请输入新的描述' }]"
@@ -55,6 +62,7 @@ export default defineComponent({
         const tokenInfo = ref({
             identifier: "",
             description: "",
+            username: "",
         });
 
         const handleUpdateTokenDescription = async () => {
@@ -72,6 +80,7 @@ export default defineComponent({
                         baseurl,
                         identifier,
                         description,
+                        tokenInfo.value.username,
                     ),
                 );
                 message.success("令牌修改成功");
@@ -99,6 +108,18 @@ export default defineComponent({
             tokenInfo,
             handleUpdateTokenDescription,
             rules: {
+                username: [
+                    {
+                        required: true,
+                        message: "请输入用户名",
+                        trigger: "blur",
+                    },
+                    {
+                        pattern: /^[a-zA-Z0-9\-_]+$/,
+                        message: "用户名只能包含字母、数字、下划线或短横线",
+                        trigger: "blur",
+                    },
+                ],
                 identifier: [
                     {
                         required: true,
