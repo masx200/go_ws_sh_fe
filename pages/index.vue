@@ -308,6 +308,12 @@ import {
 import { gettoken, listsessions } from "../src/listsessions.ts";
 const sessionvalue = ref("");
 onMounted(() => {
+    if (!localStorage?.getItem("server")) {
+        return router.push("/");
+    }
+    if (!localStorage?.getItem("token")) {
+        return router.push("/");
+    }
     const url = localStorage?.getItem("server");
     const token = localStorage?.getItem("token");
     if (!token || !url) {
@@ -395,12 +401,7 @@ async function service(
 
     // console.log()
 }
-// onMounted(async () => {
-//     await runAsync(gettoken() ?? "", localStorage.getItem("server") ?? "").then(
-//         (a) => console.log(a),
-//         (e) => console.error(e),
-//     );
-// });
+
 const { data, error, loading, runAsync } = useRequest(service, {
     defaultParams: [
         "",

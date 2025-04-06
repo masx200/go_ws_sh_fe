@@ -278,6 +278,12 @@ const currentTab = ref(["displayUsers"]); // 默认显示用户页面
 
 const router = useRouter();
 onMounted(async () => {
+    if (!localStorage?.getItem("server")) {
+        return router.push("/");
+    }
+    if (!localStorage?.getItem("token")) {
+        return router.push("/");
+    }
     const server = new URL(location.href).searchParams.get("server");
     if (!server || !localStorage?.getItem("token")) {
         return router.push("/");

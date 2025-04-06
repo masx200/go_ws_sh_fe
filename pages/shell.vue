@@ -35,6 +35,12 @@ const loading = computed(
     () => !(appopts.wsprotocol.length && appopts.wsurl.length),
 );
 onMounted(async () => {
+    if (!localStorage?.getItem("server")) {
+        return router.push("/");
+    }
+    if (!localStorage?.getItem("token")) {
+        return router.push("/");
+    }
     const session = new URL(location.href).searchParams.get("session");
     const server = new URL(location.href).searchParams.get("server");
     const conninfo = (await fetchServerInfoServer(server || ""))
