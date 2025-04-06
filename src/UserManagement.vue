@@ -16,7 +16,10 @@
                     { min: 4, message: '用户名长度至少为4位', trigger: 'blur' },
                 ]"
             >
-                <a-input v-model:value="userInfo.username" />
+                <a-input v-model:value="userInfo.username" 
+                
+                name="username"
+                />
             </a-form-item>
             <a-form-item
                 name="password"
@@ -26,7 +29,10 @@
                     { min: 4, message: '用户名长度至少为4位', trigger: 'blur' },
                 ]"
             >
-                <a-input-password v-model:value="userInfo.password" />
+                <a-input-password v-model:value="userInfo.password"
+                show-password
+                name="password"
+                />
             </a-form-item>
             <a-form-item>
                 <a-button type="primary" html-type="submit">修改</a-button>

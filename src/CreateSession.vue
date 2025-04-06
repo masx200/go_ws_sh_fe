@@ -139,10 +139,10 @@ export default defineComponent({
             //   email: string
         }>({
             args: [
-                {
-                    key: 1,
-                    value: "",
-                },
+                // {
+                //     key: 1,
+                //     value: "",
+                // },
             ],
             //   email: '',
         });

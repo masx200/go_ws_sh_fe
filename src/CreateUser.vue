@@ -16,7 +16,7 @@
                     { min: 4, message: '用户名长度至少为4位', trigger: 'blur' },
                 ]"
             >
-                <a-input v-model:value="userInfo.username" />
+                <a-input v-model:value="userInfo.username" name="username" />
             </a-form-item>
             <a-form-item
                 name="password"
@@ -27,7 +27,11 @@
                     { min: 4, message: '密码长度至少为4位', trigger: 'blur' },
                 ]"
             >
-                <a-input-password v-model:value="userInfo.password" />
+                <a-input-password
+                    v-model:value="userInfo.password"
+                    show-password
+                    name="password"
+                />
             </a-form-item>
             <a-form-item>
                 <a-button type="primary" html-type="submit">创建</a-button>
@@ -62,9 +66,7 @@ export default defineComponent({
         });
 
         const handleCreateUser = async () => {
-
-            await formRef.value
-                .validateFields()
+            await formRef.value.validateFields();
             if (!userInfo.value.username || !userInfo.value.password) {
                 message.error("请输入用户名和密码");
                 return;
@@ -91,7 +93,7 @@ export default defineComponent({
                 );
                 console.log(result);
                 message.success("用户创建成功");
-                routepushdisplayUsers()
+                routepushdisplayUsers();
             } catch (error) {
                 console.error("用户创建失败:", error);
                 message.error(
@@ -103,16 +105,19 @@ export default defineComponent({
         return {
             formRef,
             rules: {
-                
                 username: [
-                    { required: true, message: '请输入用户名', trigger: 'blur' },
-                    { min: 4, message: '用户名长度至少为4位', trigger: 'blur' }
+                    {
+                        required: true,
+                        message: "请输入用户名",
+                        trigger: "blur",
+                    },
+                    { min: 4, message: "用户名长度至少为4位", trigger: "blur" },
                 ],
                 password: [
-                    { required: true, message: '请输入密码', trigger: 'blur' },
-                    { min: 4, message: '密码长度至少为4位', trigger: 'blur' }
-                ]
-            }as Record<string, Rule[]>,
+                    { required: true, message: "请输入密码", trigger: "blur" },
+                    { min: 4, message: "密码长度至少为4位", trigger: "blur" },
+                ],
+            } as Record<string, Rule[]>,
             userInfo,
             router,
             handleCreateUser,
