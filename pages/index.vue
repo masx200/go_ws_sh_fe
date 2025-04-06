@@ -312,6 +312,7 @@ onMounted(() => {
     const token = localStorage?.getItem("token");
     if (!token || !url) {
         router.push("/login?redirect=/");
+        return;
     }
     // 这里可以添加初始化逻辑
 

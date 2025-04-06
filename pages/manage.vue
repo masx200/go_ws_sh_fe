@@ -279,6 +279,9 @@ const currentTab = ref(["displayUsers"]); // 默认显示用户页面
 const router = useRouter();
 onMounted(async () => {
     const server = new URL(location.href).searchParams.get("server");
+    if (!server || !localStorage?.getItem("token")) {
+        return router.push("/");
+    }
     const conninfo = (await fetchServerInfoServer(server || ""))
         .serverinfo?.[0];
     const token = server ? conninfo.token : localStorage?.getItem("token");
