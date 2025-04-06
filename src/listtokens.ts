@@ -1,12 +1,15 @@
 export const listUrl = "http://localhost:28080/";
 
-export interface listCredentialsInterface {
+export interface listTokensInterface {
     authorization: {
         username?: string;
         password?: string;
         token?: string;
         identifier?: string;
         type: string;
+    };
+    token?: {
+        identifier?: string;
     };
 }
 
@@ -26,7 +29,7 @@ export interface listTokenResults {
 
 // 新增：获取令牌列表的函数
 export async function listtokens(
-    credentials: listCredentialsInterface,
+    credentials: listTokensInterface,
     baseurl = listUrl,
 ): Promise<listTokenResults> {
     const url = new URL("/tokens", baseurl).href;

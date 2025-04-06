@@ -1,6 +1,17 @@
 import type { listCredentialResults } from "./listCredentialResults";
-import { type listCredentialsInterface, listUrl } from "./listtokens";
-
+import { listUrl } from "./listtokens";
+export interface listCredentialsInterface {
+    authorization: {
+        username?: string;
+        password?: string;
+        token?: string;
+        identifier?: string;
+        type: string;
+    };
+    credential?: {
+        username?: string;
+    };
+}
 // 新增：获取凭证列表的函数
 
 export async function listcredentials(

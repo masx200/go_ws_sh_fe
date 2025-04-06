@@ -1,12 +1,15 @@
 export const listUrl = "http://localhost:28080/";
 
-export interface listCredentials {
+export interface listSessionInterface {
     authorization: {
         username?: string;
         password?: string;
         token?: string;
         identifier?: string;
         type: string;
+    };
+    session?: {
+        name?: string;
     };
 }
 export interface listResults {
@@ -23,7 +26,7 @@ export interface listResults {
 }
 
 export async function listsessions(
-    credentials: listCredentials,
+    credentials: listSessionInterface,
     baseurl = listUrl,
 ): Promise<listResults> {
     const url = new URL("/sessions", baseurl).href;
