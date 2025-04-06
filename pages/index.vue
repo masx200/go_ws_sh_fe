@@ -327,21 +327,27 @@ async function service(
             },
             new URL(urlserver).href,
         );
-        if (sessionresult.username.length && sessionresult.sessions.length) {
+        if (
+            sessionresult.username.length /* && sessionresult.sessions.length */
+        ) {
             const username = sessionresult.username;
             const identifier = options.identifier;
             ElMessage.success("登录成功:" + sessionresult.username);
             loginstate.value = "登录成功:" + sessionresult.username;
             loginstyle.value = "color:green";
-            const session = sessionresult.sessions[0].name;
+            if (sessionresult.sessions.length !== 0) {
+                const session = sessionresult.sessions[0].name;
+                localStorage.setItem("session", session);
+            }
+            //  const session = sessionresult.sessions[0].name;
             localStorage.setItem("token", token);
             localStorage.setItem("server", server);
-            localStorage.setItem("session", session);
+            //  localStorage.setItem("session", session);
 
             localStorage.setItem("token", token);
             localStorage.setItem("identifier", identifier);
             localStorage.setItem("server", server);
-            localStorage.setItem("session", session);
+            //  localStorage.setItem("session", session);
             await updateOrAddIntoTableServerInfo({
                 server: server,
                 username: username,

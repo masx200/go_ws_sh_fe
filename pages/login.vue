@@ -299,17 +299,22 @@ const submitForm = async (formEl: FormInstance | null) => {
                     );
                     const server = loginForm.server;
                     if (
-                        sessionresult.username.length &&
-                        sessionresult.sessions.length
+                        sessionresult.username.length // &&
+                        // sessionresult.sessions.length
                     ) {
                         ElMessage.success("登录成功:" + sessionresult.username);
                         loginstate.value = "登录成功:" + sessionresult.username;
                         loginstyle.value = "color:green";
-                        const session = sessionresult.sessions[0].name;
+
+                        if (sessionresult.sessions.length !== 0) {
+                            const session = sessionresult.sessions[0].name;
+                            localStorage.setItem("session", session);
+                        }
+
                         localStorage.setItem("token", token.token);
                         localStorage.setItem("identifier", token.identifier);
                         localStorage.setItem("server", server);
-                        localStorage.setItem("session", session);
+
                         await router.push(
                             new URL(location.href).searchParams.get(
                                 "redirect",
@@ -378,20 +383,24 @@ const submitTokenForm = async (formEl: FormInstance | null) => {
                     const server = tokenForm.server;
                     localStorage.setItem("username", sessionresult.username);
                     if (
-                        sessionresult.username.length &&
-                        sessionresult.sessions.length
+                        sessionresult.username.length /*  &&
+                        sessionresult.sessions.length */
                     ) {
                         ElMessage.success("登录成功:" + sessionresult.username);
                         loginstate.value = "登录成功:" + sessionresult.username;
                         loginstyle.value = "color:green";
-                        const session = sessionresult.sessions[0].name;
+                        // const session = sessionresult.sessions[0].name;
                         localStorage.setItem("token", tokenForm.token);
                         localStorage.setItem(
                             "identifier",
                             tokenForm.identifier,
                         );
                         localStorage.setItem("server", server);
-                        localStorage.setItem("session", session);
+                        if (sessionresult.sessions.length !== 0) {
+                            const session = sessionresult.sessions[0].name;
+                            localStorage.setItem("session", session);
+                        }
+                        // localStorage.setItem("session", session);
                         await router.push(
                             new URL(location.href).searchParams.get(
                                 "redirect",
