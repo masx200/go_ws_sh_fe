@@ -41,6 +41,7 @@ import { Form, Input, Button, message } from "ant-design-vue";
 import type { Rule } from "ant-design-vue/es/form/interface";
 import { getAuth } from "./SessionDisplay.vue";
 import { updateTokenDescription } from "./updateTokenDescription";
+import { listtokens } from "./listtokens";
 
 export default defineComponent({
     components: {
@@ -51,11 +52,45 @@ export default defineComponent({
     },
     setup() {
         const router = useRouter();
-        onMounted(() => {
-            const url = new URL(window.location.href);
-            const identifier = url.searchParams.get("identifier");
-            if (identifier) {
-                tokenInfo.value.identifier = identifier;
+        onMounted(async () => {
+            try {
+                const url = new URL(window.location.href);
+                const identifier = url.searchParams.get("identifier");
+                if (identifier) {
+                    tokenInfo.value.identifier = identifier;
+
+                    const authresult = await getAuth(router);
+                    if (!authresult) {
+                        return null;
+                    }
+
+                    const { baseurl, credentials } = authresult;
+                    const result = await listtokens(
+                        {
+                            ...credentials,
+                            token: {
+                                identifier: identifier,
+                            },
+                        },
+                        baseurl,
+                    );
+                    const tokens = result.tokens;
+
+                    if (tokens.length > 0) {
+                        tokenInfo.value.username = tokens[0].username;
+                        tokenInfo.value.description = tokens[0].description;
+                        console.log("令牌描述获取成功");
+                        message.success("令牌描述获取成功");
+                    } else {
+                        console.error("令牌描述获取失败");
+                        message.error("令牌描述获取失败");
+                    }
+                }
+            } catch (error) {
+                console.error("获取令牌描述失败:", error);
+                message.error(
+                    "获取令牌描述失败" + "\n" + error + "\n" + String(error),
+                );
             }
         });
         const formRef = ref();
