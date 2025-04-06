@@ -87,6 +87,12 @@
                 </div>
                 <hr />
                 <el-row align="middle" justify="center">
+                    <el-button
+                        size="large"
+                        type="success"
+                        @click="handlerefresh"
+                        >刷新</el-button
+                    >
                     <el-button size="large" type="primary" @click="handlemanage"
                         >管理</el-button
                     >
@@ -230,6 +236,27 @@ function openNewWindow(strUrl: string) {
     a.href = strUrl;
     a.click();
     document.body.removeChild(a);
+}
+
+async function handlerefresh() {
+    if (urlvalue.value.length == 0 || sessionvalue.value.length == 0) {
+        ElMessage.error("请选择会话和网址");
+        return;
+    }
+    try {
+        showloading.value = true;
+        await runAsync(gettoken() ?? "", localStorage.getItem("server") ?? "", {
+            type: "token",
+            identifier: localStorage.getItem("identifier") ?? "",
+            username: localStorage.getItem("username") ?? "",
+        }).then(
+            (a) => console.log(a),
+            (e) => console.error(e),
+        );
+        showloading.value = false;
+    } finally {
+        showloading.value = false;
+    }
 }
 async function handleconnect() {
     if (urlvalue.value.length == 0 || sessionvalue.value.length == 0) {
