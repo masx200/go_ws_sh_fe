@@ -10,6 +10,12 @@ go_ws_sh_fe
 npm run generate
 ```
 
+复制dist目录下的内容到静态服务器目录下
+
+```bash
+cp -rfv ./dist/* /path_to_static/go-ws-sh-fe/
+```
+
 ## 使用caddy部署静态网页
 
 ```caddyfile
