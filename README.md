@@ -4,6 +4,11 @@
 
 go_ws_sh_fe
 
+## 编译前端网页
+
+```shell
+npm run generate
+```
 
 ## 使用caddy部署静态网页
 
@@ -16,6 +21,7 @@ go_ws_sh_fe
 	root * "\path_to_static\go-ws-sh-fe"
 }
 ```
+
 # Nuxt Minimal Starter
 
 Look at the
