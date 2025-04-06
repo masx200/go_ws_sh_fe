@@ -51,7 +51,7 @@
                     >
                         <el-input
                             v-model="arg.value"
-                            name="args"
+                            :name="'args[' + index + ']'"
                             autocomplete="on"
                         />
                     </el-form-item>
