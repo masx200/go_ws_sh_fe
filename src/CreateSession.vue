@@ -49,7 +49,11 @@
                             trigger: 'blur',
                         }"
                     >
-                        <el-input v-model="arg.value" />
+                        <el-input
+                            v-model="arg.value"
+                            name="args"
+                            autocomplete="on"
+                        />
                     </el-form-item>
 
                     <el-form-item

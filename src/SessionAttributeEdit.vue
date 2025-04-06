@@ -50,6 +50,9 @@
                         }"
                     >
                         <a-input
+
+                        name="args"
+                        autocomplete="on"
                             v-model:value="arg.value"
                             placeholder="please input arg"
                             style="width: 60%; margin-right: 8px"
