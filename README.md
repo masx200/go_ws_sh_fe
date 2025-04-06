@@ -22,6 +22,10 @@ npm run generate
 }
 ```
 
+```bash
+caddy run --config Caddyfile --adapter caddyfile
+```
+
 # Nuxt Minimal Starter
 
 Look at the
