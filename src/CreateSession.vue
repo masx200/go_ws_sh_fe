@@ -118,6 +118,7 @@ export default defineComponent({
             if (!formEl) return;
             formEl.resetFields();
             dynamicValidateForm.domains.length = 0;
+            formRef?.value?.resetFields();
         };
         const removeDomain = (item: DomainItem) => {
             const index = dynamicValidateForm.domains.indexOf(item);
