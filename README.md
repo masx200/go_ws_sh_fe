@@ -4,6 +4,18 @@
 
 go_ws_sh_fe
 
+
+## 使用caddy部署静态网页
+
+```caddyfile
+
+
+:60001 {
+	encode zstd gzip
+	file_server
+	root * "\path_to_static\go-ws-sh-fe"
+}
+```
 # Nuxt Minimal Starter
 
 Look at the
