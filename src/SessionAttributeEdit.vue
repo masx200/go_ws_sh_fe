@@ -49,6 +49,7 @@
 </template>
 
 <script lang="ts">
+import { type listSessionInterface, listsessions } from "./listsessions";
 import { defineComponent, ref } from "vue";
 import { Form, Input, Button, message } from "ant-design-vue";
 import type { Rule } from "ant-design-vue/es/form/interface";
@@ -57,11 +58,49 @@ import { getAuth } from "./SessionDisplay.vue";
 import { editSession } from "./editsession";
 
 export default defineComponent({
-    mounted() {
-        const url = new URL(window.location.href);
-        const sessionname = url.searchParams.get("sessionname");
-        if (sessionname) {
-            this.sessionInfo.name = sessionname;
+    async mounted() {
+        let sessionInfo = this.sessionInfo;
+        const router = this.router;
+        try {
+            const url = new URL(window.location.href);
+            const sessionname = url.searchParams.get("sessionname");
+            if (!sessionname) {
+                // message.error("会话不存在");
+                return;
+            }
+            if (sessionname) {
+                this.sessionInfo.name = sessionname;
+            }
+
+            const authresult = await getAuth(router);
+            if (!authresult) return;
+
+            const { baseurl, credentials } = authresult;
+            const result = await listsessions(
+                {
+                    ...credentials,
+                    session: { name: sessionname },
+                },
+                baseurl,
+            );
+
+            if (result.sessions.length > 0) {
+                const session = result.sessions[0];
+                sessionInfo = {
+                    name: sessionname,
+                    cmd: session.cmd,
+                    args: JSON.stringify(session.args), // 将数组转换为字符串
+                    dir: session.dir,
+                };
+                this.sessionInfo = sessionInfo;
+                console.log("会话信息获取成功:", sessionInfo);
+                message.success("会话信息获取成功");    
+            } else {
+                message.error("会话不存在");
+            }
+        } catch (error) {
+            console.error("获取会话信息失败:", error);
+            message.error("获取会话信息失败: " + error);
         }
     },
     components: {
@@ -115,6 +154,7 @@ export default defineComponent({
         };
 
         return {
+            router,
             formRef,
             rules: {
                 name: [
@@ -157,7 +197,7 @@ export default defineComponent({
             } as Record<string, Rule[]>,
             sessionInfo,
             handleUpdateSessionAttributes,
-            router,
+            // router,
         };
     },
 });
