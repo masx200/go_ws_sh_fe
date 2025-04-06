@@ -1,5 +1,7 @@
 # go_ws_sh_fe
 
+基于websocket的支持多个会话管理的web远程终端
+
 go_ws_sh_fe
 
 # Nuxt Minimal Starter
