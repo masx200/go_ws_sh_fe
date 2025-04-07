@@ -15,7 +15,12 @@ npm run generate
 复制dist目录下的内容到静态服务器目录下
 
 ```bash
-cp -rfv ./dist/* /path_to_static/go-ws-sh-fe/
+cp -rfv ./.output/public/* /path_to_static/go-ws-sh-fe/
+```
+
+
+```powershell
+Copy-Item -Path ".\.output\public/*" -Destination "/path_to_static\go-ws-sh-fe" -Recurse -Force -v
 ```
 
 ## 使用caddy部署静态网页
