@@ -26,6 +26,7 @@ export default defineNuxtConfig({
     app: {
         head: {
             link: [{ rel: "icon", href: "/favicon.ico" }],
+            title:"go-ws-sh-fe"
         },
     },
     css: [
