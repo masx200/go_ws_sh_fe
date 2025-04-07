@@ -309,10 +309,10 @@ import { gettoken, listsessions } from "../src/listsessions.ts";
 const sessionvalue = ref("");
 onMounted(() => {
     if (!localStorage?.getItem("server")) {
-        return router.push("/");
+        return router.push("/login");
     }
     if (!localStorage?.getItem("token")) {
-        return router.push("/");
+        return router.push("/login");
     }
     const url = localStorage?.getItem("server");
     const token = localStorage?.getItem("token");
