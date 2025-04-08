@@ -15,6 +15,20 @@
         <!-- </ul> -->
         <!-- </template> -->
         <template #bodyCell="{ column, record, text, value, index }">
+            <template v-if="column.key === 'copy'">
+                <span>
+                    <a href="#" @click="handleCopyAttributes(record.name)"
+                        >复制</a
+                    ></span
+                >
+            </template>
+            <template v-if="column.key === 'move'">
+                <span>
+                    <a href="#" @click="handleMoveAttributes(record.name)"
+                        >移动</a
+                    ></span
+                >
+            </template>
             <template v-if="column.key === 'args'">
                 <ul
                     style="
@@ -50,7 +64,7 @@
             <template v-if="column.key === 'modify'">
                 <span>
                     <a href="#" @click="handleChangeAttributes(record.name)"
-                        >修改属性</a
+                        >修改</a
                     ></span
                 >
             </template>
@@ -122,6 +136,8 @@ export default defineComponent({
     setup() {
         const router = useRouter();
         return {
+            handleCopyAttributes: async (sessionname: string) => {},
+            handleMoveAttributes: async (sessionname: string) => {},
             router,
             sessions: ref([] as Session[]),
             loading: ref(false),
@@ -136,8 +152,10 @@ export default defineComponent({
                 { title: "目录", dataIndex: "dir" },
                 { title: "创建时间", dataIndex: "created_at" },
                 { title: "修改时间", dataIndex: "updated_at" },
-                { title: "修改操作", key: "modify" },
-                { title: "删除操作", key: "delete" },
+                { title: "修改", key: "modify" },
+                { title: "复制", key: "copy" },
+                { title: "移动", key: "move" },
+                { title: "删除", key: "delete" },
             ] as ColumnsType,
         };
     },
