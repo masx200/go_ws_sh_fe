@@ -6,14 +6,6 @@
         style="width: 100%"
         :row-key="(record) => record.name"
     >
-        <!-- <template slot="args" slot-scope="args">
-            <ul style="list-style: none; padding: 0; margin: 0">
-                <li v-for="(arg, index) in args" :key="index">
-                    <a-tag color="blue">{{ arg }}</a-tag>
-                    <!-- 使用 Ant Design 的 Tag 组件 -->
-        <!-- </li> -->
-        <!-- </ul> -->
-        <!-- </template> -->
         <template #bodyCell="{ column, record, text, value, index }">
             <template v-if="column.key === 'copy'">
                 <span>
@@ -70,17 +62,50 @@
             </template>
         </template>
     </a-table>
+    <a-modal
+        v-model:open="visible"
+        title="复制会话"
+        @ok="handleCopy"
+        @cancel="handleCancel"
+        cancelText="取消"
+        okText="确定"
+    >
+        <a-col
+            flex="auto"
+            style="
+                display: flex;
+                flex-direction: column;
+                align-content: center;
+                justify-content: center;
+                align-items: center;
+            "
+        >
+            <p><strong>新的会话名称</strong></p>
+            <a-input
+                v-model:value="newSessionName"
+                placeholder="请输入新会话名称"
+        /></a-col>
+    </a-modal>
 </template>
 
 <script lang="ts">
 import { type Router, useRouter } from "vue-router";
-import { Popconfirm, Table, Tag, message } from "ant-design-vue";
+import {
+    Col,
+    Input,
+    Modal,
+    Popconfirm,
+    Table,
+    Tag,
+    message,
+} from "ant-design-vue";
 import type { ColumnsType } from "ant-design-vue/es/table/interface";
 import { defineComponent } from "vue";
 import { fetchServerInfoServer } from "~/src/ServerConnectionInfo.ts";
 import { listsessions, type listResults } from "./listsessions.ts"; // 引入 listsessions 函数
 import { routepushEditSessions } from "./routepush";
 import { deletesession } from "./deletesession";
+import { copysession } from "./copysession";
 
 export async function getAuth(router: Router): Promise<{
     baseurl: string;
@@ -123,7 +148,7 @@ export async function getSessions(router: Router): Promise<listResults | null> {
     const result = await listsessions(credentials, baseurl);
     return result;
 }
-interface Session {
+export interface Session {
     name: string;
     cmd: string;
     args: string;
@@ -135,43 +160,55 @@ interface Session {
 export default defineComponent({
     setup() {
         const router = useRouter();
-        return {
-            handleCopyAttributes: async (sessionname: string) => {},
-            handleMoveAttributes: async (sessionname: string) => {},
-            router,
-            sessions: ref([] as Session[]),
-            loading: ref(false),
-            columns: [
-                { title: "会话名称", dataIndex: "name" },
-                { title: "命令", dataIndex: "cmd" },
-                {
-                    title: "参数",
-                    dataIndex: "args",
-                    key: "args",
-                },
-                { title: "目录", dataIndex: "dir" },
-                { title: "创建时间", dataIndex: "created_at" },
-                { title: "修改时间", dataIndex: "updated_at" },
-                { title: "修改", key: "modify" },
-                { title: "复制", key: "copy" },
-                { title: "移动", key: "move" },
-                { title: "删除", key: "delete" },
-            ] as ColumnsType,
-        };
-    },
-    components: {
-        "a-tag": Tag,
-        "a-table": Table,
-        "a-popconfirm": Popconfirm,
-    },
 
-    mounted() {
-        this.fetchSessions();
-    },
-    methods: {
-        async fetchSessions() {
-            const { router } = this;
-            this.loading = true;
+        const visible = ref(false);
+        const newSessionName = ref("");
+        const oldSessionName = ref("");
+
+        const showCopyModal = () => {
+            visible.value = true;
+        };
+
+        async function handleCopy() {
+            if (!newSessionName.value) {
+                message.error("请输入新的会话名称");
+                return;
+            }
+            try {
+                console.log("新会话名称:", newSessionName.value);
+
+                const authresult = await getAuth(router);
+                if (!authresult) {
+                    return null;
+                }
+                const { baseurl, credentials } = authresult;
+                const result = await copysession(
+                    {
+                        ...credentials,
+
+                        session: { name: oldSessionName.value },
+                        destination: {
+                            name: newSessionName.value,
+                        },
+                    },
+                    baseurl,
+                );
+                console.log(result);
+                visible.value = false;
+                newSessionName.value = ""; // 重置输入框
+                message.success("复制会话成功");
+                await fetchSessions();
+            } catch (error) {
+                console.error("复制会话失败:", error);
+                message.error(
+                    "复制会话失败" + "\n" + error + "\n" + String(error),
+                );
+            }
+            // 此处添加复制会话的业务逻辑
+        }
+
+        async function fetchSessions() {
+            loading.value = true;
             try {
                 const result = await getSessions(router);
                 if (!result) {
@@ -180,22 +217,22 @@ export default defineComponent({
                 // 调用 API 获取会话列表
                 // const response = await api.getSessions();
                 // this.sessions = response.data;
-                this.sessions = result.sessions.map((session) => ({
+                sessions.value = result.sessions.map((session) => ({
                     ...session,
                     args: JSON.stringify(session.args), //.join(" ")
                 }));
+                message.success("会话列表获取成功");
             } catch (error) {
                 console.error("获取会话列表失败:", error);
                 message.error(
                     "获取会话列表失败" + "\n" + error + "\n" + String(error),
                 );
             } finally {
-                this.loading = false;
+                loading.value = false;
             }
-        },
-        async handleDeleteSession(sessionname: string) {
-            const { router } = this;
-            this.loading = true;
+        }
+        async function handleDeleteSession(sessionname: string) {
+            loading.value = true;
             try {
                 const authresult = await getAuth(router);
                 if (!authresult) {
@@ -220,24 +257,76 @@ export default defineComponent({
                 // this.sessions = response.data;
 
                 message.success("会话删除成功");
-                await this.fetchSessions();
+                await fetchSessions();
             } catch (error) {
                 console.error("删除会话失败:", error);
                 message.error(
                     "删除会话列表失败" + "\n" + error + "\n" + String(error),
                 );
             } finally {
-                this.loading = false;
+                loading.value = false;
             }
             // 调用 API 删除会话
             // await api.deleteSession(sessionId);
             //this.sessions = this.sessions.filter((s) => s.id !== sessionId);
-        },
-        async handleChangeAttributes(sessionname: string) {
+        }
+        async function handleChangeAttributes(sessionname: string) {
             // 实现修改属性逻辑
             console.log(`修改会话 ${sessionname} 的属性`);
             routepushEditSessions(sessionname);
-        },
+        }
+        const handleCancel = () => {
+            visible.value = false;
+            newSessionName.value = "";
+        };
+        const loading = ref(false);
+        const sessions = ref<Session[]>([]);
+        return {
+            handleChangeAttributes,
+            handleDeleteSession,
+            fetchSessions,
+            newSessionName,
+            handleCopy,
+            handleCancel,
+            visible,
+            handleCopyAttributes: async (sessionname: string) => {
+                oldSessionName.value = sessionname;
+                showCopyModal();
+            },
+            handleMoveAttributes: async (sessionname: string) => {},
+            router,
+            sessions,
+            loading,
+            columns: [
+                { title: "会话名称", dataIndex: "name" },
+                { title: "命令", dataIndex: "cmd" },
+                {
+                    title: "参数",
+                    dataIndex: "args",
+                    key: "args",
+                },
+                { title: "目录", dataIndex: "dir" },
+                { title: "创建时间", dataIndex: "created_at" },
+                { title: "修改时间", dataIndex: "updated_at" },
+                { title: "修改", key: "modify" },
+                { title: "复制", key: "copy" },
+                { title: "移动", key: "move" },
+                { title: "删除", key: "delete" },
+            ] as ColumnsType,
+        };
     },
+    components: {
+        "a-col": Col,
+        "a-modal": Modal,
+        "a-tag": Tag,
+        "a-table": Table,
+        "a-input": Input,
+        "a-popconfirm": Popconfirm,
+    },
+
+    mounted() {
+        this.fetchSessions();
+    },
+    methods: {},
 });
 </script>
