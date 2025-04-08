@@ -63,6 +63,7 @@
         </template>
     </a-table>
     <a-modal
+        :maskClosable="false"
         v-model:open="visible"
         title="复制会话"
         @ok="handleCopy"
