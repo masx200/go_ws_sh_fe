@@ -87,6 +87,31 @@
                 placeholder="请输入新会话名称"
         /></a-col>
     </a-modal>
+    <a-modal
+        :maskClosable="false"
+        v-model:open="visibleMove"
+        title="移动会话"
+        @ok="handleMove"
+        @cancel="handleCancelMove"
+        cancelText="取消"
+        okText="确定"
+    >
+        <a-col
+            flex="auto"
+            style="
+                display: flex;
+                flex-direction: column;
+                align-content: center;
+                justify-content: center;
+                align-items: center;
+            "
+        >
+            <p><strong>新的会话名称</strong></p>
+            <a-input
+                v-model:value="newSessionNameMove"
+                placeholder="请输入新会话名称"
+        /></a-col>
+    </a-modal>
 </template>
 
 <script lang="ts">
@@ -107,6 +132,7 @@ import { listsessions, type listResults } from "./listsessions.ts"; // 引入 li
 import { routepushEditSessions } from "./routepush";
 import { deletesession } from "./deletesession";
 import { copysession } from "./copysession";
+import { MOVEsession } from "./movesession";
 
 export async function getAuth(router: Router): Promise<{
     baseurl: string;
@@ -160,16 +186,61 @@ export interface Session {
 
 export default defineComponent({
     setup() {
+        async function handleMove() {
+            if (!newSessionNameMove.value) {
+                message.error("请输入新的会话名称");
+                return;
+            }
+            try {
+                console.log("新会话名称:", newSessionNameMove.value);
+
+                const authresult = await getAuth(router);
+                if (!authresult) {
+                    return null;
+                }
+                const { baseurl, credentials } = authresult;
+                const result = await MOVEsession(
+                    {
+                        ...credentials,
+
+                        session: { name: oldSessionName.value },
+                        destination: {
+                            name: newSessionNameMove.value,
+                        },
+                    },
+                    baseurl,
+                );
+                console.log(result);
+                visibleMove.value = false;
+                newSessionNameMove.value = ""; // 重置输入框
+                message.success("移动会话成功");
+                await fetchSessions();
+            } catch (error) {
+                console.error("移动会话失败:", error);
+                message.error(
+                    "移动会话失败" + "\n" + error + "\n" + String(error),
+                );
+            }
+            // 此处添加复制会话的业务逻辑
+        }
+        const handleCancelMove = () => {
+            visibleMove.value = false;
+            newSessionNameMove.value = "";
+        };
         const router = useRouter();
 
+        const visibleMove = ref(false);
         const visible = ref(false);
         const newSessionName = ref("");
+        const newSessionNameMove = ref("");
         const oldSessionName = ref("");
 
         const showCopyModal = () => {
             visible.value = true;
         };
-
+        const showMoveModal = () => {
+            visibleMove.value = true;
+        };
         async function handleCopy() {
             if (!newSessionName.value) {
                 message.error("请输入新的会话名称");
@@ -283,6 +354,10 @@ export default defineComponent({
         const loading = ref(false);
         const sessions = ref<Session[]>([]);
         return {
+            visibleMove,
+            handleCancelMove,
+            handleMove,
+            newSessionNameMove,
             handleChangeAttributes,
             handleDeleteSession,
             fetchSessions,
@@ -294,7 +369,12 @@ export default defineComponent({
                 oldSessionName.value = sessionname;
                 showCopyModal();
             },
-            handleMoveAttributes: async (sessionname: string) => {},
+            handleMoveAttributes: async (sessionname: string) => {
+
+
+                oldSessionName.value = sessionname;
+                showMoveModal();
+            },
             router,
             sessions,
             loading,
