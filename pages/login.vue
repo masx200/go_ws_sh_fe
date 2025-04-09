@@ -228,7 +228,7 @@ const rules = reactive<FormRules<typeof loginForm>>({
     ],
     password: [
         { required: true, message: "请输入密码", trigger: "blur" },
-        { min: 4, max: 36, message: "长度在 4 到 36 个字符", trigger: "blur" },
+        { min: 4, max: 120, message: "长度在 4 到 120 个字符", trigger: "blur" },
     ],
 });
 
@@ -256,7 +256,10 @@ const tokenRules = reactive<FormRules<typeof tokenForm>>({
     //     { required: true, message: "请输入账号", trigger: "blur" },
     //     { min: 3, max: 30, message: "长度在 3 到 30 个字符", trigger: "blur" },
     // ],
-    token: [{ required: true, message: "请输入令牌", trigger: "blur" }],
+    token: [{ required: true, message: "请输入令牌", trigger: "blur" },
+  { min: 4, max: 120, message: "长度在 4 到 120 个字符", trigger: "blur" },
+
+],
     identifier: [{ required: true, message: "请输入标识", trigger: "blur" }],
 });
 
