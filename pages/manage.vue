@@ -8,6 +8,17 @@
             align-items: center;
         "
     >
+        <a-page-header
+            style="border: 1px solid rgb(235, 237, 240); width: 100%"
+            :breadcrumb="{ routes, itemRender }"
+            title="管理"
+        >
+            <template #extra>
+                <span
+                    ><strong>{{ subtitle }}</strong></span
+                >
+            </template>
+        </a-page-header>
         <!-- 添加导航栏 -->
         <a-menu
             mode="inline"
@@ -85,6 +96,35 @@
 </template>
 
 <script setup lang="ts">
+import { h } from "vue";
+import { RouterLink } from "vue-router";
+import { PageHeader as APageHeader } from "ant-design-vue";
+import type { SelectInfo } from "ant-design-vue/es/menu/src/interface.d.ts";
+const routes = [
+    {
+        path: "index",
+        breadcrumbName: "首页",
+    },
+
+    {
+        path: "manage",
+        breadcrumbName: "管理",
+    },
+];
+
+const subtitle = ref("服务器网址：");
+//@ts-ignore
+function itemRender({ route, params, routes, paths }) {
+    console.log({ route, params, routes, paths });
+    if (routes.indexOf(route) === routes.length - 1) {
+        return h("span", {}, [route.breadcrumbName]);
+    }
+    return h(
+        RouterLink,
+        { to: route.path == "index" ? "/" : paths.join("/") },
+        [route.breadcrumbName],
+    );
+}
 onMounted(async () => {
     const url = new URL(window.location.href);
     const tab = url.searchParams.get("tab");
@@ -96,7 +136,6 @@ onMounted(async () => {
         state_openKeys.value = [open];
     }
 });
-import type { SelectInfo } from "ant-design-vue/es/menu/src/interface.d.ts";
 async function onselect(keys: SelectInfo) {
     // console.log(keys);
     const firstkeypath = keys.keyPath?.[0]?.toString();
@@ -288,6 +327,8 @@ onMounted(async () => {
     if (!server || !localStorage?.getItem("token")) {
         return router.push("/");
     }
+
+    subtitle.value = "服务器网址：" + server;
     const conninfo = (await fetchServerInfoServer(server || ""))
         .serverinfo?.[0];
     const token = server ? conninfo.token : localStorage?.getItem("token");

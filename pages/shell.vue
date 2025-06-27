@@ -1,15 +1,65 @@
 <template>
-    <div class="fullscreen-div" v-if="loading">
-        <Loading v-if="loading"></Loading>
+    <div
+        style="
+            display: flex;
+            flex-direction: column;
+            align-content: center;
+            justify-content: center;
+            align-items: center;width: 100%;height:100%
+        "
+    >
+        <a-page-header
+            style="border: 1px solid rgb(235, 237, 240); width: 100%"
+            :breadcrumb="{ routes, itemRender }"
+            title="终端"
+        >
+            <template #extra>
+                <span
+                    ><strong>{{ subtitle }}</strong></span
+                >
+            </template>
+        </a-page-header>
+        <div class="fullscreen-div" v-if="loading">
+            <Loading v-if="loading"></Loading>
+        </div>
+        <App
+            style="width: 100%;height:100%"
+            v-if="!loading"
+            :wsprotocol="appopts.wsprotocol"
+            v-bind:ws-url="appopts.wsurl"
+            :reconnect="reconnect"
+        ></App>
     </div>
-    <App
-        v-if="!loading"
-        :wsprotocol="appopts.wsprotocol"
-        v-bind:ws-url="appopts.wsurl"
-        :reconnect="reconnect"
-    ></App>
 </template>
 <script setup lang="ts">
+import { h } from "vue";
+
+import { RouterLink } from "vue-router";
+import { PageHeader as APageHeader } from "ant-design-vue";
+//@ts-ignore
+function itemRender({ route, params, routes, paths }) {
+    console.log({ route, params, routes, paths });
+    if (routes.indexOf(route) === routes.length - 1) {
+        return h("span", {}, [route.breadcrumbName]);
+    }
+    return h(
+        RouterLink,
+        { to: route.path == "index" ? "/" : paths.join("/") },
+        [route.breadcrumbName],
+    );
+}
+const subtitle = ref("服务器网址：");
+const routes = [
+    {
+        path: "index",
+        breadcrumbName: "首页",
+    },
+
+    {
+        path: "shell",
+        breadcrumbName: "终端",
+    },
+];
 if (typeof window == "undefined") {
     //@ts-ignore
     globalThis.window = {};
@@ -49,6 +99,9 @@ onMounted(async () => {
     if (!token || !server || !session) {
         return router.push("/");
     } else {
+
+        
+    subtitle.value = "服务器网址：" + server;
         const searchParams = new URLSearchParams();
         searchParams.set("token", token);
         searchParams.set("username", conninfo.username);
