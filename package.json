@@ -35,7 +35,7 @@
         "element-plus": "2.9.2",
         "file-saver": "2.0.5",
         "google-protobuf": "3.21.4",
-        "nuxt": "3.15.4",
+        "nuxt": "4.0.3",
         "pako": "2.1.0",
         "path": "0.12.7",
         "protobufjs": "7.4.0",
