@@ -1,6 +1,7 @@
 import { defineNuxtConfig } from "nuxt/config";
 
 export default defineNuxtConfig({
+    ssr: true,
     plugins: [
         { src: "~/plugins/server-only.js", mode: "server" },
 
