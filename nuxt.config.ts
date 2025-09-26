@@ -8,7 +8,13 @@ export default defineNuxtConfig({
         { src: "~/plugins/client-only.js", mode: "client" },
     ],
     pwa: {
+        buildBase: {
+            minify: "esbuild",
+            // ✅ 关键修复
+        },
         workbox: {
+            cleanupOutdatedCaches: true,
+            swDest: "sw.js",
             globPatterns: ["**/*.{js,css}"],
         },
         injectManifest: {
@@ -37,18 +43,18 @@ export default defineNuxtConfig({
         "~/node_modules/@xterm/xterm/css/xterm.css",
     ],
     elementPlus: {},
+    nitro: {
+        preset: "static",
+        debug: true,
+    },
     compatibilityDate: "2024-11-01",
     devtools: { enabled: true },
     modules: ["@element-plus/nuxt", "@vite-pwa/nuxt"],
     vite: {
-        plugins: [],
         build: {
-            minify: "terser",
-            terserOptions: {
-                compress: {
-                    drop_console: true,
-                    drop_debugger: true,
-                },
+            minify: "esbuild",
+            esbuildOptions: {
+                drop: ["console", "debugger"],
             },
         },
     },

@@ -18,7 +18,7 @@
         "@masx200/zmodem.js": "0.2.10",
         "@protobuf-ts/plugin": "2.9.4",
         "@types/file-saver": "2.0.7",
-        "@vite-pwa/nuxt": "0.10.6",
+        "@vite-pwa/nuxt": "1.0.4",
         "@xterm/addon-canvas": "0.7.0",
         "@xterm/addon-clipboard": "0.1.0",
         "@xterm/addon-fit": "0.10.0",
@@ -33,9 +33,10 @@
         "decko": "1.2.0",
         "dexie": "4.0.10",
         "element-plus": "2.9.2",
+        "esbuild": "^0.25.10",
         "file-saver": "2.0.5",
         "google-protobuf": "3.21.4",
-        "nuxt": "3.15.4",
+        "nuxt": "4.1.2",
         "pako": "2.1.0",
         "path": "0.12.7",
         "protobufjs": "7.4.0",
@@ -54,15 +55,17 @@
         "@types/pako": "2.0.3",
         "ant-design-vue": "^4.2.6",
         "prettier": "3.4.2",
+        "terser": "5.44.0",
         "ts-protoc-gen": "0.15.0",
         "typescript": "5.7.2",
         "unplugin-auto-import": "^19.1.1",
         "unplugin-vue-components": "^28.4.1",
-        "vitest": "3.0.9"
+        "vitest": "3.0.9",
+        "workbox-build": "7.3.0"
     },
     "version": "1.0.0",
     "repository": "https://github.com/masx200/go_ws_sh_fe.git",
     "author": "masx200 <masx200@qq.com>",
     "license": "MIT",
-    "packageManager": "yarn@4.7.0"
+    "packageManager": "pnpm@10.17.1+sha512.17c560fca4867ae9473a3899ad84a88334914f379be46d455cbf92e5cf4b39d34985d452d2583baf19967fa76cb5c17bc9e245529d0b98745721aa7200ecaf7a"
 }

@@ -25,3 +25,4 @@ deno.lock
 pnpm-lock.yaml
 *.gz
 .yarn
+.claude

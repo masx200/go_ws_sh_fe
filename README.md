@@ -4,7 +4,8 @@
 
 ## 项目简介
 
-go_ws_sh_fe 是一个基于 Nuxt 3 构建的 Web 远程终端前端项目，通过 WebSocket 与后端进行通信，支持多个会话的管理和控制。
+go_ws_sh_fe 是一个基于 Nuxt 3 构建的 Web 远程终端前端项目，通过 WebSocket
+与后端进行通信，支持多个会话的管理和控制。
 
 **后端项目地址**: https://github.com/masx200/go_ws_sh
 
@@ -38,8 +39,6 @@ Copy-Item -Path ".\.output\public/*" -Destination "/path_to_static\go-ws-sh-fe" 
 ## 使用caddy部署静态网页
 
 ```caddyfile
-
-
 :60001 {
 	encode zstd gzip
 	file_server

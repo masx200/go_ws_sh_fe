@@ -1,10 +1,12 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code (claude.ai/code) when working with
+code in this repository.
 
 ## Codebase Overview
 
-This is a Nuxt 3 based frontend for a WebSocket-based remote terminal management system with multiple session support. The application provides:
+This is a Nuxt 3 based frontend for a WebSocket-based remote terminal management
+system with multiple session support. The application provides:
 
 - Terminal interface using xterm.js
 - WebSocket communication with backend
@@ -17,7 +19,8 @@ This is a Nuxt 3 based frontend for a WebSocket-based remote terminal management
 
 - **Framework**: Nuxt 3 (SSR enabled)
 - **UI Library**: Element Plus, Ant Design Vue
-- **Terminal**: xterm.js with various addons (canvas, clipboard, fit, image, etc.)
+- **Terminal**: xterm.js with various addons (canvas, clipboard, fit, image,
+  etc.)
 - **Data Storage**: Dexie (IndexedDB)
 - **Build Tool**: Vite
 - **Package Manager**: Yarn 4
@@ -74,7 +77,8 @@ yarn postinstall
 
 ### Configuration
 
-- `nuxt.config.ts` - Nuxt configuration with PWA, Element Plus, and styling setup
+- `nuxt.config.ts` - Nuxt configuration with PWA, Element Plus, and styling
+  setup
 - `package.json` - Dependencies and scripts
 - `.prettierrc.json` - Code formatting rules
 

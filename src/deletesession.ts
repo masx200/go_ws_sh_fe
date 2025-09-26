@@ -11,7 +11,6 @@ export interface deleteSessionCredentialsInterface {
     };
     session: {
         name: string;
-        
     };
 }
 
@@ -21,7 +20,6 @@ export interface deleteSessionResults {
     username: string;
     session: {
         name: string;
-     
     };
 }
 
