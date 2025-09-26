@@ -14,7 +14,6 @@ export default defineNuxtConfig({
         },
         workbox: {
             cleanupOutdatedCaches: true,
-           // swDest: "sw.js",
             globPatterns: ["**/*.{js,css}"],
         },
         injectManifest: {
