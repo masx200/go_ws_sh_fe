@@ -5,7 +5,9 @@
             flex-direction: column;
             align-content: center;
             justify-content: center;
-            align-items: center;width: 100%;height:100%
+            align-items: center;
+            width: 100%;
+            height: 100%;
         "
     >
         <a-page-header
@@ -23,7 +25,7 @@
             <Loading v-if="loading"></Loading>
         </div>
         <App
-            style="width: 100%;height:100%"
+            style="width: 100%; height: 100%"
             v-if="!loading"
             :wsprotocol="appopts.wsprotocol"
             v-bind:ws-url="appopts.wsurl"
@@ -99,9 +101,7 @@ onMounted(async () => {
     if (!token || !server || !session) {
         return router.push("/");
     } else {
-
-        
-    subtitle.value = "服务器网址：" + server;
+        subtitle.value = "服务器网址：" + server;
         const searchParams = new URLSearchParams();
         searchParams.set("token", token);
         searchParams.set("username", conninfo.username);

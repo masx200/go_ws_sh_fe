@@ -132,7 +132,7 @@ export default defineComponent({
                         };
                     },
                 },
-            ]as ColumnsType<any>,
+            ] as ColumnsType<any>,
             formState: {
                 description: "",
 

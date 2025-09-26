@@ -370,8 +370,6 @@ export default defineComponent({
                 showCopyModal();
             },
             handleMoveAttributes: async (sessionname: string) => {
-
-
                 oldSessionName.value = sessionname;
                 showMoveModal();
             },
