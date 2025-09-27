@@ -58,7 +58,7 @@
         "vue-tsc": "^3.0.8"
     },
     "devDependencies": {
-        "@ant-design-vue/nuxt": "^1.4.6",
+    
         "@nuxt/kit": "^4.1.2",
         "@types/node": "^24.5.2",
         "@types/pako": "2.0.3",
