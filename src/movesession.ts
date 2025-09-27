@@ -44,8 +44,8 @@ export async function MOVEsession(
             headers: {
                 "Content-Type": "application/json",
                 "x-HTTP-method-override": "MOVE",
-                authorization:
-                    "Bearer " + btoa(JSON.stringify(credentials.authorization)),
+                authorization: "Bearer " +
+                    btoa(JSON.stringify(credentials.authorization)),
             },
             body: JSON.stringify(credentials),
         };

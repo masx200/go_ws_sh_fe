@@ -3,7 +3,7 @@ if (!self.define) {
         l = {};
     const u = (u, s) => (
         (u = new URL(u + ".js", s).href),
-        l[u] ||
+            l[u] ||
             new Promise((l) => {
                 if ("document" in self) {
                     const n = document.createElement("script");
@@ -11,14 +11,14 @@ if (!self.define) {
                 } else (n = u), importScripts(u), l();
             }).then(() => {
                 let n = l[u];
-                if (!n)
+                if (!n) {
                     throw new Error(`Module ${u} didn’t register its module`);
+                }
                 return n;
             })
     );
     self.define = (s, r) => {
-        const i =
-            n ||
+        const i = n ||
             ("document" in self ? document.currentScript.src : "") ||
             location.href;
         if (l[i]) return;

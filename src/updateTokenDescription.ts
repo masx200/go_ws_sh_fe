@@ -20,8 +20,8 @@ export async function updateTokenDescription(
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
-                authorization:
-                    "Bearer " + btoa(JSON.stringify(credentials.authorization)),
+                authorization: "Bearer " +
+                    btoa(JSON.stringify(credentials.authorization)),
             },
             body: JSON.stringify({
                 token: { identifier, description, username: username },

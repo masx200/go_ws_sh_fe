@@ -22,8 +22,8 @@ export async function deleteToken(
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
-                authorization:
-                    "Bearer " + btoa(JSON.stringify(credentials.authorization)),
+                authorization: "Bearer " +
+                    btoa(JSON.stringify(credentials.authorization)),
             },
             body: JSON.stringify({
                 token: { identifier },

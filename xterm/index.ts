@@ -198,7 +198,7 @@ export class Xterm {
         register(terminal.onData((data) => sendData(data)));
         register(
             terminal.onBinary((data) =>
-                sendData(Uint8Array.from(data, (v) => v.charCodeAt(0))),
+                sendData(Uint8Array.from(data, (v) => v.charCodeAt(0)))
             ),
         );
         register(
@@ -303,12 +303,16 @@ export class Xterm {
             ),
         );
         register(
-            addEventListener(socket, "error", ((e: ErrorEvent) => {
-                // console.error(e)
-                // ElMessage.error(e.message);
-                this.doReconnect = false;
-                return;
-            }) as EventListener),
+            addEventListener(
+                socket,
+                "error",
+                ((e: ErrorEvent) => {
+                    // console.error(e)
+                    // ElMessage.error(e.message);
+                    this.doReconnect = false;
+                    return;
+                }) as EventListener,
+            ),
         );
         const { terminal } = this;
         if (typeof terminal == "undefined") {

@@ -58,7 +58,6 @@
         "vue-tsc": "^3.0.8"
     },
     "devDependencies": {
-    
         "@nuxt/kit": "^4.1.2",
         "@types/node": "^24.5.2",
         "@types/pako": "2.0.3",
@@ -69,7 +68,7 @@
         "typescript": "5.7.2",
         "unenv": "^1.10.0",
         "unplugin-auto-import": "^19.1.1",
-        "unplugin-vue-components": "^28.4.1",
+        "unplugin-vue-components": "^28.8.0",
         "vite-plugin-node-polyfills": "^0.24.0",
         "vitest": "3.0.9",
         "workbox-build": "7.3.0"

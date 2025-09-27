@@ -36,8 +36,8 @@ export async function listsessions(
             headers: {
                 "Content-Type": "application/json",
                 "x-HTTP-method-override": "GET",
-                authorization:
-                    "Bearer " + btoa(JSON.stringify(credentials.authorization)),
+                authorization: "Bearer " +
+                    btoa(JSON.stringify(credentials.authorization)),
             },
             body: JSON.stringify(credentials),
         };
