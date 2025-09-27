@@ -34,15 +34,18 @@ export async function login(
 ): Promise<LoginResults> {
     const url = new URL("/tokens", baseurl).href;
     try {
-        // 发送POST请求，将登录凭证作为请求体
-        const response = await fetch(url, {
+        const init: RequestInit = {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 "x-HTTP-method-override": "POST",
+                authorization:
+                    "Bearer " + btoa(JSON.stringify(credentials.authorization)),
             },
             body: JSON.stringify(credentials),
-        });
+        };
+        // 发送POST请求，将登录凭证作为请求体
+        const response = await fetch(url, init);
 
         // 如果响应状态码不是200，抛出错误
         if (!response.ok) {

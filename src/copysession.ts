@@ -39,14 +39,17 @@ export async function copysession(
     const url = new URL("/sessions", baseurl).href;
 
     try {
-        const response = await fetch(url, {
+        const init: RequestInit = {
             method: "COPY",
             headers: {
                 "Content-Type": "application/json",
                 "x-HTTP-method-override": "COPY",
+                authorization:
+                    "Bearer " + btoa(JSON.stringify(credentials.authorization)),
             },
             body: JSON.stringify(credentials),
-        });
+        };
+        const response = await fetch(url, init);
 
         if (!response.ok) {
             throw new Error(
