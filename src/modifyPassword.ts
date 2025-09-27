@@ -35,14 +35,17 @@ export async function modifyPassword(
     const url = new URL("/credentials", baseurl).href;
 
     try {
-        const response = await fetch(url, {
+        const init: RequestInit = {
             method: "PUT",
             headers: {
                 "x-HTTP-method-override": "PUT",
                 "Content-Type": "application/json",
+                authorization:
+                    "Bearer " + btoa(JSON.stringify(credentials.authorization)),
             },
             body: JSON.stringify(credentials),
-        });
+        };
+        const response = await fetch(url, init);
 
         if (!response.ok) {
             throw new Error(

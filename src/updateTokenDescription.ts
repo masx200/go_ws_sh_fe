@@ -16,16 +16,19 @@ export async function updateTokenDescription(
 ): Promise<typeof updateresult> {
     const url = new URL("/tokens", baseurl).href;
     try {
-        const response = await fetch(url, {
+        const init: RequestInit = {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
+                authorization:
+                    "Bearer " + btoa(JSON.stringify(credentials.authorization)),
             },
             body: JSON.stringify({
                 token: { identifier, description, username: username },
                 authorization: credentials.authorization,
             }),
-        });
+        };
+        const response = await fetch(url, init);
 
         if (!response.ok) {
             throw new Error(

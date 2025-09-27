@@ -28,13 +28,16 @@ export async function logout(
 ): Promise<logoutResults> {
     const url = new URL("/tokens", baseurl).href;
     try {
-        const response = await fetch(url, {
+        const init: RequestInit = {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
+                authorization:
+                    "Bearer " + btoa(JSON.stringify(credentials.authorization)),
             },
             body: JSON.stringify(credentials),
-        });
+        };
+        const response = await fetch(url, init);
 
         if (!response.ok) {
             throw new Error(
