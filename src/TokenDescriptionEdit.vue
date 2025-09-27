@@ -1,55 +1,55 @@
 <template>
     <div>
         <h2>修改令牌描述</h2>
-        <a-form
+        <el-form
             :model="tokenInfo"
             ref="formRef"
             :rules="rules"
-            @finish="handleUpdateTokenDescription"
+            @submit.prevent="handleUpdateTokenDescription"
         >
-            <a-form-item
-                name="identifier"
+            <el-form-item
+                prop="identifier"
                 label="令牌标识"
                 :rules="[{ required: true, message: '请输入令牌标识' }]"
             >
-                <a-input v-model:value="tokenInfo.identifier" />
-            </a-form-item>
-            <a-form-item
-                name="username"
+                <el-input v-model="tokenInfo.identifier" />
+            </el-form-item>
+            <el-form-item
+                prop="username"
                 label="用户名"
                 :rules="[{ required: true, message: '请输入用户名' }]"
             >
-                <a-input v-model:value="tokenInfo.username" />
-            </a-form-item>
-            <a-form-item
-                name="description"
+                <el-input v-model="tokenInfo.username" />
+            </el-form-item>
+            <el-form-item
+                prop="description"
                 label="新描述"
                 :rules="[{ required: true, message: '请输入新的描述' }]"
             >
-                <a-input v-model:value="tokenInfo.description" />
-            </a-form-item>
-            <a-form-item>
-                <a-button type="primary" html-type="submit">修改</a-button>
-            </a-form-item>
-        </a-form>
+                <el-input v-model="tokenInfo.description" />
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" native-type="submit">修改</el-button>
+            </el-form-item>
+        </el-form>
     </div>
 </template>
 
 <script lang="ts">
 import { type Router, useRouter } from "vue-router";
 import { defineComponent, ref } from "vue";
-import { Form, Input, Button, message } from "ant-design-vue";
-import type { Rule } from "ant-design-vue/es/form/interface";
+import { ElForm, ElFormItem, ElInput, ElButton, ElMessage } from "element-plus";
+import type { FormRules } from "element-plus";
 import { getAuth } from "./SessionDisplay.vue";
 import { updateTokenDescription } from "./updateTokenDescription";
 import { listtokens } from "./listtokens";
 
 export default defineComponent({
     components: {
-        "a-form": Form,
-        "a-form-item": Form.Item,
-        "a-input": Input,
-        "a-button": Button,
+        "el-form": ElForm,
+        "el-form-item": ElFormItem,
+        "el-input": ElInput,
+        "el-button": ElButton,
     },
     setup() {
         const router = useRouter();
@@ -83,15 +83,15 @@ export default defineComponent({
                             //@ts-ignore
                         tokenInfo.value.description = tokens[0].description;
                         console.log("令牌描述获取成功");
-                        message.success("令牌描述获取成功");
+                        ElMessage.success("令牌描述获取成功");
                     } else {
                         console.error("令牌描述获取失败" + "\n" + "令牌不存在");
-                        message.error("令牌描述获取失败" + "\n" + "令牌不存在");
+                        ElMessage.error("令牌描述获取失败" + "\n" + "令牌不存在");
                     }
                 }
             } catch (error) {
                 console.error("获取令牌描述失败:", error);
-                message.error(
+                ElMessage.error(
                     "获取令牌描述失败" + "\n" + error + "\n" + String(error),
                 );
             }
@@ -104,7 +104,7 @@ export default defineComponent({
         });
 
         const handleUpdateTokenDescription = async () => {
-            await formRef.value.validateFields();
+            await formRef.value.validate();
             try {
                 const authresult = await getAuth(router);
                 if (!authresult) {
@@ -121,7 +121,7 @@ export default defineComponent({
                         tokenInfo.value.username,
                     ),
                 );
-                message.success("令牌修改成功");
+                ElMessage.success("令牌修改成功");
                 // 调用 API 更新令牌描述
                 // await api.updateTokenDescription(tokenInfo.value);
                 console.log("令牌描述修改成功");
@@ -135,7 +135,7 @@ export default defineComponent({
                 location.reload();
             } catch (error) {
                 console.error("修改令牌描述失败:", error);
-                message.error(
+                ElMessage.error(
                     "修改令牌描述失败" + "\n" + error + "\n" + String(error),
                 );
             }
@@ -183,7 +183,7 @@ export default defineComponent({
                         trigger: "blur",
                     },
                 ],
-            } as Record<string, Rule[]>,
+            } as FormRules,
         };
     },
 });

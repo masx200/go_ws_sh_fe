@@ -8,7 +8,7 @@
             align-items: center;
         "
     >
-        <a-page-header
+        <el-page-header
             style="border: 1px solid rgb(235, 237, 240); width: 100%"
             :breadcrumb="{ routes, itemRender }"
             title="管理"
@@ -18,12 +18,12 @@
                     ><strong>{{ subtitle }}</strong></span
                 >
             </template>
-        </a-page-header>
+        </el-page-header>
         <!-- 添加导航栏 -->
-        <a-menu
-            mode="inline"
-            v-model:openKeys="state_openKeys"
-            v-model:selectedKeys="currentTab"
+        <el-menu
+            mode="horizontal"
+            v-model:default-openeds="state_openKeys"
+            v-model:default-active="currentTab[0]"
             :items="items"
             style="
                 display: flex;
@@ -33,12 +33,12 @@
                 align-items: baseline;
                 flex-direction: row;
             "
-            :inlineIndent="0"
-            :inlineCollapsed="false"
+            :inline-indent="0"
+            :collapse="false"
             @select="onselect"
         >
             <!-- @openChange="onOpenChange" -->
-        </a-menu>
+        </el-menu>
 
         <!-- 用户管理分组 -->
         <div
@@ -101,8 +101,8 @@
 <script setup lang="ts">
 import { h } from "vue";
 import { RouterLink } from "vue-router";
-import { PageHeader as APageHeader } from "ant-design-vue";
-import type { SelectInfo } from "ant-design-vue/es/menu/src/interface.d.ts";
+import { ElPageHeader } from "element-plus";
+import type { MenuProps } from "element-plus";
 const routes = [
     {
         path: "index",
@@ -139,7 +139,7 @@ onMounted(async () => {
         state_openKeys.value = [open];
     }
 });
-async function onselect(keys: SelectInfo) {
+async function onselect(keys: any) {
     // console.log(keys);
     const firstkeypath = keys.keyPath?.[0]?.toString();
     const secondpath = keys.keyPath?.[1]?.toString();
@@ -165,8 +165,8 @@ async function onselect(keys: SelectInfo) {
 //         state_openKeys.value = latestOpenKey ? [latestOpenKey] : [];
 //     }
 // };
-import type { ItemType } from "ant-design-vue";
-import { Menu as AMenu } from "ant-design-vue";
+// import type { MenuInstance } from "element-plus";
+import { ElMenu } from "element-plus";
 import { ref } from "vue";
 import { fetchServerInfoServer } from "../../src/ServerConnectionInfo";
 import CreateSession from "../../src/CreateSession.vue";
@@ -183,7 +183,7 @@ const state_openKeys = ref<string[]>([]);
 // watch(openKeys, (newValue, oldValue) => {
 //     console.log(newValue, oldValue);
 // })
-const menuitems: ItemType[] = [
+const menuitems = [
     {
         key: "UsersManage",
         label: "管理用户",
@@ -304,16 +304,16 @@ const menuitems: ItemType[] = [
             },
         ],
     },
-] satisfies ItemType[];
+] as const;
 
-const items = computed<ItemType[]>(() => {
+const items = computed(() => {
     const length = menuitems.length;
     return menuitems.map((a) => ({
         ...a,
         style: Object.assign(a?.style || {}, {
             width: `calc(100%/${length})`,
         }),
-    })) as ItemType[];
+    }));
 });
 
 const currentTab = ref(["displayUsers"]); // 默认显示用户页面

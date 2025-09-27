@@ -3,32 +3,28 @@
         <h2>创建会话</h2>
 
         <el-form
-            ref="formRefelement"
+            ref="formRef"
             style="max-width: 100%"
-            :model="dynamicValidateForm"
+            :model="sessionInfo"
+            @submit.prevent="handleCreateSession"
+            :rules="rules"
             label-width="auto"
             class="demo-dynamic"
         >
-            <a-form
-                :model="sessionInfo"
-                @finish="handleCreateSession"
-                ref="formRef"
-                :rules="rules"
-            >
-                <a-form-item
-                    name="name"
+                <el-form-item
+                    prop="name"
                     label="会话名称"
                     :rules="[{ required: true, message: '请输入会话名称' }]"
                 >
-                    <a-input v-model:value="sessionInfo.name" />
-                </a-form-item>
-                <a-form-item
-                    name="cmd"
+                    <el-input v-model="sessionInfo.name" />
+                </el-form-item>
+                <el-form-item
+                    prop="cmd"
                     label="命令"
                     :rules="[{ required: true, message: '请输入命令' }]"
                 >
-                    <a-input v-model:value="sessionInfo.cmd" />
-                </a-form-item>
+                    <el-input v-model="sessionInfo.cmd" />
+                </el-form-item>
                 <!-- <a-form-item
                 name="args"
                 label="参数"
@@ -68,39 +64,38 @@
                 <el-form-item>
                     <el-button @click="addarg">添加参数</el-button>
                 </el-form-item>
-                <a-form-item
-                    name="dir"
+                <el-form-item
+                    prop="dir"
                     label="目录"
                     :rules="[{ required: true, message: '请输入目录' }]"
                 >
-                    <a-input v-model:value="sessionInfo.dir" />
-                </a-form-item>
-                <a-form-item>
-                    <a-button type="primary" html-type="submit">创建</a-button>
-                </a-form-item>
+                    <el-input v-model="sessionInfo.dir" />
+                </el-form-item>
                 <el-form-item>
-                    <el-button @click="resetForm(formRefelement)"
+                    <el-button type="primary" native-type="submit">创建</el-button>
+                </el-form-item>
+                <el-form-item>
+                    <el-button @click="resetForm(formRef)"
                         >重置参数</el-button
                     >
                 </el-form-item>
-            </a-form></el-form
-        >
+        </el-form>
     </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import {
-    Form,
-    Input,
-    Button,
-    message,
-    type FormInstance as FormInstanceANTV,
-} from "ant-design-vue";
-import type { FormInstance as FormInstanceELEMENT } from "element-plus";
+    ElForm,
+    ElFormItem,
+    ElInput,
+    ElButton,
+    ElMessage,
+    type FormInstance,
+    type FormRules,
+} from "element-plus";
 
 import { useRouter } from "vue-router";
-import type { Rule } from "ant-design-vue/es/form/interface";
 import { getAuth } from "./SessionDisplay.vue";
 import { createsession } from "./createsession";
 import { routepushdisplaySessions } from "./routepush";
@@ -111,15 +106,13 @@ interface argItem {
 }
 export default defineComponent({
     components: {
-        "a-form": Form,
-        "a-form-item": Form.Item,
-        "a-input": Input,
-        "a-button": Button,
+        "el-form": ElForm,
+        "el-form-item": ElFormItem,
+        "el-input": ElInput,
+        "el-button": ElButton,
     },
     setup() {
-        const formRefelement = ref<FormInstanceELEMENT>();
-
-        const resetForm = (formEl: FormInstanceELEMENT | undefined) => {
+        const resetForm = (formEl: FormInstance | undefined) => {
             if (!formEl) return;
             formEl.resetFields();
             dynamicValidateForm.args.length = 0;
@@ -152,7 +145,7 @@ export default defineComponent({
             //   email: '',
         });
         const router = useRouter();
-        const formRef = ref<FormInstanceANTV>();
+        const formRef = ref<FormInstance>();
         const sessionInfo = ref({
             name: "",
             cmd: "",
@@ -161,59 +154,49 @@ export default defineComponent({
         });
 
         const handleCreateSession = async () => {
-            if (!formRefelement.value) return;
-            formRefelement.value.validate(async (valid) => {
+            if (!formRef.value) return;
+            formRef.value.validate(async (valid: boolean) => {
                 if (valid) {
                     console.log("submit!");
-                    await formRef.value
-                        ?.validateFields()
-                        .then(async () => {
-                            try {
-                                const authresult = await getAuth(router);
-                                if (!authresult) {
-                                    return null;
-                                }
-                                const { baseurl, credentials } = authresult;
+                    try {
+                        const authresult = await getAuth(router);
+                        if (!authresult) {
+                            return;
+                        }
+                        const { baseurl, credentials } = authresult;
 
-                                const result = await createsession(
-                                    {
-                                        ...credentials,
+                        const result = await createsession(
+                            {
+                                ...credentials,
 
-                                        session: {
-                                            name: sessionInfo.value.name,
-                                            cmd: sessionInfo.value.cmd,
-                                            args: dynamicValidateForm.args
-                                                .map((item) => item.value)
-                                                .filter(Boolean),
-                                            // args: JSON.parse(sessionInfo.value.args),
-                                            dir: sessionInfo.value.dir,
-                                        },
-                                    },
-                                    baseurl,
-                                );
-                                console.log(result);
-                                message.success("会话创建成功");
+                                session: {
+                                    name: sessionInfo.value.name,
+                                    cmd: sessionInfo.value.cmd,
+                                    args: dynamicValidateForm.args
+                                        .map((item) => item.value)
+                                        .filter(Boolean),
+                                    // args: JSON.parse(sessionInfo.value.args),
+                                    dir: sessionInfo.value.dir,
+                                },
+                            },
+                            baseurl,
+                        );
+                        console.log(result);
+                        ElMessage.success("会话创建成功");
 
-                                // 根据 go_ws_sh.openapi.json 实现创建会话的 API 调用
-                                // const response = await axios.post("/api/sessions", sessionInfo.value);
-                                //message.success("会话创建成功");
+                        // 根据 go_ws_sh.openapi.json 实现创建会话的 API 调用
+                        // const response = await axios.post("/api/sessions", sessionInfo.value);
+                        //message.success("会话创建成功");
 
-                                routepushdisplaySessions();
-                            } catch (error) {
-                                console.error("会话创建失败:", error);
-                                message.error(
-                                    "会话创建失败" + "\n" + String(error),
-                                );
-                            }
-                        })
-                        .catch((error: any) => {
-                            console.log("error", error);
-                            message.error(error);
-                        });
+                        routepushdisplaySessions();
+                    } catch (error) {
+                        console.error("会话创建失败:", error);
+                        ElMessage.error(
+                            "会话创建失败" + "\n" + String(error),
+                        );
+                    }
                 } else {
                     console.log("error submit!");
-
-                    return;
                 }
             });
         };
@@ -222,7 +205,6 @@ export default defineComponent({
             addarg,
             removearg,
             resetForm,
-            formRefelement,
             dynamicValidateForm,
             formRef,
             router,
@@ -264,7 +246,7 @@ export default defineComponent({
                         trigger: "blur",
                     },
                 ],
-            } as Record<string, Rule[]>,
+            } as FormRules,
             sessionInfo,
             handleCreateSession,
         };

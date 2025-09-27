@@ -10,7 +10,7 @@
             height: 100%;
         "
     >
-        <a-page-header
+        <el-page-header
             style="border: 1px solid rgb(235, 237, 240); width: 100%"
             :breadcrumb="{ routes, itemRender }"
             title="终端"
@@ -20,7 +20,7 @@
                     ><strong>{{ subtitle }}</strong></span
                 >
             </template>
-        </a-page-header>
+        </el-page-header>
         <div class="fullscreen-div" v-if="loading">
             <Loading v-if="loading"></Loading>
         </div>
@@ -37,7 +37,7 @@
 import { h } from "vue";
 
 import { RouterLink } from "vue-router";
-import { PageHeader as APageHeader } from "ant-design-vue";
+import { ElPageHeader } from "element-plus";
 //@ts-ignore
 function itemRender({ route, params, routes, paths }) {
     console.log({ route, params, routes, paths });

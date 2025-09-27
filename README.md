@@ -104,7 +104,7 @@ npm run build
 pnpm build
 
 # yarn
-yarn build
+pnpm run build
 
 # bun
 bun run build

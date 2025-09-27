@@ -2,40 +2,41 @@
     <div style="width: 100%">
         <h1>用户管理</h1>
         <!-- 修改用户名和密码 -->
-        <a-form
+        <el-form
             ref="formRef"
             :model="userInfo"
-            @finish="handleSubmit"
+            @submit.prevent="handleSubmit"
             :rules="rules"
         >
-            <a-form-item
+            <el-form-item
                 label="用户名"
-                name="username"
+                prop="username"
                 :rules="[
                     { required: true, message: '请输入用户名' },
                     { min: 4, message: '用户名长度至少为4位', trigger: 'blur' },
                 ]"
             >
-                <a-input v-model:value="userInfo.username" name="username" />
-            </a-form-item>
-            <a-form-item
-                name="password"
+                <el-input v-model="userInfo.username" name="username" />
+            </el-form-item>
+            <el-form-item
+                prop="password"
                 label="密码"
                 :rules="[
                     { required: true, message: '请输入密码' },
                     { min: 4, message: '用户名长度至少为4位', trigger: 'blur' },
                 ]"
             >
-                <a-input-password
-                    v-model:value="userInfo.password"
-                    show-password
+                <el-input
+                    v-model="userInfo.password"
+                    type="password"
                     name="password"
+                    show-password
                 />
-            </a-form-item>
-            <a-form-item>
-                <a-button type="primary" html-type="submit">修改</a-button>
-            </a-form-item>
-        </a-form>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" native-type="submit">修改</el-button>
+            </el-form-item>
+        </el-form>
     </div>
 </template>
 
@@ -43,25 +44,22 @@
 import { type Router, useRouter } from "vue-router";
 import { defineComponent, ref } from "vue";
 import {
-    Form,
-    Input,
-    InputPassword,
-    Button,
-    Table,
-    message,
-} from "ant-design-vue";
+    ElForm,
+    ElFormItem,
+    ElInput,
+    ElButton,
+    ElMessage,
+} from "element-plus";
 import { modifyPassword } from "./modifyPassword.ts";
 import { getAuth } from "./SessionDisplay.vue";
-import type { Rule } from "ant-design-vue/es/form/interface";
+import type { FormRules } from "element-plus";
 
 export default defineComponent({
     components: {
-        "a-form": Form,
-        "a-form-item": Form.Item,
-        "a-input": Input,
-        "a-input-password": InputPassword,
-        "a-button": Button,
-        "a-table": Table,
+        "el-form": ElForm,
+        "el-form-item": ElFormItem,
+        "el-input": ElInput,
+        "el-button": ElButton,
     },
     setup() {
         const formRef = ref();
@@ -84,11 +82,11 @@ export default defineComponent({
             // console.log(formRef.value
             // .validateFields)
             await formRef.value
-                .validateFields()
+                .validate()
                 .then(async () => {
                     console.log("userInfo", userInfo.value);
                     if (!userInfo.value.username || !userInfo.value.password) {
-                        message.error("请输入用户名和密码");
+                        ElMessage.error("请输入用户名和密码");
                         return;
                     }
                     try {
@@ -113,7 +111,7 @@ export default defineComponent({
                         );
                         console.log(result);
                         // 这里可以添加实际的修改逻辑
-                        message.success("用户名和密码修改成功");
+                        ElMessage.success("用户名和密码修改成功");
                         const url = new URL(window.location.href);
                         url.searchParams.set("tab", "displayUsers");
 
@@ -127,7 +125,7 @@ export default defineComponent({
                         location.reload();
                     } catch (error) {
                         console.error("用户修改失败:", error);
-                        message.error(
+                        ElMessage.error(
                             "用户修改失败" +
                                 "\n" +
                                 error +
@@ -138,7 +136,7 @@ export default defineComponent({
                 })
                 .catch((error: any) => {
                     console.log("error", error);
-                    message.error(error);
+                    ElMessage.error(error);
                 });
         };
 
@@ -164,7 +162,7 @@ export default defineComponent({
                     },
                     { min: 4, message: "密码长度至少为4位", trigger: "change" },
                 ],
-            } as Record<string, Rule[]>,
+            } as FormRules,
             formRef,
             userInfo,
             // tokens,

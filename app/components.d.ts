@@ -8,17 +8,6 @@ export {};
 /* prettier-ignore */
 declare module "vue" {
     export interface GlobalComponents {
-        AButton: typeof import("ant-design-vue/es")["Button"];
-        ACol: typeof import("ant-design-vue/es")["Col"];
-        AForm: typeof import("ant-design-vue/es")["Form"];
-        AFormItem: typeof import("ant-design-vue/es")["FormItem"];
-        AInput: typeof import("ant-design-vue/es")["Input"];
-        AInputPassword: typeof import("ant-design-vue/es")["InputPassword"];
-        AModal: typeof import("ant-design-vue/es")["Modal"];
-        APopconfirm: typeof import("ant-design-vue/es")["Popconfirm"];
-        ATable: typeof import("ant-design-vue/es")["Table"];
-        ATag: typeof import("ant-design-vue/es")["Tag"];
-        RouterLink: typeof import("vue-router")["RouterLink"];
-        RouterView: typeof import("vue-router")["RouterView"];
+       
     }
 }

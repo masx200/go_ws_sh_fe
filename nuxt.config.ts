@@ -1,5 +1,5 @@
 // import Components from "unplugin-vue-components/vite";
-// import { AntDesignVueResolver } from "unplugin-vue-components/resolvers";
+
 import { defineNuxtConfig } from "nuxt/config";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 import { generateDayjsPluginMapping } from "./generate-dayjs-mapping.ts";
@@ -39,7 +39,7 @@ const alias = {
 export default defineNuxtConfig({
     alias: alias,
     build: {
-        transpile: ["element-plus", "ant-design-vue"],
+        transpile: ["element-plus"],
     },
     typescript: {
         typeCheck: true,
@@ -49,7 +49,7 @@ export default defineNuxtConfig({
     plugins: [
         "~~/plugins/element-plus-icons.ts",
         "~~/plugins/element-plus.ts",
-        // "~~/plugins/ant-design-vue.ts",
+
         { src: "~/plugins/server-only.js", mode: "server" },
 
         { src: "~/plugins/client-only.js", mode: "client" },
@@ -84,7 +84,6 @@ export default defineNuxtConfig({
         },
     },
     css: [
-        "ant-design-vue/dist/reset.css",
         "~~/styles/styles.css",
         "~~/styles/xterm.css",
         "element-plus/dist/index.css",
@@ -104,7 +103,7 @@ export default defineNuxtConfig({
         },
         plugins: [
             // Components({
-            //     resolvers: [AntDesignVueResolver()],
+          
             // }),
             // ,
             //@ts-ignore

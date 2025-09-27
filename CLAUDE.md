@@ -35,10 +35,10 @@ yarn install
 yarn dev
 
 # Build for production
-yarn build
+pnpm run build
 
 # Generate static site
-yarn generate
+pnpm run generate
 
 # Preview production build
 yarn preview
@@ -90,9 +90,9 @@ yarn postinstall
 
 ## Build & Deployment
 
-- Static site generation: `yarn generate`
+- Static site generation: `pnpm run generate`
 - Output directory: `./.output/public/`
-- Production build: `yarn build`
+- Production build: `pnpm run build`
 - Serve locally: `yarn preview`
 
 ## Backend Integration

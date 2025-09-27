@@ -1,36 +1,35 @@
 <template>
-    <a-table
-        :columns="columns"
-        :data-source="users"
+    <el-table
+        :data="users"
         :loading="loading"
         style="width: 100%"
         :row-key="(record) => record.username"
     >
-        <template #bodyCell="{ column, record }">
+        <template #default="{ column, record }">
             <template v-if="column.key === 'delete'">
                 <span>
-                    <a-popconfirm
+                    <el-popconfirm
                         title="确定删除该用户？"
                         @confirm="handleDeleteUser(record.username)"
                     >
-                        <a href="#">删除</a>
-                    </a-popconfirm></span
+                        <el-button type="text">删除</el-button>
+                    </el-popconfirm></span
                 >
             </template>
             <template v-if="column.key === 'modify'">
                 <span>
-                    <a href="#" @click="handleChangePassword(record.username)"
-                        >修改密码</a
+                    <el-button type="text" @click="handleChangePassword(record.username)"
+                        >修改密码</el-button
                     ></span
                 >
             </template>
         </template>
-    </a-table>
+    </el-table>
 </template>
 
 <script lang="ts">
-import { Popconfirm, Table, message } from "ant-design-vue";
-import type { ColumnsType } from "ant-design-vue/es/table/interface";
+import { ElPopconfirm, ElTable, ElButton, ElMessage } from "element-plus";
+import type { TableColumnCtx } from "element-plus/es/components/table/src/table-column/defaults";
 import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
 import { listcredentials } from "./listcredentials.ts";
@@ -52,18 +51,19 @@ export default defineComponent({
             users: ref([] as User[]),
             loading: ref(false),
             columns: [
-                { title: "用户名", dataIndex: "username" },
-                { title: "创建时间", dataIndex: "created_at" },
-                { title: "修改时间", dataIndex: "updated_at" },
-                { title: "修改操作", key: "modify" },
-                { title: "删除操作", key: "delete" },
-                // { title: "操作", key: "action" }
-            ] as ColumnsType,
+                { prop: "username", label: "用户名" },
+                { prop: "created_at", label: "创建时间" },
+                { prop: "updated_at", label: "修改时间" },
+                { label: "修改操作", key: "modify" },
+                { label: "删除操作", key: "delete" },
+                // { label: "操作", key: "action" }
+            ] as TableColumnCtx<User>[],
         };
     },
     components: {
-        "a-table": Table,
-        "a-popconfirm": Popconfirm,
+        "el-table": ElTable,
+        "el-popconfirm": ElPopconfirm,
+        "el-button": ElButton,
     },
 
     mounted() {
@@ -83,7 +83,7 @@ export default defineComponent({
                 this.users = result.credentials;
             } catch (error) {
                 console.error("获取用户列表失败:", error);
-                message.error(
+                ElMessage.error(
                     "获取会话列表失败" + "\n" + error + "\n" + String(error),
                 );
             } finally {
@@ -110,14 +110,14 @@ export default defineComponent({
                     baseurl,
                 );
                 console.log("User deleted successfully:", result);
-                message.success("用户删除成功");
+                ElMessage.success("用户删除成功");
                 console.log(`删除用户: ${username}`);
 
                 // location.reload();
                 await this.fetchUsers();
             } catch (error) {
                 console.error("User deletion failed:", error);
-                message.error(
+                ElMessage.error(
                     "用户删除失败" + "\n" + error + "\n" + String(error),
                 );
             }

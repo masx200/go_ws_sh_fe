@@ -1,122 +1,115 @@
 <template>
     <div>
         <h2>修改会话属性</h2>
-        <a-form
+        <el-form
             :model="sessionInfo"
-            name="dynamic_form_item"
             ref="formRef"
             :rules="rules"
-            @finish="handleUpdateSessionAttributes"
+            @submit.prevent="handleUpdateSessionAttributes"
         >
-            <!-- <a-form-item
+            <!-- <el-form-item
                 label="会话 ID"
                 :rules="[{ required: true, message: '请输入会话 ID' }]"
             >
-                <a-input v-model:value="sessionInfo.id" disabled />
-            </a-form-item> -->
-            <a-form-item
-                name="name"
+                <el-input v-model="sessionInfo.id" disabled />
+            </el-form-item> -->
+            <el-form-item
+                prop="name"
                 label="会话名称"
                 :rules="[{ required: true, message: '请输入会话名称' }]"
             >
-                <a-input v-model:value="sessionInfo.name" />
-            </a-form-item>
-            <a-form-item
-                name="cmd"
+                <el-input v-model="sessionInfo.name" />
+            </el-form-item>
+            <el-form-item
+                prop="cmd"
                 label="命令"
                 :rules="[{ required: true, message: '请输入命令' }]"
             >
-                <a-input v-model:value="sessionInfo.cmd" />
-            </a-form-item>
-            <a-form
+                <el-input v-model="sessionInfo.cmd" />
+            </el-form-item>
+            <el-form
                 :model="dynamicValidateForm"
-                name="dynamic_form_item"
                 ref="formRef2"
                 :rules="rules"
-                @finish="handleUpdateSessionAttributes"
+                @submit.prevent="handleUpdateSessionAttributes"
             >
                 <div
                     v-for="(arg, index) in dynamicValidateForm.args"
                     :key="arg.key"
                 >
-                    <a-form-item
+                    <el-form-item
                         :key="arg.key"
                         :label="'参数[' + index + ']'"
-                        :name="['args', index, 'value']"
+                        :prop="'args.' + index + '.value'"
                         :rules="{
                             required: true,
                             message: '参数不能为空',
                             trigger: 'change',
                         }"
                     >
-                        <a-input
+                        <el-input
                             :name="'args[' + index + ']'"
                             autocomplete="on"
-                            v-model:value="arg.value"
+                            v-model="arg.value"
                             placeholder="please input arg"
                             style="width: 60%; margin-right: 8px"
                         />
-                    </a-form-item>
-                    <a-form-item>
-                        <a-button type="dashed" @click="removearg(arg)">
-                            <MinusCircleOutlined
-                                v-if="dynamicValidateForm.args.length > 0"
-                                class="dynamic-delete-button"
-                                @click="removearg(arg)"
-                            />删除参数</a-button
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" plain @click="removearg(arg)">
+                            删除参数</el-button
                         >
-                    </a-form-item>
+                    </el-form-item>
                 </div>
-            </a-form>
-            <!-- <a-form-item
-                name="args"
+            </el-form>
+            <!-- <el-form-item
+                prop="args"
                 label="参数"
                 :rules="[{ required: true, message: '请输入参数' }]"
             >
-                <a-input v-model:value="sessionInfo.args" />
-            </a-form-item> -->
+                <el-input v-model="sessionInfo.args" />
+            </el-form-item> -->
 
-            <a-form-item>
-                <a-button type="dashed" style="width: 60%" @click="addarg">
-                    <PlusOutlined />
+            <el-form-item>
+                <el-button type="primary" plain style="width: 60%" @click="addarg">
                     添加参数
-                </a-button>
-            </a-form-item>
-            <a-form-item
-                name="dir"
+                </el-button>
+            </el-form-item>
+            <el-form-item
+                prop="dir"
                 label="目录"
                 :rules="[{ required: true, message: '请输入目录' }]"
             >
-                <a-input v-model:value="sessionInfo.dir" />
-            </a-form-item>
-            <a-form-item>
-                <a-button type="primary" html-type="submit">修改</a-button>
-            </a-form-item>
-            <a-form-item>
-                <a-button style="margin-left: 10px" @click="resetForm"
-                    >重置参数</a-button
+                <el-input v-model="sessionInfo.dir" />
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" native-type="submit">修改</el-button>
+            </el-form-item>
+            <el-form-item>
+                <el-button style="margin-left: 10px" @click="resetForm"
+                    >重置参数</el-button
                 >
-            </a-form-item>
-        </a-form>
+            </el-form-item>
+        </el-form>
     </div>
 </template>
 
 <script lang="ts">
 import { useRouter } from "vue-router";
 import {
-    Button,
-    Form,
-    Input,
-    message,
+    ElButton,
+    ElForm,
+    ElFormItem,
+    ElInput,
+    ElMessage,
     type FormInstance,
-} from "ant-design-vue";
-import type { Rule } from "ant-design-vue/es/form/interface";
+} from "element-plus";
+import type { FormRules } from "element-plus";
 import { defineComponent, ref } from "vue";
 import { editSession } from "./editsession";
 import { listsessions } from "./listsessions";
 import { routepushdisplaySessions } from "./routepush";
 import { getAuth } from "./SessionDisplay.vue";
-import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons-vue";
 interface arg {
     value: string;
     key: number;
@@ -165,22 +158,20 @@ export default defineComponent({
                 }));
                 this.sessionInfo = sessionInfo;
                 console.log("会话信息获取成功:", sessionInfo);
-                message.success("会话信息获取成功");
+                ElMessage.success("会话信息获取成功");
             } else {
-                message.error("会话不存在");
+                ElMessage.error("会话不存在");
             }
         } catch (error) {
             console.error("获取会话信息失败:", error);
-            message.error("获取会话信息失败: " + error);
+            ElMessage.error("获取会话信息失败: " + error);
         }
     },
     components: {
-        MinusCircleOutlined,
-        PlusOutlined,
-        "a-form": Form,
-        "a-form-item": Form.Item,
-        "a-input": Input,
-        "a-button": Button,
+        "el-form": ElForm,
+        "el-form-item": ElFormItem,
+        "el-input": ElInput,
+        "el-button": ElButton,
     },
     setup() {
         const removearg = (item: arg) => {
@@ -208,8 +199,8 @@ export default defineComponent({
         });
 
         const handleUpdateSessionAttributes = async () => {
-            await formRef2.value?.validateFields();
-            await formRef.value?.validateFields();
+            await formRef2.value?.validate();
+            await formRef.value?.validate();
             try {
                 const authresult = await getAuth(router);
                 if (!authresult) {
@@ -239,7 +230,7 @@ export default defineComponent({
                 routepushdisplaySessions();
             } catch (error) {
                 console.error("修改会话属性失败:", error);
-                message.error("会话修改失败" + "\n" + String(error));
+                ElMessage.error("会话修改失败" + "\n" + String(error));
             }
         };
 
@@ -298,7 +289,7 @@ export default defineComponent({
                         trigger: "blur",
                     },
                 ],
-            } as Record<string, Rule[]>,
+            } as FormRules,
             sessionInfo,
             handleUpdateSessionAttributes,
             dynamicValidateForm,

@@ -1,23 +1,22 @@
 <template>
-    <a-table
-        :columns="columns"
-        :data-source="sessions"
+    <el-table
+        :data="sessions"
         :loading="loading"
         style="width: 100%"
         :row-key="(record) => record.name"
     >
-        <template #bodyCell="{ column, record, text, value, index }">
+        <template #default="{ column, record, text, value, index }">
             <template v-if="column.key === 'copy'">
                 <span>
-                    <a href="#" @click="handleCopyAttributes(record.name)"
-                        >复制</a
+                    <el-button type="text" @click="handleCopyAttributes(record.name)"
+                        >复制</el-button
                     ></span
                 >
             </template>
             <template v-if="column.key === 'move'">
                 <span>
-                    <a href="#" @click="handleMoveAttributes(record.name)"
-                        >移动</a
+                    <el-button type="text" @click="handleMoveAttributes(record.name)"
+                        >移动</el-button
                     ></span
                 >
             </template>
@@ -39,40 +38,39 @@
                         v-for="(arg, index) in JSON.parse(record.args)"
                         :key="index"
                     >
-                        <a-tag color="blue">{{ arg }}</a-tag>
+                        <el-tag type="primary">{{ arg }}</el-tag>
                     </li>
                 </ul>
             </template>
             <template v-if="column.key === 'delete'">
                 <span>
-                    <a-popconfirm
+                    <el-popconfirm
                         title="确定删除该会话？"
                         @confirm="handleDeleteSession(record.name)"
                     >
-                        <a href="#">删除</a>
-                    </a-popconfirm></span
+                        <el-button type="text">删除</el-button>
+                    </el-popconfirm></span
                 >
             </template>
             <template v-if="column.key === 'modify'">
                 <span>
-                    <a href="#" @click="handleChangeAttributes(record.name)"
-                        >修改</a
+                    <el-button type="text" @click="handleChangeAttributes(record.name)"
+                        >修改</el-button
                     ></span
                 >
             </template>
         </template>
-    </a-table>
-    <a-modal
-        :maskClosable="false"
-        v-model:open="visible"
+    </el-table>
+    <el-dialog
+        :close-on-click-modal="false"
+        v-model="visible"
         title="复制会话"
-        @ok="handleCopy"
+        @confirm="handleCopy"
         @cancel="handleCancel"
-        cancelText="取消"
-        okText="确定"
+        width="30%"
     >
-        <a-col
-            flex="auto"
+        <el-col
+            :span="24"
             style="
                 display: flex;
                 flex-direction: column;
@@ -82,22 +80,27 @@
             "
         >
             <p><strong>新的会话名称</strong></p>
-            <a-input
-                v-model:value="newSessionName"
+            <el-input
+                v-model="newSessionName"
                 placeholder="请输入新会话名称"
-        /></a-col>
-    </a-modal>
-    <a-modal
-        :maskClosable="false"
-        v-model:open="visibleMove"
+        /></el-col>
+        <template #footer>
+            <span class="dialog-footer">
+                <el-button @click="handleCancel">取消</el-button>
+                <el-button type="primary" @click="handleCopy">确定</el-button>
+            </span>
+        </template>
+    </el-dialog>
+    <el-dialog
+        :close-on-click-modal="false"
+        v-model="visibleMove"
         title="移动会话"
-        @ok="handleMove"
+        @confirm="handleMove"
         @cancel="handleCancelMove"
-        cancelText="取消"
-        okText="确定"
+        width="30%"
     >
-        <a-col
-            flex="auto"
+        <el-col
+            :span="24"
             style="
                 display: flex;
                 flex-direction: column;
@@ -107,25 +110,32 @@
             "
         >
             <p><strong>新的会话名称</strong></p>
-            <a-input
-                v-model:value="newSessionNameMove"
+            <el-input
+                v-model="newSessionNameMove"
                 placeholder="请输入新会话名称"
-        /></a-col>
-    </a-modal>
+        /></el-col>
+        <template #footer>
+            <span class="dialog-footer">
+                <el-button @click="handleCancelMove">取消</el-button>
+                <el-button type="primary" @click="handleMove">确定</el-button>
+            </span>
+        </template>
+    </el-dialog>
 </template>
 
 <script lang="ts">
 import { type Router, useRouter } from "vue-router";
 import {
-    Col,
-    Input,
-    Modal,
-    Popconfirm,
-    Table,
-    Tag,
-    message,
-} from "ant-design-vue";
-import type { ColumnsType } from "ant-design-vue/es/table/interface";
+    ElCol,
+    ElInput,
+    ElDialog,
+    ElPopconfirm,
+    ElTable,
+    ElTag,
+    ElButton,
+    ElMessage,
+} from "element-plus";
+import type { TableColumnCtx } from "element-plus/es/components/table/src/table-column/defaults";
 import { defineComponent } from "vue";
 import { fetchServerInfoServer } from "./ServerConnectionInfo.ts";
 import { listsessions, type listResults } from "./listsessions.ts"; // 引入 listsessions 函数
@@ -191,7 +201,7 @@ export default defineComponent({
     setup() {
         async function handleMove() {
             if (!newSessionNameMove.value) {
-                message.error("请输入新的会话名称");
+                ElMessage.error("请输入新的会话名称");
                 return;
             }
             try {
@@ -216,11 +226,11 @@ export default defineComponent({
                 console.log(result);
                 visibleMove.value = false;
                 newSessionNameMove.value = ""; // 重置输入框
-                message.success("移动会话成功");
+                ElMessage.success("移动会话成功");
                 await fetchSessions();
             } catch (error) {
                 console.error("移动会话失败:", error);
-                message.error(
+                ElMessage.error(
                     "移动会话失败" + "\n" + error + "\n" + String(error),
                 );
             }
@@ -246,7 +256,7 @@ export default defineComponent({
         };
         async function handleCopy() {
             if (!newSessionName.value) {
-                message.error("请输入新的会话名称");
+                ElMessage.error("请输入新的会话名称");
                 return;
             }
             try {
@@ -271,11 +281,11 @@ export default defineComponent({
                 console.log(result);
                 visible.value = false;
                 newSessionName.value = ""; // 重置输入框
-                message.success("复制会话成功");
+                ElMessage.success("复制会话成功");
                 await fetchSessions();
             } catch (error) {
                 console.error("复制会话失败:", error);
-                message.error(
+                ElMessage.error(
                     "复制会话失败" + "\n" + error + "\n" + String(error),
                 );
             }
@@ -296,10 +306,10 @@ export default defineComponent({
                     ...session,
                     args: JSON.stringify(session.args), //.join(" ")
                 }));
-                message.success("会话列表获取成功");
+                ElMessage.success("会话列表获取成功");
             } catch (error) {
                 console.error("获取会话列表失败:", error);
-                message.error(
+                ElMessage.error(
                     "获取会话列表失败" + "\n" + error + "\n" + String(error),
                 );
             } finally {
@@ -331,11 +341,11 @@ export default defineComponent({
                 // const response = await api.getSessions();
                 // this.sessions = response.data;
 
-                message.success("会话删除成功");
+                ElMessage.success("会话删除成功");
                 await fetchSessions();
             } catch (error) {
                 console.error("删除会话失败:", error);
-                message.error(
+                ElMessage.error(
                     "删除会话列表失败" + "\n" + error + "\n" + String(error),
                 );
             } finally {
@@ -380,30 +390,31 @@ export default defineComponent({
             sessions,
             loading,
             columns: [
-                { title: "会话名称", dataIndex: "name" },
-                { title: "命令", dataIndex: "cmd" },
+                { prop: "name", label: "会话名称" },
+                { prop: "cmd", label: "命令" },
                 {
-                    title: "参数",
-                    dataIndex: "args",
+                    prop: "args",
                     key: "args",
+                    label: "参数",
                 },
-                { title: "目录", dataIndex: "dir" },
-                { title: "创建时间", dataIndex: "created_at" },
-                { title: "修改时间", dataIndex: "updated_at" },
-                { title: "修改", key: "modify" },
-                { title: "复制", key: "copy" },
-                { title: "移动", key: "move" },
-                { title: "删除", key: "delete" },
-            ] as ColumnsType,
+                { prop: "dir", label: "目录" },
+                { prop: "created_at", label: "创建时间" },
+                { prop: "updated_at", label: "修改时间" },
+                { label: "修改", key: "modify" },
+                { label: "复制", key: "copy" },
+                { label: "移动", key: "move" },
+                { label: "删除", key: "delete" },
+            ] as TableColumnCtx<Session>[],
         };
     },
     components: {
-        "a-col": Col,
-        "a-modal": Modal,
-        "a-tag": Tag,
-        "a-table": Table,
-        "a-input": Input,
-        "a-popconfirm": Popconfirm,
+        "el-col": ElCol,
+        "el-dialog": ElDialog,
+        "el-tag": ElTag,
+        "el-table": ElTable,
+        "el-input": ElInput,
+        "el-popconfirm": ElPopconfirm,
+        "el-button": ElButton,
     },
 
     mounted() {

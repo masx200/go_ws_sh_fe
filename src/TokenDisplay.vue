@@ -1,38 +1,37 @@
 <template>
-    <a-table
-        :columns="columns"
-        :data-source="tokens"
+    <el-table
+        :data="tokens"
         :loading="loading"
         style="width: 100%"
         :row-key="(record) => record.identifier"
     >
-        <template #bodyCell="{ column, record }">
+        <template #default="{ column, record }">
             <template v-if="column.key === 'delete'">
                 <span>
-                    <a-popconfirm
+                    <el-popconfirm
                         title="确定删除该令牌？"
                         @confirm="handleDeleteToken(record.identifier)"
                     >
-                        <a href="#">删除</a>
-                    </a-popconfirm></span
+                        <el-button type="text">删除</el-button>
+                    </el-popconfirm></span
                 >
             </template>
             <template v-if="column.key === 'modify'">
                 <span>
-                    <a
-                        href="#"
+                    <el-button
+                        type="text"
                         @click="handleChangeDescription(record.identifier)"
-                        >修改描述</a
+                        >修改描述</el-button
                     ></span
                 >
             </template>
         </template>
-    </a-table>
+    </el-table>
 </template>
 
 <script lang="ts">
-import { Popconfirm, Table, message } from "ant-design-vue";
-import type { ColumnsType } from "ant-design-vue/es/table/interface";
+import { ElPopconfirm, ElTable, ElButton, ElMessage } from "element-plus";
+import type { TableColumnCtx } from "element-plus/es/components/table/src/table-column/defaults";
 import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
 import { listtokens } from "./listtokens";
@@ -56,20 +55,21 @@ export default defineComponent({
             tokens: ref([] as Token[]),
             loading: ref(false),
             columns: [
-                { title: "令牌标识", dataIndex: "identifier" },
-                { title: "用户名称", dataIndex: "username" },
-                { title: "描述", dataIndex: "description" },
-                { title: "创建时间", dataIndex: "created_at" },
-                { title: "修改时间", dataIndex: "updated_at" },
-                { title: "修改操作", key: "modify" },
-                { title: "删除操作", key: "delete" },
-                // { title: "操作", key: "action" }
-            ] as ColumnsType,
+                { prop: "identifier", label: "令牌标识" },
+                { prop: "username", label: "用户名称" },
+                { prop: "description", label: "描述" },
+                { prop: "created_at", label: "创建时间" },
+                { prop: "updated_at", label: "修改时间" },
+                { label: "修改操作", key: "modify" },
+                { label: "删除操作", key: "delete" },
+                // { label: "操作", key: "action" }
+            ] as TableColumnCtx<Token>[],
         };
     },
     components: {
-        "a-table": Table,
-        "a-popconfirm": Popconfirm,
+        "el-table": ElTable,
+        "el-popconfirm": ElPopconfirm,
+        "el-button": ElButton,
     },
 
     mounted() {
@@ -89,7 +89,7 @@ export default defineComponent({
                 this.tokens = result.tokens;
             } catch (error) {
                 console.error("获取令牌列表失败:", error);
-                message.error(
+                ElMessage.error(
                     "获取会话列表失败" + "\n" + error + "\n" + String(error),
                 );
             } finally {
@@ -110,11 +110,11 @@ export default defineComponent({
                 console.log(
                     await deleteToken(credentials, baseurl, identifier),
                 );
-                message.success("令牌删除成功");
+                ElMessage.success("令牌删除成功");
                 this.fetchTokens(); // 刷新列表
             } catch (error) {
                 console.error("删除令牌失败:", error);
-                message.error("删除令牌失败: " + (error as Error).message);
+                ElMessage.error("删除令牌失败: " + (error as Error).message);
             }
         },
         async handleChangeDescription(identifier: string) {
