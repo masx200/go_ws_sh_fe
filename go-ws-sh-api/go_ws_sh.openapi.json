@@ -38,14 +38,8 @@
                                         "$ref": "#/components/schemas/token"
                                     }
                                 },
-                                "required": [
-                                    "authorization",
-                                    "token"
-                                ],
-                                "x-apifox-orders": [
-                                    "authorization",
-                                    "token"
-                                ],
+                                "required": ["authorization", "token"],
+                                "x-apifox-orders": ["authorization", "token"],
                                 "x-apifox-ignore-properties": []
                             },
                             "example": {
@@ -157,14 +151,8 @@
                                         "$ref": "#/components/schemas/authorization"
                                     }
                                 },
-                                "required": [
-                                    "token",
-                                    "authorization"
-                                ],
-                                "x-apifox-orders": [
-                                    "token",
-                                    "authorization"
-                                ],
+                                "required": ["token", "authorization"],
+                                "x-apifox-orders": ["token", "authorization"],
                                 "x-apifox-ignore-properties": []
                             },
                             "example": {
@@ -252,14 +240,8 @@
                                         "$ref": "#/components/schemas/authorization"
                                     }
                                 },
-                                "required": [
-                                    "token",
-                                    "authorization"
-                                ],
-                                "x-apifox-orders": [
-                                    "token",
-                                    "authorization"
-                                ],
+                                "required": ["token", "authorization"],
+                                "x-apifox-orders": ["token", "authorization"],
                                 "x-apifox-ignore-properties": []
                             },
                             "example": {
@@ -368,19 +350,12 @@
                                                 "description": ""
                                             }
                                         },
-                                        "x-apifox-orders": [
-                                            "identifer"
-                                        ],
+                                        "x-apifox-orders": ["identifer"],
                                         "x-apifox-ignore-properties": []
                                     }
                                 },
-                                "required": [
-                                    "authorization"
-                                ],
-                                "x-apifox-orders": [
-                                    "authorization",
-                                    "token"
-                                ],
+                                "required": ["authorization"],
+                                "x-apifox-orders": ["authorization", "token"],
                                 "x-apifox-ignore-properties": []
                             },
                             "example": {
@@ -483,10 +458,7 @@
                                     "authorization",
                                     "credential"
                                 ],
-                                "required": [
-                                    "authorization",
-                                    "credential"
-                                ],
+                                "required": ["authorization", "credential"],
                                 "x-apifox-ignore-properties": []
                             },
                             "example": {
@@ -577,10 +549,7 @@
                                     "authorization",
                                     "credential"
                                 ],
-                                "required": [
-                                    "authorization",
-                                    "credential"
-                                ],
+                                "required": ["authorization", "credential"],
                                 "x-apifox-ignore-properties": []
                             },
                             "example": {
@@ -683,15 +652,11 @@
                                                 "description": ""
                                             }
                                         },
-                                        "x-apifox-orders": [
-                                            "username"
-                                        ],
+                                        "x-apifox-orders": ["username"],
                                         "x-apifox-ignore-properties": []
                                     }
                                 },
-                                "required": [
-                                    "authorization"
-                                ],
+                                "required": ["authorization"],
                                 "x-apifox-orders": [
                                     "authorization",
                                     "credential"
@@ -807,10 +772,7 @@
                                     "authorization",
                                     "credential"
                                 ],
-                                "required": [
-                                    "authorization",
-                                    "credential"
-                                ],
+                                "required": ["authorization", "credential"],
                                 "x-apifox-ignore-properties": []
                             },
                             "example": {
@@ -903,14 +865,8 @@
                                         "$ref": "#/components/schemas/session"
                                     }
                                 },
-                                "required": [
-                                    "authorization",
-                                    "session"
-                                ],
-                                "x-apifox-orders": [
-                                    "authorization",
-                                    "session"
-                                ],
+                                "required": ["authorization", "session"],
+                                "x-apifox-orders": ["authorization", "session"],
                                 "x-apifox-ignore-properties": []
                             },
                             "example": {
@@ -1008,14 +964,8 @@
                                         "$ref": "#/components/schemas/authorization"
                                     }
                                 },
-                                "required": [
-                                    "session",
-                                    "authorization"
-                                ],
-                                "x-apifox-orders": [
-                                    "session",
-                                    "authorization"
-                                ],
+                                "required": ["session", "authorization"],
+                                "x-apifox-orders": ["session", "authorization"],
                                 "x-apifox-ignore-properties": []
                             },
                             "example": {
@@ -1132,12 +1082,8 @@
                                                 "description": "名称"
                                             }
                                         },
-                                        "x-apifox-orders": [
-                                            "name"
-                                        ],
-                                        "required": [
-                                            "name"
-                                        ],
+                                        "x-apifox-orders": ["name"],
+                                        "required": ["name"],
                                         "x-apifox-ignore-properties": []
                                     }
                                 },
@@ -1156,10 +1102,7 @@
                             "example": {
                                 "session": {
                                     "name": "霜国栋",
-                                    "args": [
-                                        "esse eu",
-                                        "fugiat sit Lorem est"
-                                    ],
+                                    "args": ["esse eu", "fugiat sit Lorem est"],
                                     "dir": "nostrud amet consequat",
                                     "cmd": "esse dolore Duis do sunt",
                                     "created_at": "2024-10-19 06:27:58",
@@ -1270,12 +1213,8 @@
                                                 "type": "string"
                                             }
                                         },
-                                        "x-apifox-orders": [
-                                            "name"
-                                        ],
-                                        "required": [
-                                            "name"
-                                        ],
+                                        "x-apifox-orders": ["name"],
+                                        "required": ["name"],
                                         "x-apifox-ignore-properties": []
                                     }
                                 },
@@ -1405,19 +1344,12 @@
                                                 "type": "string"
                                             }
                                         },
-                                        "x-apifox-orders": [
-                                            "name"
-                                        ],
+                                        "x-apifox-orders": ["name"],
                                         "x-apifox-ignore-properties": []
                                     }
                                 },
-                                "x-apifox-orders": [
-                                    "authorization",
-                                    "session"
-                                ],
-                                "required": [
-                                    "authorization"
-                                ],
+                                "x-apifox-orders": ["authorization", "session"],
+                                "required": ["authorization"],
                                 "x-apifox-ignore-properties": []
                             },
                             "example": {
@@ -1472,9 +1404,7 @@
                                     "sessions": [
                                         {
                                             "name": "余桂英",
-                                            "args": [
-                                                "Ut"
-                                            ],
+                                            "args": ["Ut"],
                                             "dir": "enim voluptate occaecat do ipsum",
                                             "cmd": "Lorem aliquip",
                                             "created_at": "2025-09-08 16:23:31",
@@ -1525,14 +1455,8 @@
                                         "$ref": "#/components/schemas/session"
                                     }
                                 },
-                                "x-apifox-orders": [
-                                    "authorization",
-                                    "session"
-                                ],
-                                "required": [
-                                    "authorization",
-                                    "session"
-                                ],
+                                "x-apifox-orders": ["authorization", "session"],
+                                "required": ["authorization", "session"],
                                 "x-apifox-ignore-properties": []
                             },
                             "example": {
@@ -1748,10 +1672,7 @@
                     "created_at",
                     "updated_at"
                 ],
-                "required": [
-                    "created_at",
-                    "updated_at"
-                ],
+                "required": ["created_at", "updated_at"],
                 "x-apifox-ignore-properties": [],
                 "x-apifox-folder": ""
             },

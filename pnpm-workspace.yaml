@@ -1,6 +1,6 @@
 onlyBuiltDependencies:
-  - '@parcel/watcher'
-  - core-js
-  - esbuild
-  - protobufjs
-  - vue-demi
+    - "@parcel/watcher"
+    - core-js
+    - esbuild
+    - protobufjs
+    - vue-demi

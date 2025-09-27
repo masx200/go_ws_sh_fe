@@ -141,14 +141,8 @@
                                         "$ref": "#/definitions/154920447"
                                     }
                                 },
-                                "x-apifox-orders": [
-                                    "authorization",
-                                    "session"
-                                ],
-                                "required": [
-                                    "authorization",
-                                    "session"
-                                ]
+                                "x-apifox-orders": ["authorization", "session"],
+                                "required": ["authorization", "session"]
                             },
                             "mediaType": "",
                             "examples": [
@@ -176,9 +170,7 @@
                         "mockScript": {},
                         "codeSamples": [],
                         "commonResponseStatus": {},
-                        "responseChildren": [
-                            "BLANK.639101978"
-                        ],
+                        "responseChildren": ["BLANK.639101978"],
                         "visibility": "INHERITED",
                         "oasExtensions": "",
                         "preProcessors": [],
@@ -284,10 +276,7 @@
                                     "authorization",
                                     "credential"
                                 ],
-                                "required": [
-                                    "authorization",
-                                    "credential"
-                                ]
+                                "required": ["authorization", "credential"]
                             },
                             "mediaType": "",
                             "examples": [
@@ -315,9 +304,7 @@
                         "mockScript": {},
                         "codeSamples": [],
                         "commonResponseStatus": {},
-                        "responseChildren": [
-                            "BLANK.639116233"
-                        ],
+                        "responseChildren": ["BLANK.639116233"],
                         "visibility": "INHERITED",
                         "oasExtensions": "",
                         "preProcessors": [],
@@ -413,14 +400,8 @@
                                         "$ref": "#/definitions/154919835"
                                     }
                                 },
-                                "required": [
-                                    "authorization",
-                                    "token"
-                                ],
-                                "x-apifox-orders": [
-                                    "authorization",
-                                    "token"
-                                ]
+                                "required": ["authorization", "token"],
+                                "x-apifox-orders": ["authorization", "token"]
                             },
                             "mediaType": "",
                             "examples": [
@@ -448,9 +429,7 @@
                         "mockScript": {},
                         "codeSamples": [],
                         "commonResponseStatus": {},
-                        "responseChildren": [
-                            "BLANK.638122600"
-                        ],
+                        "responseChildren": ["BLANK.638122600"],
                         "visibility": "INHERITED",
                         "oasExtensions": null,
                         "preProcessors": [],
@@ -546,14 +525,8 @@
                                         "$ref": "#/definitions/154919835"
                                     }
                                 },
-                                "required": [
-                                    "authorization",
-                                    "token"
-                                ],
-                                "x-apifox-orders": [
-                                    "authorization",
-                                    "token"
-                                ]
+                                "required": ["authorization", "token"],
+                                "x-apifox-orders": ["authorization", "token"]
                             },
                             "mediaType": "",
                             "examples": [
@@ -581,9 +554,7 @@
                         "mockScript": {},
                         "codeSamples": [],
                         "commonResponseStatus": {},
-                        "responseChildren": [
-                            "BLANK.638128033"
-                        ],
+                        "responseChildren": ["BLANK.638128033"],
                         "visibility": "INHERITED",
                         "oasExtensions": null,
                         "preProcessors": [],
@@ -679,14 +650,8 @@
                                         "$ref": "#/definitions/154919835"
                                     }
                                 },
-                                "x-apifox-orders": [
-                                    "authorization",
-                                    "token"
-                                ],
-                                "required": [
-                                    "authorization",
-                                    "token"
-                                ]
+                                "x-apifox-orders": ["authorization", "token"],
+                                "required": ["authorization", "token"]
                             },
                             "mediaType": "",
                             "examples": [
@@ -714,9 +679,7 @@
                         "mockScript": {},
                         "codeSamples": [],
                         "commonResponseStatus": {},
-                        "responseChildren": [
-                            "BLANK.596117687"
-                        ],
+                        "responseChildren": ["BLANK.596117687"],
                         "visibility": "INHERITED",
                         "oasExtensions": null,
                         "preProcessors": [],
@@ -842,18 +805,11 @@
                                                 "type": "string"
                                             }
                                         },
-                                        "x-apifox-orders": [
-                                            "name"
-                                        ]
+                                        "x-apifox-orders": ["name"]
                                     }
                                 },
-                                "x-apifox-orders": [
-                                    "authorization",
-                                    "session"
-                                ],
-                                "required": [
-                                    "authorization"
-                                ]
+                                "x-apifox-orders": ["authorization", "session"],
+                                "required": ["authorization"]
                             },
                             "mediaType": "",
                             "examples": [
@@ -881,9 +837,7 @@
                         "mockScript": {},
                         "codeSamples": [],
                         "commonResponseStatus": {},
-                        "responseChildren": [
-                            "BLANK.596144738"
-                        ],
+                        "responseChildren": ["BLANK.596144738"],
                         "visibility": "INHERITED",
                         "oasExtensions": null,
                         "preProcessors": [],
@@ -989,18 +943,11 @@
                                                 "description": ""
                                             }
                                         },
-                                        "x-apifox-orders": [
-                                            "identifer"
-                                        ]
+                                        "x-apifox-orders": ["identifer"]
                                     }
                                 },
-                                "required": [
-                                    "authorization"
-                                ],
-                                "x-apifox-orders": [
-                                    "authorization",
-                                    "token"
-                                ]
+                                "required": ["authorization"],
+                                "x-apifox-orders": ["authorization", "token"]
                             },
                             "mediaType": "",
                             "examples": [
@@ -1028,9 +975,7 @@
                         "mockScript": {},
                         "codeSamples": [],
                         "commonResponseStatus": {},
-                        "responseChildren": [
-                            "BLANK.638110606"
-                        ],
+                        "responseChildren": ["BLANK.638110606"],
                         "visibility": "INHERITED",
                         "oasExtensions": "",
                         "preProcessors": [],
@@ -1138,14 +1083,10 @@
                                                 "description": ""
                                             }
                                         },
-                                        "x-apifox-orders": [
-                                            "username"
-                                        ]
+                                        "x-apifox-orders": ["username"]
                                     }
                                 },
-                                "required": [
-                                    "authorization"
-                                ],
+                                "required": ["authorization"],
                                 "x-apifox-orders": [
                                     "authorization",
                                     "credential"
@@ -1177,9 +1118,7 @@
                         "mockScript": {},
                         "codeSamples": [],
                         "commonResponseStatus": {},
-                        "responseChildren": [
-                            "BLANK.639066810"
-                        ],
+                        "responseChildren": ["BLANK.639066810"],
                         "visibility": "INHERITED",
                         "oasExtensions": null,
                         "preProcessors": [],
@@ -1263,14 +1202,8 @@
                                         "$ref": "#/definitions/154919528"
                                     }
                                 },
-                                "required": [
-                                    "authorization",
-                                    "session"
-                                ],
-                                "x-apifox-orders": [
-                                    "authorization",
-                                    "session"
-                                ]
+                                "required": ["authorization", "session"],
+                                "x-apifox-orders": ["authorization", "session"]
                             },
                             "mediaType": "",
                             "examples": [
@@ -1298,9 +1231,7 @@
                         "mockScript": {},
                         "codeSamples": [],
                         "commonResponseStatus": {},
-                        "responseChildren": [
-                            "BLANK.639092534"
-                        ],
+                        "responseChildren": ["BLANK.639092534"],
                         "visibility": "INHERITED",
                         "oasExtensions": null,
                         "preProcessors": [],
@@ -1404,14 +1335,8 @@
                                         "$ref": "#/definitions/154919528"
                                     }
                                 },
-                                "required": [
-                                    "token",
-                                    "authorization"
-                                ],
-                                "x-apifox-orders": [
-                                    "token",
-                                    "authorization"
-                                ]
+                                "required": ["token", "authorization"],
+                                "x-apifox-orders": ["token", "authorization"]
                             },
                             "mediaType": "",
                             "examples": [
@@ -1439,9 +1364,7 @@
                         "mockScript": {},
                         "codeSamples": [],
                         "commonResponseStatus": {},
-                        "responseChildren": [
-                            "BLANK.639089397"
-                        ],
+                        "responseChildren": ["BLANK.639089397"],
                         "visibility": "INHERITED",
                         "oasExtensions": null,
                         "preProcessors": [],
@@ -1529,10 +1452,7 @@
                                     "authorization",
                                     "credential"
                                 ],
-                                "required": [
-                                    "authorization",
-                                    "credential"
-                                ]
+                                "required": ["authorization", "credential"]
                             },
                             "mediaType": "",
                             "examples": [
@@ -1560,9 +1480,7 @@
                         "mockScript": {},
                         "codeSamples": [],
                         "commonResponseStatus": {},
-                        "responseChildren": [
-                            "BLANK.638121106"
-                        ],
+                        "responseChildren": ["BLANK.638121106"],
                         "visibility": "INHERITED",
                         "oasExtensions": null,
                         "preProcessors": [],
@@ -1646,14 +1564,8 @@
                                         "$ref": "#/definitions/154919528"
                                     }
                                 },
-                                "required": [
-                                    "token",
-                                    "authorization"
-                                ],
-                                "x-apifox-orders": [
-                                    "token",
-                                    "authorization"
-                                ]
+                                "required": ["token", "authorization"],
+                                "x-apifox-orders": ["token", "authorization"]
                             },
                             "mediaType": "",
                             "examples": [
@@ -1681,9 +1593,7 @@
                         "mockScript": {},
                         "codeSamples": [],
                         "commonResponseStatus": {},
-                        "responseChildren": [
-                            "BLANK.638122095"
-                        ],
+                        "responseChildren": ["BLANK.638122095"],
                         "visibility": "INHERITED",
                         "oasExtensions": null,
                         "preProcessors": [],
@@ -1767,14 +1677,8 @@
                                         "$ref": "#/definitions/154919835"
                                     }
                                 },
-                                "required": [
-                                    "authorization",
-                                    "token"
-                                ],
-                                "x-apifox-orders": [
-                                    "authorization",
-                                    "token"
-                                ]
+                                "required": ["authorization", "token"],
+                                "x-apifox-orders": ["authorization", "token"]
                             },
                             "mediaType": "",
                             "examples": [
@@ -1802,9 +1706,7 @@
                         "mockScript": {},
                         "codeSamples": [],
                         "commonResponseStatus": {},
-                        "responseChildren": [
-                            "BLANK.596141984"
-                        ],
+                        "responseChildren": ["BLANK.596141984"],
                         "visibility": "INHERITED",
                         "oasExtensions": null,
                         "preProcessors": [],
@@ -1892,10 +1794,7 @@
                                     "authorization",
                                     "credential"
                                 ],
-                                "required": [
-                                    "authorization",
-                                    "credential"
-                                ]
+                                "required": ["authorization", "credential"]
                             },
                             "mediaType": "",
                             "examples": [
@@ -1923,9 +1822,7 @@
                         "mockScript": {},
                         "codeSamples": [],
                         "commonResponseStatus": {},
-                        "responseChildren": [
-                            "BLANK.639068931"
-                        ],
+                        "responseChildren": ["BLANK.639068931"],
                         "visibility": "INHERITED",
                         "oasExtensions": null,
                         "preProcessors": [],
@@ -2009,14 +1906,8 @@
                                         "$ref": "#/definitions/154920447"
                                     }
                                 },
-                                "required": [
-                                    "session",
-                                    "authorization"
-                                ],
-                                "x-apifox-orders": [
-                                    "session",
-                                    "authorization"
-                                ]
+                                "required": ["session", "authorization"],
+                                "x-apifox-orders": ["session", "authorization"]
                             },
                             "mediaType": "",
                             "examples": [
@@ -2044,9 +1935,7 @@
                         "mockScript": {},
                         "codeSamples": [],
                         "commonResponseStatus": {},
-                        "responseChildren": [
-                            "BLANK.639092565"
-                        ],
+                        "responseChildren": ["BLANK.639092565"],
                         "visibility": "INHERITED",
                         "oasExtensions": null,
                         "preProcessors": [],
@@ -2149,12 +2038,8 @@
                                                 "description": "名称"
                                             }
                                         },
-                                        "x-apifox-orders": [
-                                            "name"
-                                        ],
-                                        "required": [
-                                            "name"
-                                        ]
+                                        "x-apifox-orders": ["name"],
+                                        "required": ["name"]
                                     }
                                 },
                                 "required": [
@@ -2194,9 +2079,7 @@
                         "mockScript": {},
                         "codeSamples": [],
                         "commonResponseStatus": {},
-                        "responseChildren": [
-                            "BLANK.649006856"
-                        ],
+                        "responseChildren": ["BLANK.649006856"],
                         "visibility": "INHERITED",
                         "oasExtensions": null,
                         "preProcessors": [],
@@ -2298,12 +2181,8 @@
                                                 "type": "string"
                                             }
                                         },
-                                        "x-apifox-orders": [
-                                            "name"
-                                        ],
-                                        "required": [
-                                            "name"
-                                        ]
+                                        "x-apifox-orders": ["name"],
+                                        "required": ["name"]
                                     }
                                 },
                                 "required": [
@@ -2343,9 +2222,7 @@
                         "mockScript": {},
                         "codeSamples": [],
                         "commonResponseStatus": {},
-                        "responseChildren": [
-                            "BLANK.649016896"
-                        ],
+                        "responseChildren": ["BLANK.649016896"],
                         "visibility": "INHERITED",
                         "oasExtensions": null,
                         "preProcessors": [],
@@ -2532,10 +2409,7 @@
                                 "created_at",
                                 "updated_at"
                             ],
-                            "required": [
-                                "created_at",
-                                "updated_at"
-                            ]
+                            "required": ["created_at", "updated_at"]
                         }
                     },
                     "visibility": "INHERITED"
@@ -2588,9 +2462,7 @@
         {
             "name": "根目录",
             "children": [],
-            "ordering": [
-                "requestFolder.6002933"
-            ],
+            "ordering": ["requestFolder.6002933"],
             "items": []
         }
     ],
@@ -2619,12 +2491,7 @@
         ],
         "gateway": [],
         "language": "zh-CN",
-        "apiStatuses": [
-            "developing",
-            "testing",
-            "released",
-            "deprecated"
-        ],
+        "apiStatuses": ["developing", "testing", "released", "deprecated"],
         "mockSettings": {},
         "preProcessors": [],
         "postProcessors": [],

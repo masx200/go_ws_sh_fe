@@ -1,6 +1,10 @@
 import { defineNuxtConfig } from "nuxt/config";
 
 export default defineNuxtConfig({
+    typescript: {
+        typeCheck: true,
+        strict: true,
+    },
     ssr: true,
     plugins: [
         { src: "~/plugins/server-only.js", mode: "server" },
@@ -8,10 +12,10 @@ export default defineNuxtConfig({
         { src: "~/plugins/client-only.js", mode: "client" },
     ],
     pwa: {
-        buildBase: {
-            minify: "esbuild",
-            // ✅ 关键修复
-        },
+        // buildBase: {
+        //     minify: "esbuild",
+        //     // ✅ 关键修复
+        // },
         workbox: {
             cleanupOutdatedCaches: true,
             globPatterns: ["**/*.{js,css}"],
@@ -50,11 +54,14 @@ export default defineNuxtConfig({
     devtools: { enabled: true },
     modules: ["@element-plus/nuxt", "@vite-pwa/nuxt"],
     vite: {
+        esbuild: {
+            drop: ["console", "debugger"],
+        },
         build: {
             minify: "esbuild",
-            esbuildOptions: {
-                drop: ["console", "debugger"],
-            },
+            // esbuildOptions: {
+            //     drop: ["console", "debugger"],
+            // },
         },
     },
 });

@@ -3,13 +3,14 @@
     "public": true,
     "type": "module",
     "scripts": {
+        "check": "nuxt typecheck",
         "test": "vitest run",
         "build": "nuxt build",
         "dev": "nuxt dev",
         "generate": "nuxt generate",
         "preview": "nuxt preview",
         "postinstall": "nuxt prepare",
-        "format": "npx -y prettier -w */**/*.vue */**/*.css */**/*.ts */**/*.json *.md *.json *.ts"
+        "format": "npx -y prettier -w */**/*.vue */**/*.css */**/*.ts */**/*.json *.md *.json *.ts  */*.html"
     },
     "dependencies": {
         "@ant-design/icons-vue": "^7.0.1",
@@ -47,7 +48,8 @@
         "util": "0.12.5",
         "vue": "latest",
         "vue-hooks-plus": "2.2.1",
-        "vue-router": "latest"
+        "vue-router": "latest",
+        "vue-tsc": "^3.0.8"
     },
     "devDependencies": {
         "@ant-design-vue/nuxt": "^1.4.6",

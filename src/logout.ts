@@ -3,7 +3,7 @@ export const logoutUrl = "http://localhost:28080/";
 export interface logoutCredentials {
     authorization: {
         username?: string;
-
+        password?: string;
         token: string;
         identifier: string;
         type: string;

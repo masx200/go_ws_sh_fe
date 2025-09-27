@@ -1,7 +1,18 @@
-import type { listCredentialsInterface } from "./listtokens";
+export interface deleteCredentialsInterface {
+    authorization: {
+        username?: string;
+        password?: string;
+        token?: string;
+        identifier?: string;
+        type: string;
+    };
+    credential?: {
+        username?: string;
+    };
+}
 
 export async function deleteToken(
-    credentials: listCredentialsInterface,
+    credentials: deleteCredentialsInterface,
     baseurl: string,
     identifier: string,
 ): Promise<typeof deleteresult> {
