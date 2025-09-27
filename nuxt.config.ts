@@ -2,7 +2,16 @@
 // import { AntDesignVueResolver } from "unplugin-vue-components/resolvers";
 import { defineNuxtConfig } from "nuxt/config";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
+import { generateDayjsPluginMapping } from "./generate-dayjs-mapping.ts";
+import { dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+import { join } from "path";
+const pluginDirectory = join(__dirname, "./node_modules/dayjs/plugin");
+const mapping = await generateDayjsPluginMapping(pluginDirectory);
 const dayjsPlugins = [
     "dayjs/plugin/updateLocale",
     "dayjs/plugin/relativeTime",
@@ -24,6 +33,7 @@ const alias = {
             `dayjs/esm/plugin/${pluginName}/index`;
         return acc;
     }, {}),
+    ...mapping,
 };
 // console.log("dayjs alias:", alias);
 export default defineNuxtConfig({
