@@ -148,6 +148,7 @@ export async function getAuth(router: Router): Promise<{
     const urlserver = new URL(location.href).searchParams.get("server");
     const conninfo = (await fetchServerInfoServer(urlserver || ""))
         .serverinfo?.[0];
+        //@ts-ignore
     const token = urlserver ? conninfo.token : localStorage?.getItem("token");
     if (!token || !urlserver) {
         await router.push("/");
@@ -158,9 +159,11 @@ export async function getAuth(router: Router): Promise<{
         baseurl: new URL(urlserver).href,
         credentials: {
             authorization: {
+                   //@ts-ignore
                 username: conninfo.username,
                 token: token,
                 type: "token",
+                   //@ts-ignore
                 identifier: conninfo.identifier,
             },
         },

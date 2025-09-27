@@ -327,6 +327,7 @@ const submitForm = async (formEl: FormInstance | null) => {
                         loginstyle.value = "color:green";
 
                         if (sessionresult.sessions.length !== 0) {
+                            //@ts-ignore
                             const session = sessionresult.sessions[0].name;
                             localStorage.setItem("session", session);
                         }
@@ -417,6 +418,7 @@ const submitTokenForm = async (formEl: FormInstance | null) => {
                         );
                         localStorage.setItem("server", server);
                         if (sessionresult.sessions.length !== 0) {
+                            //@ts-ignore
                             const session = sessionresult.sessions[0].name;
                             localStorage.setItem("session", session);
                         }

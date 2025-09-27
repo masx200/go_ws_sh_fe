@@ -41,6 +41,7 @@
 </template>
 
 <script lang="ts">
+import { useRouter } from "vue-router";
 import { defineComponent, ref } from "vue";
 import { Form, Input, InputPassword, Button, message } from "ant-design-vue";
 import { getAuth } from "./SessionDisplay.vue";

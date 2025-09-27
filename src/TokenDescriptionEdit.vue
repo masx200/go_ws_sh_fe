@@ -36,6 +36,7 @@
 </template>
 
 <script lang="ts">
+import { type Router, useRouter } from "vue-router";
 import { defineComponent, ref } from "vue";
 import { Form, Input, Button, message } from "ant-design-vue";
 import type { Rule } from "ant-design-vue/es/form/interface";
@@ -77,7 +78,9 @@ export default defineComponent({
                     const tokens = result.tokens;
 
                     if (tokens.length > 0) {
+                        //@ts-ignore
                         tokenInfo.value.username = tokens[0].username;
+                            //@ts-ignore
                         tokenInfo.value.description = tokens[0].description;
                         console.log("令牌描述获取成功");
                         message.success("令牌描述获取成功");

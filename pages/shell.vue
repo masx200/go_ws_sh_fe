@@ -97,6 +97,8 @@ onMounted(async () => {
     const server = new URL(location.href).searchParams.get("server");
     const conninfo = (await fetchServerInfoServer(server || ""))
         .serverinfo?.[0];
+
+          //@ts-ignore
     const token = server ? conninfo.token : localStorage?.getItem("token");
     if (!token || !server || !session) {
         return router.push("/");
@@ -104,8 +106,10 @@ onMounted(async () => {
         subtitle.value = "服务器网址：" + server;
         const searchParams = new URLSearchParams();
         searchParams.set("token", token);
+          //@ts-ignore
         searchParams.set("username", conninfo.username);
         searchParams.set("type", "token");
+          //@ts-ignore
         searchParams.set("identifier", conninfo.identifier);
         appopts.wsprotocol = encodeURIComponent(searchParams.toString());
         const url1 = new URL(server);
@@ -116,6 +120,7 @@ onMounted(async () => {
         localStorage.setItem("type", "token");
         localStorage.setItem("token", token);
         localStorage.setItem("server", server);
+          //@ts-ignore
         localStorage.setItem("identifier", conninfo.identifier);
         localStorage.setItem("session", session);
     }

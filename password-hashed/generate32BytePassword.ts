@@ -5,6 +5,7 @@ function generate32BytePassword() {
 
     let password = "";
     for (let i = 0; i < 32; i++) {
+          //@ts-ignore
         const index = randomValues[i] % charset.length; // 取模确保字符集范围
         password += charset[index];
     }

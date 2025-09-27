@@ -44,6 +44,7 @@
         <div
             v-if="
                 ['displayUsers', 'createUser', 'changepassword'].includes(
+                    //@ts-ignore
                     currentTab[0],
                 )
             "
@@ -62,6 +63,7 @@
                     'displayTokens',
                     'createToken',
                     'editTokenDescription',
+                      //@ts-ignore
                 ].includes(currentTab[0])
             "
             style="width: 100%"
@@ -81,6 +83,7 @@
                     'displaySessions',
                     'createSession',
                     'editSessionAttributes',
+                      //@ts-ignore
                 ].includes(currentTab[0])
             "
             style="width: 100%"
@@ -331,6 +334,7 @@ onMounted(async () => {
     subtitle.value = "服务器网址：" + server;
     const conninfo = (await fetchServerInfoServer(server || ""))
         .serverinfo?.[0];
+          //@ts-ignore
     const token = server ? conninfo.token : localStorage?.getItem("token");
     if (!token || !server) {
         return router.push("/");

@@ -40,6 +40,7 @@
 </template>
 
 <script lang="ts">
+import { type Router, useRouter } from "vue-router";
 import { defineComponent, ref } from "vue";
 import {
     Form,

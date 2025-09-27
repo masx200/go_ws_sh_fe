@@ -54,14 +54,17 @@
     "devDependencies": {
         "@ant-design-vue/nuxt": "^1.4.6",
         "@nuxt/kit": "3.15.4",
+        "@types/node": "^24.5.2",
         "@types/pako": "2.0.3",
         "ant-design-vue": "^4.2.6",
         "prettier": "3.4.2",
         "terser": "5.44.0",
         "ts-protoc-gen": "0.15.0",
         "typescript": "5.7.2",
+        "unenv": "^1.10.0",
         "unplugin-auto-import": "^19.1.1",
         "unplugin-vue-components": "^28.4.1",
+        "vite-plugin-node-polyfills": "^0.24.0",
         "vitest": "3.0.9",
         "workbox-build": "7.3.0"
     },

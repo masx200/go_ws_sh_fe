@@ -1,5 +1,5 @@
 import { defineNuxtConfig } from "nuxt/config";
-
+import { nodePolyfills } from 'vite-plugin-node-polyfills'
 export default defineNuxtConfig({
     typescript: {
         typeCheck: true,
@@ -54,6 +54,22 @@ export default defineNuxtConfig({
     devtools: { enabled: true },
     modules: ["@element-plus/nuxt", "@vite-pwa/nuxt"],
     vite: {
+        plugins: [
+            //@ts-ignore
+      nodePolyfills({
+        
+        // To exclude specific polyfills, add them to this list
+        exclude: [],
+        // Whether to polyfill specific globals
+        globals: {
+          Buffer: true,
+          global: true,
+          process: true,
+        },
+        // Whether to polyfill `node:` protocol imports
+        protocolImports: true,
+      })
+    ],
         esbuild: {
             drop: ["console", "debugger"],
         },

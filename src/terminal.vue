@@ -183,6 +183,7 @@ export default defineComponent({
                 const value = container.value;
                 // await xterm.refreshToken();
                 if (!value) throw new Error("container is null");
+                //@ts-ignore
                 xterm.open(value);
                 xterm.connect();
                 // alert("Terminal connected");

@@ -102,6 +102,7 @@
 </template>
 
 <script lang="ts">
+import { useRouter } from "vue-router";
 import {
     Button,
     Form,
@@ -151,10 +152,13 @@ export default defineComponent({
                 const session = result.sessions[0];
                 sessionInfo = {
                     name: sessionname,
+                      //@ts-ignore
                     cmd: session.cmd,
                     // args: JSON.stringify(session.args), // 将数组转换为字符串
+                      //@ts-ignore
                     dir: session.dir,
                 };
+  //@ts-ignore
                 this.dynamicValidateForm.args = session.args.map((arg) => ({
                     value: arg,
                     key: Date.now(),
