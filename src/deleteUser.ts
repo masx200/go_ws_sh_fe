@@ -35,14 +35,17 @@ export async function deleteUser(
     const url = new URL("/credentials", baseurl).href;
 
     try {
-        const response = await fetch(url, {
+        const init: RequestInit = {
             method: "DELETE",
             headers: {
                 "x-HTTP-method-override": "DELETE",
                 "Content-Type": "application/json",
+                authorization:
+                    "Bearer " + btoa(JSON.stringify(credentials.authorization)),
             },
             body: JSON.stringify(credentials),
-        });
+        };
+        const response = await fetch(url, init);
 
         if (!response.ok) {
             throw new Error(
