@@ -49,7 +49,7 @@ export default defineNuxtConfig({
     plugins: [
         "~~/plugins/element-plus-icons.ts",
         "~~/plugins/element-plus.ts",
-        "~~/plugins/ant-design-vue.ts",
+        // "~~/plugins/ant-design-vue.ts",
         { src: "~/plugins/server-only.js", mode: "server" },
 
         { src: "~/plugins/client-only.js", mode: "client" },
