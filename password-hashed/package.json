@@ -19,5 +19,5 @@
         "vite-plugin-pwa": "^0.21.1",
         "vitest": "^3.0.9"
     },
-    "packageManager": "yarn@4.7.0"
+    "packageManager": "pnpm@10.17.1"
 }

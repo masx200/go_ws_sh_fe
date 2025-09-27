@@ -31,7 +31,8 @@ jobs:
               run: |
                   npm install -g pnpm
                   pnpm install --force
-                  npm run test
+            - run: cd password-hashed && npm install -g pnpm && pnpm install --force      
+            - run: npm run test
 
             - run: npm run build
             - name: Static HTML export with Nuxt
