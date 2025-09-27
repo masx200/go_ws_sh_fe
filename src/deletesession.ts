@@ -31,14 +31,17 @@ export async function deletesession(
     const url = new URL("/sessions", baseurl).href;
 
     try {
-        const response = await fetch(url, {
+        const init: RequestInit = {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
                 "x-HTTP-method-override": "DELETE",
+                authorization:
+                    "Bearer " + btoa(JSON.stringify(credentials.authorization)),
             },
             body: JSON.stringify(credentials),
-        });
+        };
+        const response = await fetch(url, init);
 
         if (!response.ok) {
             throw new Error(
