@@ -31,14 +31,17 @@ export async function listsessions(
 ): Promise<listResults> {
     const url = new URL("/sessions", baseurl).href;
     try {
-        const response = await fetch(url, {
+        const init: RequestInit = {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 "x-HTTP-method-override": "GET",
+                authorization:
+                    "Bearer " + btoa(JSON.stringify(credentials.authorization)),
             },
             body: JSON.stringify(credentials),
-        });
+        };
+        const response = await fetch(url, init);
 
         if (!response.ok) {
             throw new Error(
