@@ -127,7 +127,7 @@ import {
 } from "ant-design-vue";
 import type { ColumnsType } from "ant-design-vue/es/table/interface";
 import { defineComponent } from "vue";
-import { fetchServerInfoServer } from "~/src/ServerConnectionInfo.ts";
+import { fetchServerInfoServer } from "./ServerConnectionInfo.ts";
 import { listsessions, type listResults } from "./listsessions.ts"; // 引入 listsessions 函数
 import { routepushEditSessions } from "./routepush";
 import { deletesession } from "./deletesession";

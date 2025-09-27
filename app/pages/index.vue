@@ -304,14 +304,14 @@ const loginstyle = ref("");
 import { ElButton, ElMessage } from "element-plus";
 import { useRequest } from "vue-hooks-plus/es/useRequest/useRequest";
 import Loading from "~/src/loading.vue";
-import { cleartoken, logout } from "~/src/logout";
+import { cleartoken, logout } from "../../src/logout";
 import {
     fetchServerInfoAll,
     fetchServerInfoServer,
     TableServerInfoDeleteAll,
     TableServerInfoDeleteByServer,
     updateOrAddIntoTableServerInfo,
-} from "~/src/ServerConnectionInfo";
+} from "../../src/ServerConnectionInfo";
 import { gettoken, listsessions } from "../../src/listsessions.ts";
 const sessionvalue = ref("");
 onMounted(() => {
