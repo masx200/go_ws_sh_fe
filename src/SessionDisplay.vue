@@ -5,22 +5,27 @@
         style="width: 100%"
         :row-key="(record) => record.name"
     >
-        <template #default="{ column, record, text, value, index }">
-            <template v-if="column.key === 'copy'">
+        <el-table-column
+            v-for="col in columns"
+            :key="col.prop || col.label"
+            :prop="col.prop"
+            :label="col.label"
+        >
+            <template v-if="col.key === 'copy'" #default="{ row: record }">
                 <span>
                     <el-button type="text" @click="handleCopyAttributes(record.name)"
                         >复制</el-button
                     ></span
                 >
             </template>
-            <template v-if="column.key === 'move'">
+            <template v-if="col.key === 'move'" #default="{ row: record }">
                 <span>
                     <el-button type="text" @click="handleMoveAttributes(record.name)"
                         >移动</el-button
                     ></span
                 >
             </template>
-            <template v-if="column.key === 'args'">
+            <template v-if="col.key === 'args'" #default="{ row: record }">
                 <ul
                     style="
                         display: flex;
@@ -42,7 +47,7 @@
                     </li>
                 </ul>
             </template>
-            <template v-if="column.key === 'delete'">
+            <template v-if="col.key === 'delete'" #default="{ row: record }">
                 <span>
                     <el-popconfirm
                         title="确定删除该会话？"
@@ -52,14 +57,14 @@
                     </el-popconfirm></span
                 >
             </template>
-            <template v-if="column.key === 'modify'">
+            <template v-if="col.key === 'modify'" #default="{ row: record }">
                 <span>
                     <el-button type="text" @click="handleChangeAttributes(record.name)"
                         >修改</el-button
                     ></span
                 >
             </template>
-        </template>
+        </el-table-column>
     </el-table>
     <el-dialog
         :close-on-click-modal="false"
@@ -131,6 +136,7 @@ import {
     ElDialog,
     ElPopconfirm,
     ElTable,
+    ElTableColumn,
     ElTag,
     ElButton,
     ElMessage,
@@ -195,6 +201,10 @@ export interface Session {
     dir: string;
     created_at: string;
     updated_at: string;
+}
+
+interface TableColumnWithKey extends TableColumnCtx<Session> {
+    key?: string;
 }
 
 export default defineComponent({
@@ -404,7 +414,7 @@ export default defineComponent({
                 { label: "复制", key: "copy" },
                 { label: "移动", key: "move" },
                 { label: "删除", key: "delete" },
-            ] as TableColumnCtx<Session>[],
+            ] as TableColumnWithKey[],
         };
     },
     components: {
@@ -412,6 +422,7 @@ export default defineComponent({
         "el-dialog": ElDialog,
         "el-tag": ElTag,
         "el-table": ElTable,
+        "el-table-column": ElTableColumn,
         "el-input": ElInput,
         "el-popconfirm": ElPopconfirm,
         "el-button": ElButton,
