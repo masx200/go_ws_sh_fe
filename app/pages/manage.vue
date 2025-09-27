@@ -24,7 +24,6 @@
             mode="horizontal"
             v-model:default-openeds="state_openKeys"
             v-model:default-active="currentTab[0]"
-            :items="items"
             style="
                 display: flex;
                 width: 100%;
@@ -37,7 +36,29 @@
             :collapse="false"
             @select="onselect"
         >
-            <!-- @openChange="onOpenChange" -->
+            <!-- 用户管理 -->
+            <el-sub-menu index="UsersManage">
+                <template #title>管理用户</template>
+                <el-menu-item index="displayUsers">显示用户</el-menu-item>
+                <el-menu-item index="createUser">创建用户</el-menu-item>
+                <el-menu-item index="changepassword">修改密码</el-menu-item>
+            </el-sub-menu>
+
+            <!-- 令牌管理 -->
+            <el-sub-menu index="TokenManage">
+                <template #title>管理令牌</template>
+                <el-menu-item index="displayTokens">显示令牌</el-menu-item>
+                <el-menu-item index="createToken">创建令牌</el-menu-item>
+                <el-menu-item index="editTokenDescription">修改令牌</el-menu-item>
+            </el-sub-menu>
+
+            <!-- 会话管理 -->
+            <el-sub-menu index="SessionManage">
+                <template #title>管理会话</template>
+                <el-menu-item index="displaySessions">显示会话</el-menu-item>
+                <el-menu-item index="createSession">创建会话</el-menu-item>
+                <el-menu-item index="editSessionAttributes">修改会话</el-menu-item>
+            </el-sub-menu>
         </el-menu>
 
         <!-- 用户管理分组 -->
