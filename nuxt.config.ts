@@ -4,7 +4,8 @@ import { defineNuxtConfig } from "nuxt/config";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 export default defineNuxtConfig({
     alias: {
-        "dayjs/plugin/advancedFormat":"dayjs/esm/plugin/advancedFormat/index"
+        "dayjs/plugin/advancedFormat":"dayjs/esm/plugin/advancedFormat/index",
+        "dayjs/plugin/customParseFormat":"dayjs/esm/plugin/customParseFormat/index"
     },
     build: {
         transpile: ["element-plus", "ant-design-vue"],
