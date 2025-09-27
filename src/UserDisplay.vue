@@ -5,31 +5,31 @@
         style="width: 100%"
         :row-key="(record) => record.username"
     >
-        <template #default="{ column, record }">
-            <template v-if="column.key === 'delete'">
-                <span>
-                    <el-popconfirm
-                        title="确定删除该用户？"
-                        @confirm="handleDeleteUser(record.username)"
-                    >
-                        <el-button type="text">删除</el-button>
-                    </el-popconfirm></span
+        <el-table-column prop="username" label="用户名" />
+        <el-table-column prop="created_at" label="创建时间" />
+        <el-table-column prop="updated_at" label="修改时间" />
+        <el-table-column label="修改操作" key="modify">
+            <template #default="{ row }">
+                <el-button type="text" @click="handleChangePassword(row.username)"
+                    >修改密码</el-button
                 >
             </template>
-            <template v-if="column.key === 'modify'">
-                <span>
-                    <el-button type="text" @click="handleChangePassword(record.username)"
-                        >修改密码</el-button
-                    ></span
+        </el-table-column>
+        <el-table-column label="删除操作" key="delete">
+            <template #default="{ row }">
+                <el-popconfirm
+                    title="确定删除该用户？"
+                    @confirm="handleDeleteUser(row.username)"
                 >
+                    <el-button type="text">删除</el-button>
+                </el-popconfirm>
             </template>
-        </template>
+        </el-table-column>
     </el-table>
 </template>
 
 <script lang="ts">
-import { ElPopconfirm, ElTable, ElButton, ElMessage } from "element-plus";
-import type { TableColumnCtx } from "element-plus/es/components/table/src/table-column/defaults";
+import { ElPopconfirm, ElTable, ElTableColumn, ElButton, ElMessage } from "element-plus";
 import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
 import { listcredentials } from "./listcredentials.ts";
@@ -50,18 +50,11 @@ export default defineComponent({
             router,
             users: ref([] as User[]),
             loading: ref(false),
-            columns: [
-                { prop: "username", label: "用户名" },
-                { prop: "created_at", label: "创建时间" },
-                { prop: "updated_at", label: "修改时间" },
-                { label: "修改操作", key: "modify" },
-                { label: "删除操作", key: "delete" },
-                // { label: "操作", key: "action" }
-            ] as TableColumnCtx<User>[],
         };
     },
     components: {
         "el-table": ElTable,
+        "el-table-column": ElTableColumn,
         "el-popconfirm": ElPopconfirm,
         "el-button": ElButton,
     },
