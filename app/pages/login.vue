@@ -162,11 +162,11 @@ async function handleTabChange(tabPaneName: TabPaneName) {
 }
 import type { ValidateFieldsError } from "async-validator";
 import type { FormInstance, FormRules, TabPaneName } from "element-plus";
-import { reactive, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import { useRouter } from "vue-router";
-import { listsessions } from "~/src/listsessions.ts";
-import { updateOrAddIntoTableServerInfo } from "~/src/ServerConnectionInfo";
-import { login, savetoken } from "../../src/login.ts";
+import { listsessions } from "../../src/listsessions";
+import { updateOrAddIntoTableServerInfo } from "../../src/ServerConnectionInfo";
+import { login, savetoken } from "../../src/login";
 
 const activeTab = ref("password");
 onMounted(() => {
