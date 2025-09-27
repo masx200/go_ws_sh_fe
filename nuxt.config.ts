@@ -78,5 +78,10 @@ export default defineNuxtConfig({
             //     drop: ["console", "debugger"],
             // },
         },
+        resolve: {
+            alias: {
+                'dayjs/esm': 'dayjs'
+            }
+        },
     },
 });
