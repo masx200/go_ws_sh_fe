@@ -312,7 +312,7 @@ import {
     TableServerInfoDeleteByServer,
     updateOrAddIntoTableServerInfo,
 } from "~/src/ServerConnectionInfo";
-import { gettoken, listsessions } from "../src/listsessions.ts";
+import { gettoken, listsessions } from "../../src/listsessions.ts";
 const sessionvalue = ref("");
 onMounted(() => {
     if (!localStorage?.getItem("server")) {
@@ -394,12 +394,13 @@ async function service(
                 server: server,
                 username: username,
                 token: token,
+                //@ts-ignore
                 session: sessionresult.sessions.map((a) => a.name),
                 type: "token",
                 identifier: identifier,
             });
             console.log(sessionresult.sessions);
-
+//@ts-ignore
             return sessionresult.sessions.map((a) => a.name);
         }
         throw new Error("登录失败,服务端没有session列表");

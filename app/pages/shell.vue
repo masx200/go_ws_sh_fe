@@ -74,9 +74,9 @@ if (typeof process == "undefined") {
     //@ts-ignore
     globalThis.process = {};
 }
-import App from "~/src/App.vue";
-import Loading from "~/src/loading.vue";
-import { fetchServerInfoServer } from "~/src/ServerConnectionInfo.ts";
+import App from "../../src/App.vue";
+import Loading from "../../src/loading.vue";
+import { fetchServerInfoServer } from "../../src/ServerConnectionInfo.ts";
 const reconnect = false;
 const router = useRouter();
 const appopts = reactive({

@@ -40,10 +40,10 @@ export default defineNuxtConfig({
         },
     },
     css: [
-        "~/styles/styles.css",
-        "~/styles/xterm.css",
-        "~/node_modules/element-plus/dist/index.css",
-        "~/node_modules/@xterm/xterm/css/xterm.css",
+        "~~/styles/styles.css",
+        "~~/styles/xterm.css",
+        "element-plus/dist/index.css",
+        "@xterm/xterm/css/xterm.css",
     ],
     elementPlus: {},
     nitro: {

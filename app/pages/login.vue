@@ -166,7 +166,7 @@ import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import { listsessions } from "~/src/listsessions.ts";
 import { updateOrAddIntoTableServerInfo } from "~/src/ServerConnectionInfo";
-import { login, savetoken } from "../src/login.ts";
+import { login, savetoken } from "../../src/login.ts";
 
 const activeTab = ref("password");
 onMounted(() => {

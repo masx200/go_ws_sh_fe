@@ -6,13 +6,13 @@ import { Unicode11Addon } from "@xterm/addon-unicode11";
 import { WebLinksAddon } from "@xterm/addon-web-links";
 import { WebglAddon } from "@xterm/addon-webgl";
 import { Terminal } from "@xterm/xterm";
-import { OverlayAddon } from "./addons/overlay.ts";
+import { OverlayAddon } from "./addons/overlay.js";
 import { ZmodemAddon } from "./addons/zmodem";
 import {
     BinaryMessage,
     ShellWebSocketAdaptor,
     TextMessage,
-} from "./ShellWebSocketAdaptor.ts";
+} from "./ShellWebSocketAdaptor.js";
 import type { IDisposable, ITerminalOptions } from "@xterm/xterm";
 
 interface TtydTerminal extends Terminal {

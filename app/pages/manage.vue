@@ -168,16 +168,16 @@ async function onselect(keys: SelectInfo) {
 import type { ItemType } from "ant-design-vue";
 import { Menu as AMenu } from "ant-design-vue";
 import { ref } from "vue";
-import { fetchServerInfoServer } from "~/src/ServerConnectionInfo";
-import CreateSession from "../src/CreateSession.vue";
-import CreateToken from "../src/CreateToken.vue";
-import CreateUser from "../src/CreateUser.vue";
-import SessionAttributeEdit from "../src/SessionAttributeEdit.vue";
-import SessionDisplay from "../src/SessionDisplay.vue";
-import TokenDescriptionEdit from "../src/TokenDescriptionEdit.vue";
-import TokenDisplay from "../src/TokenDisplay.vue";
-import UserDisplay from "../src/UserDisplay.vue";
-import UserManagement from "../src/UserManagement.vue";
+import { fetchServerInfoServer } from "../../src/ServerConnectionInfo";
+import CreateSession from "../../src/CreateSession.vue";
+import CreateToken from "../../src/CreateToken.vue";
+import CreateUser from "../../src/CreateUser.vue";
+import SessionAttributeEdit from "../../src/SessionAttributeEdit.vue";
+import SessionDisplay from "../../src/SessionDisplay.vue";
+import TokenDescriptionEdit from "../../src/TokenDescriptionEdit.vue";
+import TokenDisplay from "../../src/TokenDisplay.vue";
+import UserDisplay from "../../src/UserDisplay.vue";
+import UserManagement from "../../src/UserManagement.vue";
 
 const state_openKeys = ref<string[]>([]);
 // watch(openKeys, (newValue, oldValue) => {

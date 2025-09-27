@@ -1,6 +1,6 @@
 import { debounce } from "lodash-es";
-import { generate32BytePassword } from "./generate32BytePassword.ts";
-import { hashPasswordWithSalt } from "./hashPasswordWithSalt.ts";
+import { generate32BytePassword } from "./generate32BytePassword.js";
+import { hashPasswordWithSalt } from "./hashPasswordWithSalt.js";
 const debouncedGenerateHash = debounce(async function () {
     //@ts-ignore
     let password = document.getElementById("password").value;
