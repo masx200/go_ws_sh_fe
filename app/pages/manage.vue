@@ -49,7 +49,9 @@
                 <template #title>管理令牌</template>
                 <el-menu-item index="displayTokens">显示令牌</el-menu-item>
                 <el-menu-item index="createToken">创建令牌</el-menu-item>
-                <el-menu-item index="editTokenDescription">修改令牌</el-menu-item>
+                <el-menu-item index="editTokenDescription"
+                    >修改令牌</el-menu-item
+                >
             </el-sub-menu>
 
             <!-- 会话管理 -->
@@ -57,7 +59,9 @@
                 <template #title>管理会话</template>
                 <el-menu-item index="displaySessions">显示会话</el-menu-item>
                 <el-menu-item index="createSession">创建会话</el-menu-item>
-                <el-menu-item index="editSessionAttributes">修改会话</el-menu-item>
+                <el-menu-item index="editSessionAttributes"
+                    >修改会话</el-menu-item
+                >
             </el-sub-menu>
         </el-menu>
 
@@ -84,7 +88,7 @@
                     'displayTokens',
                     'createToken',
                     'editTokenDescription',
-                      //@ts-ignore
+                    //@ts-ignore
                 ].includes(currentTab[0])
             "
             style="width: 100%"
@@ -104,7 +108,7 @@
                     'displaySessions',
                     'createSession',
                     'editSessionAttributes',
-                      //@ts-ignore
+                    //@ts-ignore
                 ].includes(currentTab[0])
             "
             style="width: 100%"
@@ -121,9 +125,9 @@
 
 <script setup lang="ts">
 import { h } from "vue";
-import { RouterLink } from "vue-router";
+import { RouterLink, type NavigationFailure } from "vue-router";
 import { ElPageHeader } from "element-plus";
-import type { MenuProps } from "element-plus";
+import type { MenuItemClicked, MenuProps } from "element-plus";
 const routes = [
     {
         path: "index",
@@ -160,10 +164,15 @@ onMounted(async () => {
         state_openKeys.value = [open];
     }
 });
-async function onselect(keys: any) {
-    // console.log(keys);
-    const firstkeypath = keys.keyPath?.[0]?.toString();
-    const secondpath = keys.keyPath?.[1]?.toString();
+async function onselect(
+    index: string,
+    indexPath: string[],
+    item: MenuItemClicked,
+    routerResult?: Promise<void | NavigationFailure> | undefined,
+) {
+    // console.log(item);
+    const firstkeypath = indexPath[0]?.toString();
+    const secondpath = indexPath[1]?.toString();
     if (!firstkeypath) return;
     if (!secondpath) return;
     state_openKeys.value = [firstkeypath];
@@ -355,7 +364,7 @@ onMounted(async () => {
     subtitle.value = "服务器网址：" + server;
     const conninfo = (await fetchServerInfoServer(server || ""))
         .serverinfo?.[0];
-          //@ts-ignore
+    //@ts-ignore
     const token = server ? conninfo.token : localStorage?.getItem("token");
     if (!token || !server) {
         return router.push("/");
