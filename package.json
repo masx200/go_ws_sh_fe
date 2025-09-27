@@ -13,6 +13,7 @@
         "format": "npx -y prettier -w */**/*.vue */**/*.css */**/*.ts */**/*.json *.md *.json *.ts  */*.html"
     },
     "dependencies": {
+        "@ant-design-vue/nuxt": "1.4.6",
         "@ant-design/icons-vue": "^7.0.1",
         "@bufbuild/protobuf": "^2.9.0",
         "@element-plus/icons-vue": "2.3.1",

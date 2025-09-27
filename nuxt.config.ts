@@ -3,6 +3,10 @@
 import { defineNuxtConfig } from "nuxt/config";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 export default defineNuxtConfig({
+    alias: {},
+    build: {
+        transpile: ["element-plus", "ant-design-vue"],
+    },
     typescript: {
         typeCheck: true,
         strict: true,
@@ -59,8 +63,11 @@ export default defineNuxtConfig({
     },
     compatibilityDate: "2024-11-01",
     devtools: { enabled: true },
-    modules: ["@element-plus/nuxt", "@vite-pwa/nuxt"],
+    modules: ["@element-plus/nuxt", "@vite-pwa/nuxt",],
     vite: {
+        optimizeDeps: {
+            include: [], // 强制预打包
+        },
         plugins: [
             // Components({
             //     resolvers: [AntDesignVueResolver()],
@@ -93,9 +100,7 @@ export default defineNuxtConfig({
             // },
         },
         resolve: {
-            alias: {
-                //  "dayjs/esm": "dayjs",
-            },
+            alias: {},
         },
     },
 });
