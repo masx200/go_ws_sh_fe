@@ -5,32 +5,36 @@
         style="width: 100%"
         :row-key="(record) => record.identifier"
     >
-        <template #default="{ column, record }">
-            <template v-if="column.key === 'delete'">
+        <el-table-column
+            v-for="col in columns"
+            :key="col.prop || col.label"
+            :prop="col.prop"
+            :label="col.label"
+        >
+            <template v-if="col.key === 'delete'" #default="{ row: record }">
                 <span>
                     <el-popconfirm
                         title="确定删除该令牌？"
                         @confirm="handleDeleteToken(record.identifier)"
                     >
                         <el-button type="text">删除</el-button>
-                    </el-popconfirm></span
-                >
+                    </el-popconfirm>
+                </span>
             </template>
-            <template v-if="column.key === 'modify'">
+            <template v-if="col.key === 'modify'" #default="{ row: record }">
                 <span>
                     <el-button
                         type="text"
                         @click="handleChangeDescription(record.identifier)"
-                        >修改描述</el-button
-                    ></span
-                >
+                    >修改描述</el-button>
+                </span>
             </template>
-        </template>
+        </el-table-column>
     </el-table>
 </template>
 
 <script lang="ts">
-import { ElPopconfirm, ElTable, ElButton, ElMessage } from "element-plus";
+import { ElPopconfirm, ElTable, ElTableColumn, ElButton, ElMessage } from "element-plus";
 import type { TableColumnCtx } from "element-plus/es/components/table/src/table-column/defaults";
 import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
@@ -45,6 +49,10 @@ interface Token {
     // token: string;
     updated_at: string;
     created_at: string;
+}
+
+interface TableColumnWithKey extends TableColumnCtx<Token> {
+    key?: string;
 }
 
 export default defineComponent({
@@ -63,11 +71,12 @@ export default defineComponent({
                 { label: "修改操作", key: "modify" },
                 { label: "删除操作", key: "delete" },
                 // { label: "操作", key: "action" }
-            ] as TableColumnCtx<Token>[],
+            ] as TableColumnWithKey[],
         };
     },
     components: {
         "el-table": ElTable,
+        "el-table-column": ElTableColumn,
         "el-popconfirm": ElPopconfirm,
         "el-button": ElButton,
     },
