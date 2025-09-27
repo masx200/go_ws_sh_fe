@@ -2,11 +2,32 @@
 // import { AntDesignVueResolver } from "unplugin-vue-components/resolvers";
 import { defineNuxtConfig } from "nuxt/config";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
+
+const dayjsPlugins = [
+    "dayjs/plugin/updateLocale",
+    "dayjs/plugin/relativeTime",
+    "dayjs/plugin/utc",
+
+    "dayjs/plugin/advancedFormat",
+    "dayjs/plugin/customParseFormat",
+    "dayjs/plugin/localeData",
+];
+const alias = {
+    "dayjs/plugin/advancedFormat": "dayjs/esm/plugin/advancedFormat/index",
+    "dayjs/plugin/customParseFormat":
+        "dayjs/esm/plugin/customParseFormat/index",
+    //@ts-ignore
+    ...dayjsPlugins.reduce((acc, plugin) => {
+        const pluginName = plugin.split("/").pop();
+        //@ts-ignore
+        acc[`dayjs/plugin/${pluginName}`] =
+            `dayjs/esm/plugin/${pluginName}/index`;
+        return acc;
+    }, {}),
+};
+// console.log("dayjs alias:", alias);
 export default defineNuxtConfig({
-    alias: {
-        "dayjs/plugin/advancedFormat":"dayjs/esm/plugin/advancedFormat/index",
-        "dayjs/plugin/customParseFormat":"dayjs/esm/plugin/customParseFormat/index"
-    },
+    alias: alias,
     build: {
         transpile: ["element-plus", "ant-design-vue"],
     },
