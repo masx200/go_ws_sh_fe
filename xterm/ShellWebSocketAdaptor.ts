@@ -1,4 +1,4 @@
-import { wsmsg } from "~/src/wsmsg";
+import { wsmsg } from "../src/wsmsg";
 import { compressData, decompressData } from "./compressData";
 import { toUint8Array } from "./toUint8Array";
 import { parse } from "avsc";

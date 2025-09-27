@@ -303,7 +303,7 @@ const loginstate = ref("");
 const loginstyle = ref("");
 import { ElButton, ElMessage } from "element-plus";
 import { useRequest } from "vue-hooks-plus/es/useRequest/useRequest";
-import Loading from "~/src/loading.vue";
+import Loading from "../../src/loading.vue";
 import { cleartoken, logout } from "../../src/logout";
 import {
     fetchServerInfoAll,
