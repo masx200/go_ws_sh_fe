@@ -179,6 +179,7 @@ async function onselect(
 
     const url = new URL(window.location.href);
     url.searchParams.set("tab", secondpath);
+    currentTab.value = [secondpath];
     url.searchParams.set("open", firstkeypath);
     await router.push(url.href.slice(url.origin.length));
 }
