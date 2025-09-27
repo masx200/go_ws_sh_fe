@@ -1,6 +1,29 @@
 <template>
-    <!-- 修改：添加导航栏容器 -->
-    <div class="nav-container">
+    <div
+        style="
+            display: flex;
+            flex-direction: column;
+            align-content: center;
+            justify-content: center;
+            align-items: center;
+        "
+    >
+        <el-page-header
+        @back="goBack"
+            style="border: 1px solid rgb(235, 237, 240); width: 100%"
+            :breadcrumb="{ routes, itemRender }"
+            title="登录"
+        >
+            <template #extra>
+                <span
+                    ><strong>{{ subtitle }}</strong></span
+                >
+            </template>
+        </el-page-header>
+        <!-- 修改：添加导航栏容器 -->
+    <div class="nav-container" style="
+    width: 100%;
+">
         <el-tabs
             v-model="activeTab"
             type="card"
@@ -136,12 +159,44 @@
             </el-tab-pane>
         </el-tabs>
     </div>
+    </div>
     <!-- <div class="login-container">
         <!-- 这里原本的导航栏内容已移到上面 -->
     <!-- </div>  -->
 </template>
 
 <script setup lang="ts">
+function goBack() {
+    router.push("/");
+}
+import { h } from "vue";
+import { RouterLink } from "vue-router";
+import { ElPageHeader } from "element-plus";
+const routes = [
+    {
+        path: "index",
+        breadcrumbName: "首页",
+    },
+    {
+        path: "login",
+        breadcrumbName: "登录",
+    },
+];
+
+const subtitle = ref("服务器网址：");
+
+
+function itemRender({ route, params, routes, paths }: { route: any; params: any; routes: any; paths: any }) {
+    console.log({ route, params, routes, paths });
+    if (routes.indexOf(route) === routes.length - 1) {
+        return h("span", {}, [route.breadcrumbName]);
+    }
+    return h(
+        RouterLink,
+        { to: route.path == "index" ? "/" : paths.join("/") },
+        [route.breadcrumbName],
+    );
+}
 async function handleTabChange(tabPaneName: TabPaneName) {
     switch (tabPaneName) {
         case "password": {
@@ -477,6 +532,14 @@ const resetForm = (formEl: FormInstance | null) => {
     if (!formEl) return;
     formEl.resetFields();
 };
+
+watch(
+    () => loginForm.server,
+    (newServer) => {
+        subtitle.value = "服务器网址：" + newServer;
+    },
+    
+);
 </script>
 
 <style scoped>

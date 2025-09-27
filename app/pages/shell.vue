@@ -11,6 +11,7 @@
         "
     >
         <el-page-header
+         @back="goBack"
             style="border: 1px solid rgb(235, 237, 240); width: 100%"
             :breadcrumb="{ routes, itemRender }"
             title="终端"
@@ -34,7 +35,9 @@
     </div>
 </template>
 <script setup lang="ts">
-import { h } from "vue";
+import { h } from "vue";function goBack() {
+    router.push("/");
+}
 
 import { RouterLink } from "vue-router";
 import { ElPageHeader } from "element-plus";

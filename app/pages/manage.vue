@@ -9,6 +9,7 @@
         "
     >
         <el-page-header
+        @back="goBack"
             style="border: 1px solid rgb(235, 237, 240); width: 100%"
             :breadcrumb="{ routes, itemRender }"
             title="管理"
@@ -124,6 +125,9 @@
 </template>
 
 <script setup lang="ts">
+function goBack() {
+    router.push("/");
+}
 import { h } from "vue";
 import { RouterLink, type NavigationFailure } from "vue-router";
 import { ElPageHeader } from "element-plus";
