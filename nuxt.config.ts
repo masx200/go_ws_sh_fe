@@ -101,6 +101,9 @@ export default defineNuxtConfig({
     devtools: { enabled: true },
     modules: ["@element-plus/nuxt", "@vite-pwa/nuxt", "dayjs-nuxt"],
     vite: {
+        ssr: {
+            noExternal: ["avsc", "https://esm.sh/avsc@5.7.9/"],
+        },
         optimizeDeps: {
             include: ["https://esm.sh/avsc@5.7.9/"], // 强制预打包
         },
