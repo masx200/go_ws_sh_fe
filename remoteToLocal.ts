@@ -1,14 +1,81 @@
 import type { Plugin } from "vite";
+
+import { createHash } from "node:crypto";
+import fse from "fs-extra";
+import { homedir } from "node:os";
+import path from "node:path";
+
+export class fileCache implements CacheType {
+    #cacheFolder: string;
+    has(key: string): Promise<boolean> | boolean {
+        const filepath = this.#getCachePath(key);
+        return fse.exists(filepath);
+    }
+    constructor(cacheFolder?: string) {
+        this.#cacheFolder = path.join(homedir(), "cache", "fetch");
+        if (cacheFolder) this.#cacheFolder = cacheFolder;
+
+        // 确保缓存目录存在
+        fse.ensureDirSync(this.#cacheFolder);
+    }
+
+    #getCachePath(key: string) {
+        const hash = createHash("sha512");
+        hash.update(key);
+        const filename = hash.digest("base64");
+        return path.join(this.#cacheFolder, filename);
+    }
+    async set(key: string, value: string) {
+        const filepath = this.#getCachePath(key);
+        await fse.ensureFile(filepath);
+        return await fse.writeFile(filepath, value, { encoding: "utf-8" });
+    }
+    async get(key: string) {
+        const filepath = this.#getCachePath(key);
+        if (!fse.exists(filepath)) {
+            return;
+        }
+        await fse.ensureFile(filepath);
+
+        return await fse.readFile(filepath, "utf-8");
+    }
+}
+
 import axios from "axios";
 function isHttpVirtualProtocol(id: string | undefined | null) {
     return (
         id?.startsWith("virtual:http://") || id?.startsWith("virtual:https://")
     );
 }
-// 内存缓存避免重复请求
-const moduleCache = new Map<string, string>();
+export interface CacheType {
+    has(key: string): Promise<boolean> | boolean;
+    set(key: string, value: string): Promise<any> | any;
+    get(key: string): Promise<string | undefined> | string | undefined;
+}
 
-export default function remoteToLocal(): Plugin {
+// 内存缓存避免重复请求
+const cacheMemory = new Map<string, string>();
+export type HttpResolveOptions = {
+    cache?: CacheType;
+    fetcher?: (url: string) => Promise<string>;
+};
+export default function remoteToLocal(
+    options: HttpResolveOptions = {},
+): Plugin {
+    const {
+        cache = cacheMemory,
+        fetcher = async (urlToFetch): Promise<string> => {
+            const { data } = await axios.get(urlToFetch, {
+                headers: {
+                    Accept: "application/javascript",
+
+                    "User-Agent":
+                        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                },
+            });
+            return data;
+        },
+    } = options;
     const remoteUrlvirtual = "virtual:https://esm.sh/avsc@5.7.9/";
     const virtualModuleId = "virtual:https://esm.sh/avsc@5.7.9/";
     let remoteUrlhttp = "https://esm.sh/avsc@5.7.9/";
@@ -23,7 +90,7 @@ export default function remoteToLocal(): Plugin {
                 id.startsWith("virtual:https://") ||
                 importer?.startsWith("virtual:https://")
             ) {
-                console.log("Resolving id:", id, "importer:", importer);
+                // console.log("Resolving id:", id, "importer:", importer);
             }
             if (id === remoteUrlvirtual) return resolvedId;
 
@@ -35,7 +102,10 @@ export default function remoteToLocal(): Plugin {
             }
 
             if (importer && isHttpVirtualProtocol(importer)) {
-                if ((id.startsWith("/node/") || id.startsWith("/avsc@")) && id.endsWith(".mjs")) {
+                if (
+                    (id.startsWith("/node/") || id.startsWith("/avsc@")) &&
+                    id.endsWith(".mjs")
+                ) {
                     const baseUrl = importer.replace("virtual:", "");
                     const nodeModuleUrl = new URL(id, baseUrl);
                     return "virtual:" + nodeModuleUrl.href;
@@ -49,11 +119,11 @@ export default function remoteToLocal(): Plugin {
             }
         },
         async load(id: string) {
-            if (isHttpVirtualProtocol(id)) console.log("Loading id:", id);
+            // if (isHttpVirtualProtocol(id)) console.log("Loading id:", id);
             if (id !== resolvedId && !isHttpVirtualProtocol(id)) return null;
 
-            if (moduleCache.has(id)) {
-                return moduleCache.get(id);
+            if (await cache.has(id)) {
+                return await cache.get(id);
             }
 
             let urlToFetch = id;
@@ -64,19 +134,28 @@ export default function remoteToLocal(): Plugin {
             }
 
             try {
-                const { data } = await axios.get(urlToFetch, {
-                    headers: {
-                        Accept: "application/javascript",
+                let processedData: string | undefined = undefined;
 
-                        "User-Agent":
-                            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
-                    },
-                });
+                if (fetcher) {
+                    processedData = await fetcher(urlToFetch);
+                } else {
+                    const { data } = await axios.get(urlToFetch, {
+                        headers: {
+                            Accept: "application/javascript",
 
-                let processedData = data;
+                            "User-Agent":
+                                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        },
+                    });
+
+                    processedData = data;
+                }
+                if (!processedData) {
+                    throw new Error(`No data fetched from ${urlToFetch}`);
+                }
 
                 if (id.includes("/node/")) {
-                    console.log(`Processing ${id} to fix variable conflicts`);
+                    // console.log(`Processing ${id} to fix variable conflicts`);
                     const nodeParts = id.split("/node/");
                     if (nodeParts.length > 1) {
                         const modulePart = nodeParts[1];
@@ -84,21 +163,44 @@ export default function remoteToLocal(): Plugin {
                             const moduleNameParts = modulePart.split(".mjs");
                             if (moduleNameParts.length > 0) {
                                 let moduleName = moduleNameParts[0];
-                                if (moduleName && moduleName.includes("chunk-")) {
+                                if (
+                                    moduleName &&
+                                    moduleName.includes("chunk-")
+                                ) {
                                     moduleName = "chunk";
                                 }
 
-                                processedData = data.replace(/var h=/g, `var h_${moduleName}=`);
-                                processedData = processedData.replace(/function h\(/g, `function h_${moduleName}(`);
-                                processedData = processedData.replace(/,h=/g, `,h_${moduleName}=`);
-                                processedData = processedData.replace(/function e\(/g, `function e_${moduleName}(`);
-                                processedData = processedData.replace(/,e\(/g, `,e_${moduleName}(`);
+                                processedData = processedData.replace(
+                                    /var h=/g,
+                                    `var h_${moduleName}=`,
+                                );
+                                if (!processedData) {
+                                    throw new Error(
+                                        `No data fetched from ${urlToFetch}`,
+                                    );
+                                }
+                                processedData = processedData.replace(
+                                    /function h\(/g,
+                                    `function h_${moduleName}(`,
+                                );
+                                processedData = processedData.replace(
+                                    /,h=/g,
+                                    `,h_${moduleName}=`,
+                                );
+                                processedData = processedData.replace(
+                                    /function e\(/g,
+                                    `function e_${moduleName}(`,
+                                );
+                                processedData = processedData.replace(
+                                    /,e\(/g,
+                                    `,e_${moduleName}(`,
+                                );
                             }
                         }
                     }
                 }
 
-                moduleCache.set(id, processedData);
+                await cache.set(id, processedData);
                 return processedData;
             } catch (error) {
                 console.error(

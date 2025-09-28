@@ -9,6 +9,7 @@ import { defineNuxtConfig } from "nuxt/config";
 import { join } from "path";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 import { generateDayjsPluginMapping } from "./generate-dayjs-mapping.ts";
+import { fileCache } from "./remoteToLocal.ts";
 // const cache = new fileCache();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -109,7 +110,7 @@ export default defineNuxtConfig({
             include: ["virtual:https://esm.sh/avsc@5.7.9/"], // 强制预打包
         },
         plugins: [
-            remoteToLocal(),
+            remoteToLocal({ cache: new fileCache() }),
             // RemoteAssets(),
             // httpResolve({
             //     cache,
