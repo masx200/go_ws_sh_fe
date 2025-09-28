@@ -4,7 +4,7 @@
 
 ## 项目简介
 
-go_ws_sh_fe 是一个基于 Nuxt 3 构建的 Web 远程终端前端项目，通过 WebSocket
+go_ws_sh_fe 是一个基于 Nuxt 4 构建的 Web 远程终端前端项目，通过 WebSocket
 与后端进行通信，支持多个会话的管理和控制。
 
 **后端项目地址**: https://github.com/masx200/go_ws_sh
@@ -18,7 +18,7 @@ go_ws_sh_fe 是一个基于 Nuxt 3 构建的 Web 远程终端前端项目，通�
 - 🔐 **令牌管理**: API 令牌的创建和管理
 - 📱 **PWA 支持**: 渐进式 Web 应用，支持离线使用
 - 🎨 **现代化 UI**: 使用 Element Plus 和 Ant Design Vue 构建界面
-- ⚡ **高性能**: Nuxt 3 SSR + Vite 构建
+- ⚡ **高性能**: Nuxt 4 SSR + Vite 构建
 
 ## 编译前端网页
 

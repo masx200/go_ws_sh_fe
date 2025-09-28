@@ -5,7 +5,7 @@ code in this repository.
 
 ## Codebase Overview
 
-This is a Nuxt 3 based frontend for a WebSocket-based remote terminal management
+This is a Nuxt 4 based frontend for a WebSocket-based remote terminal management
 system with multiple session support. The application provides:
 
 - Terminal interface using xterm.js
@@ -17,7 +17,7 @@ system with multiple session support. The application provides:
 
 ## Key Technologies
 
-- **Framework**: Nuxt 3 (SSR enabled)
+- **Framework**: Nuxt 4 (SSR enabled)
 - **UI Library**: Element Plus, Ant Design Vue
 - **Terminal**: xterm.js with various addons (canvas, clipboard, fit, image,
   etc.)

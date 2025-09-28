@@ -2,7 +2,7 @@
 
 ## 项目概述
 
-这是一个基于 Nuxt 3 的 WebSocket
+这是一个基于 Nuxt 4 的 WebSocket
 远程终端管理系统前端应用，支持多会话管理。系统提供：
 
 - 基于 xterm.js 的终端界面
@@ -14,7 +14,7 @@
 
 ## 核心技术栈
 
-- **框架**: Nuxt 3（支持服务端渲染 SSR）
+- **框架**: Nuxt 4（支持服务端渲染 SSR）
 - **UI 库**: Element Plus, Ant Design Vue
 - **终端**: xterm.js 及多个插件（canvas、clipboard、fit、image 等）
 - **数据存储**: Dexie（IndexedDB）
