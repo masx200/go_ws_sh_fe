@@ -18,7 +18,7 @@
         "@element-plus/nuxt": "1.1.1",
         "@masx200/rollup-plugin-http-resolve": "^5.0.2",
         "@masx200/zmodem.js": "0.2.10",
-        "@protobuf-ts/plugin": "2.9.4",
+        "@protobuf-ts/plugin": "2.11.1",
         "@types/file-saver": "2.0.7",
         "@types/lodash-es": "^4.17.12",
         "@vite-pwa/nuxt": "1.0.4",
