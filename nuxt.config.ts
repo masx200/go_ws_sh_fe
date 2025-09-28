@@ -1,4 +1,6 @@
 import remoteToLocal from "./remoteToLocal.ts";
+
+import fetch from "node-fetch";
 // import RemoteAssets from "vite-plugin-remote-assets";
 // import Components from "unplugin-vue-components/vite";
 //@ts-ignore
@@ -40,7 +42,9 @@ const alias = {
 };
 // console.log("dayjs alias:", alias);
 export default defineNuxtConfig({
-    sourcemap: process.env.SOURCEMAP == "true",
+    sourcemap:
+        process.env.NODE_ENV == "development" ||
+        process.env.SOURCEMAP == "true",
     alias: Object.assign(alias, { avsc: "virtual:https://esm.sh/avsc@5.7.9/" }),
     build: {
         transpile: ["element-plus", "avsc"],
@@ -95,7 +99,9 @@ export default defineNuxtConfig({
     ],
     elementPlus: {},
     nitro: {
-        sourceMap: process.env.SOURCEMAP == "true",
+        sourceMap:
+            process.env.NODE_ENV == "development" ||
+            process.env.SOURCEMAP == "true",
         preset: "static",
         debug: true,
     },
@@ -110,7 +116,23 @@ export default defineNuxtConfig({
             include: ["virtual:https://esm.sh/avsc@5.7.9/"], // 强制预打包
         },
         plugins: [
-            remoteToLocal({ cache: new fileCache() }),
+            remoteToLocal({
+                cache: new fileCache(),
+                async fetcher(url: string) {
+                    const res = await fetch(url, {
+                        headers: {
+                            Accept: "application/javascript",
+
+                            "User-Agent":
+                                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        },
+                    });
+
+                    if (res.ok) return await res.text();
+
+                    throw Error("failed to fetch:" + url);
+                },
+            }),
             // RemoteAssets(),
             // httpResolve({
             //     cache,
@@ -135,12 +157,15 @@ export default defineNuxtConfig({
         ],
         esbuild: {
             drop:
+                process.env.NODE_ENV == "development" ||
                 process.env.DEBUGCONSOLE == "true"
                     ? []
                     : ["console", "debugger"],
         },
         build: {
-            sourcemap: process.env.SOURCEMAP == "true",
+            sourcemap:
+                process.env.NODE_ENV == "development" ||
+                process.env.SOURCEMAP == "true",
             commonjsOptions: {
                 transformMixedEsModules: true,
             },

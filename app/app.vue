@@ -25,4 +25,9 @@ if (typeof process == "undefined") {
     globalThis.process = {};
 }
 // });
+
+//@ts-ignore
+// import $ from "virtual:https://cdn.jsdelivr.net/npm/jquery/+esm";
+
+// console.log("jQuery", $);
 </script>

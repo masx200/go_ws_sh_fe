@@ -191,11 +191,13 @@ export default defineComponent({
                 console.error(String(error));
 
                 ElMessage.error(String(error));
+
+                throw error;
             }
         });
 
         onUnmounted(() => {
-            xterm.dispose();
+            xterm?.dispose();
         });
 
         return {

@@ -80,45 +80,104 @@ export default function remoteToLocal(
     const virtualModuleId = "virtual:https://esm.sh/avsc@5.7.9/";
     let remoteUrlhttp = "https://esm.sh/avsc@5.7.9/";
     const resolvedId = `${virtualModuleId}`;
+    function resolveId(id: string, importer?: string) {
+        if (
+            importer?.startsWith("http://") ||
+            importer?.startsWith("https://")
+        ) {
+            return null;
+        }
+        if (id.startsWith("http://") || id.startsWith("https://")) {
+            return null;
+        }
+        // If already a virtual HTTP/HTTPS protocol, return as-is
+        if (isHttpVirtualProtocol(id)) {
+            return id;
+        }
 
+        // Handle the specific remote URL case
+        if (id === remoteUrlvirtual) return resolvedId;
+
+        // Handle regular HTTP/HTTPS URLs - convert to virtual protocol
+
+        // Handle relative imports when importer is a virtual HTTP/HTTPS URL
+        if (importer && isHttpVirtualProtocol(importer)) {
+            const baseUrl = importer.replace("virtual:", "");
+
+            // Handle node modules and avsc modules
+            if (
+                (id.startsWith("/node/") || id.startsWith("/avsc@")) &&
+                id.endsWith(".mjs")
+            ) {
+                const nodeModuleUrl = new URL(id, baseUrl);
+                return "virtual:" + nodeModuleUrl.href;
+            }
+
+            // Handle chunk files
+            if (id.startsWith("./chunk-") && id.endsWith(".mjs")) {
+                const chunkUrl = new URL(id, baseUrl);
+                return "virtual:" + chunkUrl.href;
+            }
+
+            // Handle Skypack-style redirects (like /-/jquery@v3.7.1-7rUWvYxyB0VFidIbWTia/dist=es2019,mode=imports/optimized/jquery.js)
+            if (id.startsWith("/-/") && id.includes("@")) {
+                const resolvedUrl = new URL(id, baseUrl);
+                return "virtual:" + resolvedUrl.href;
+            }
+
+            // Handle any other relative imports
+            if (
+                id.startsWith("./") ||
+                id.startsWith("../") ||
+                id.startsWith("/")
+            ) {
+                const resolvedUrl = new URL(id, baseUrl);
+                return "virtual:" + resolvedUrl.href;
+            }
+        }
+
+        return null;
+    }
     return {
         name: "remote-to-local",
         resolveId(id: string, importer?: string) {
-            if (
-                id.startsWith("virtual:http://") ||
-                importer?.startsWith("virtual:http://") ||
-                id.startsWith("virtual:https://") ||
-                importer?.startsWith("virtual:https://")
-            ) {
-                // console.log("Resolving id:", id, "importer:", importer);
-            }
-            if (id === remoteUrlvirtual) return resolvedId;
-
-            if (isHttpVirtualProtocol(id)) {
-                if (importer) {
-                    const importerUrl = new URL(id, importer);
-                    return "virtual:" + importerUrl.href;
-                } else return id;
+            if (importer?.startsWith("virtual:https:/"))
+                console.log("resolveId", { id, importer });
+            if (id.startsWith("virtual:https:/"))
+                console.log("resolveId", { id, importer });
+            if (id.startsWith("virtual:https:/")) {
+                id = id
+                    .replaceAll("virtual:https:/", "virtual:https://")
+                    .replaceAll("virtual:https:///", "virtual:https://");
             }
 
-            if (importer && isHttpVirtualProtocol(importer)) {
-                if (
-                    (id.startsWith("/node/") || id.startsWith("/avsc@")) &&
-                    id.endsWith(".mjs")
-                ) {
-                    const baseUrl = importer.replace("virtual:", "");
-                    const nodeModuleUrl = new URL(id, baseUrl);
-                    return "virtual:" + nodeModuleUrl.href;
+            if (importer?.startsWith("virtual:https:/")) {
+                importer = importer?.replaceAll("virtual:https:/", "virtual:https://")
+                    .replaceAll("virtual:https:///", "virtual:https://");
+            }
+            const result = resolveId(id, importer);
+            if (result) {
+                // Handle virtual URLs
+                if (result.startsWith("virtual:https:/")) {
+                    return result
+                        .replaceAll("virtual:https:/", "virtual:https://")
+                        .replaceAll("virtual:https:///", "virtual:https://");
                 }
-
-                if (id.startsWith("./chunk-") && id.endsWith(".mjs")) {
-                    const baseUrl = importer.replace("virtual:", "");
-                    const chunkUrl = new URL(id, baseUrl);
-                    return "virtual:" + chunkUrl.href;
-                }
+                return result;
             }
+            return null;
         },
         async load(id: string) {
+            if (id.startsWith("virtual:https:/")) console.log("load", { id });
+
+            if (id.startsWith("virtual:https:/")) {
+                id = id
+                    .replaceAll("virtual:https:/", "virtual:https://")
+                    .replaceAll("virtual:https:///", "virtual:https://");
+            }
+            if (id.startsWith("http://") || id.startsWith("https://")) {
+                return null;
+            }
             // if (isHttpVirtualProtocol(id)) console.log("Loading id:", id);
             if (id !== resolvedId && !isHttpVirtualProtocol(id)) return null;
 
@@ -203,11 +262,15 @@ export default function remoteToLocal(
                 await cache.set(id, processedData);
                 return processedData;
             } catch (error) {
-                console.error(
-                    `[vite-plugin]  Failed to fetch ${urlToFetch}:`,
-                    error,
+                // console.error(
+                //     `[vite-plugin]  Failed to fetch ${urlToFetch}:`,
+                //     error,
+                // );
+                throw new Error(
+                    `Remote module load failed: ${urlToFetch}\n` +
+                    String(error),
+                    { cause: error },
                 );
-                throw new Error(`Remote module load failed: ${urlToFetch}`);
             }
         },
     };
