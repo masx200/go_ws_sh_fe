@@ -1,13 +1,14 @@
+// import RemoteAssets from "vite-plugin-remote-assets";
 // import Components from "unplugin-vue-components/vite";
 //@ts-ignore
-import { fileCache, httpResolve } from "@masx200/rollup-plugin-http-resolve";
+// import { fileCache, httpResolve } from "@masx200/rollup-plugin-http-resolve";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineNuxtConfig } from "nuxt/config";
 import { join } from "path";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 import { generateDayjsPluginMapping } from "./generate-dayjs-mapping.ts";
-const cache = new fileCache();
+// const cache = new fileCache();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const pluginDirectory = join(__dirname, "./node_modules/dayjs/plugin");
@@ -38,7 +39,7 @@ const alias = {
 // console.log("dayjs alias:", alias);
 export default defineNuxtConfig({
     sourcemap: process.env.SOURCEMAP == "true",
-    alias: alias,
+    alias: Object.assign(alias, { avsc: "https://esm.sh/avsc@5.7.9/" }),
     build: {
         transpile: ["element-plus", "avsc"],
     },
@@ -101,12 +102,13 @@ export default defineNuxtConfig({
     modules: ["@element-plus/nuxt", "@vite-pwa/nuxt", "dayjs-nuxt"],
     vite: {
         optimizeDeps: {
-            include: [], // 强制预打包
+            include: ["https://esm.sh/avsc@5.7.9/"], // 强制预打包
         },
         plugins: [
-            httpResolve({
-                cache,
-            }),
+            // RemoteAssets(),
+            // httpResolve({
+            //     cache,
+            // }),
             // Components({
 
             // }),
