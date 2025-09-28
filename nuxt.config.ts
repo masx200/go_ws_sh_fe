@@ -1,3 +1,4 @@
+import remoteToLocal from "./remoteToLocal.ts";
 // import RemoteAssets from "vite-plugin-remote-assets";
 // import Components from "unplugin-vue-components/vite";
 //@ts-ignore
@@ -39,7 +40,7 @@ const alias = {
 // console.log("dayjs alias:", alias);
 export default defineNuxtConfig({
     sourcemap: process.env.SOURCEMAP == "true",
-    alias: Object.assign(alias, { avsc: "https://esm.sh/avsc@5.7.9/" }),
+    alias: Object.assign(alias, { avsc: "virtual:https://esm.sh/avsc@5.7.9/" }),
     build: {
         transpile: ["element-plus", "avsc"],
     },
@@ -102,12 +103,13 @@ export default defineNuxtConfig({
     modules: ["@element-plus/nuxt", "@vite-pwa/nuxt", "dayjs-nuxt"],
     vite: {
         ssr: {
-            noExternal: ["avsc", "https://esm.sh/avsc@5.7.9/"],
+            noExternal: ["avsc", "virtual:https://esm.sh/avsc@5.7.9/"],
         },
         optimizeDeps: {
-            include: ["https://esm.sh/avsc@5.7.9/"], // 强制预打包
+            include: ["virtual:https://esm.sh/avsc@5.7.9/"], // 强制预打包
         },
         plugins: [
+            remoteToLocal(),
             // RemoteAssets(),
             // httpResolve({
             //     cache,
@@ -148,7 +150,7 @@ export default defineNuxtConfig({
         },
         resolve: {
             alias: {
-                avsc: "https://esm.sh/avsc@5.7.9/",
+                avsc: "virtual:https://esm.sh/avsc@5.7.9/",
             },
         },
     },

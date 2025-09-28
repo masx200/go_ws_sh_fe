@@ -32,6 +32,7 @@
         "@xterm/xterm": "5.5.0",
         "async-validator": "^4.2.5",
         "avsc": "5.7.9",
+        "axios": "^1.12.2",
         "buffer": "6.0.3",
         "dayjs": "^1.11.18",
         "dayjs-nuxt": "2.1.11",
