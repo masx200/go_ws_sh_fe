@@ -43,7 +43,14 @@
 <script lang="ts">
 import { useRouter } from "vue-router";
 import { defineComponent, ref } from "vue";
-import { ElForm, ElFormItem, ElInput, ElButton, ElMessage, type FormRules } from "element-plus";
+import {
+    ElForm,
+    ElFormItem,
+    ElInput,
+    ElButton,
+    ElMessage,
+    type FormRules,
+} from "element-plus";
 import { getAuth } from "./SessionDisplay.vue";
 import { createUser } from "./createUser";
 import { routepushdisplayUsers } from "./routepush";

@@ -1,7 +1,10 @@
 import { wsmsg } from "../src/wsmsg";
 import { compressData, decompressData } from "./compressData";
 import { toUint8Array } from "./toUint8Array";
-import { parse } from "avsc";
+//@ts-ignore
+import AVSC from "avsc";
+
+const { parse } = AVSC;
 import { Buffer } from "buffer";
 export class ShellWebSocketAdaptor extends WebSocket {
     sendStdin(arg0: Uint8Array<ArrayBufferLike>) {

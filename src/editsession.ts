@@ -45,8 +45,8 @@ export async function editSession(
             headers: {
                 "Content-Type": "application/json",
                 "x-HTTP-method-override": "PUT",
-                authorization: "Bearer " +
-                    btoa(JSON.stringify(credentials.authorization)),
+                authorization:
+                    "Bearer " + btoa(JSON.stringify(credentials.authorization)),
             },
             body: JSON.stringify(credentials),
         };

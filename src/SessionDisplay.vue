@@ -13,14 +13,18 @@
         >
             <template v-if="col.key === 'copy'" #default="{ row: record }">
                 <span>
-                    <el-button type="text" @click="handleCopyAttributes(record.name)"
+                    <el-button
+                        type="text"
+                        @click="handleCopyAttributes(record.name)"
                         >复制</el-button
                     ></span
                 >
             </template>
             <template v-if="col.key === 'move'" #default="{ row: record }">
                 <span>
-                    <el-button type="text" @click="handleMoveAttributes(record.name)"
+                    <el-button
+                        type="text"
+                        @click="handleMoveAttributes(record.name)"
                         >移动</el-button
                     ></span
                 >
@@ -59,7 +63,9 @@
             </template>
             <template v-if="col.key === 'modify'" #default="{ row: record }">
                 <span>
-                    <el-button type="text" @click="handleChangeAttributes(record.name)"
+                    <el-button
+                        type="text"
+                        @click="handleChangeAttributes(record.name)"
                         >修改</el-button
                     ></span
                 >
@@ -85,9 +91,7 @@
             "
         >
             <p><strong>新的会话名称</strong></p>
-            <el-input
-                v-model="newSessionName"
-                placeholder="请输入新会话名称"
+            <el-input v-model="newSessionName" placeholder="请输入新会话名称"
         /></el-col>
         <template #footer>
             <span class="dialog-footer">
@@ -164,7 +168,7 @@ export async function getAuth(router: Router): Promise<{
     const urlserver = new URL(location.href).searchParams.get("server");
     const conninfo = (await fetchServerInfoServer(urlserver || ""))
         .serverinfo?.[0];
-        //@ts-ignore
+    //@ts-ignore
     const token = urlserver ? conninfo.token : localStorage?.getItem("token");
     if (!token || !urlserver) {
         await router.push("/");
@@ -175,11 +179,11 @@ export async function getAuth(router: Router): Promise<{
         baseurl: new URL(urlserver).href,
         credentials: {
             authorization: {
-                   //@ts-ignore
+                //@ts-ignore
                 username: conninfo.username,
                 token: token,
                 type: "token",
-                   //@ts-ignore
+                //@ts-ignore
                 identifier: conninfo.identifier,
             },
         },

@@ -26,7 +26,8 @@
                     <el-button
                         type="text"
                         @click="handleChangeDescription(record.identifier)"
-                    >修改描述</el-button>
+                        >修改描述</el-button
+                    >
                 </span>
             </template>
         </el-table-column>
@@ -34,7 +35,13 @@
 </template>
 
 <script lang="ts">
-import { ElPopconfirm, ElTable, ElTableColumn, ElButton, ElMessage } from "element-plus";
+import {
+    ElPopconfirm,
+    ElTable,
+    ElTableColumn,
+    ElButton,
+    ElMessage,
+} from "element-plus";
 import type { TableColumnCtx } from "element-plus/es/components/table/src/table-column/defaults";
 import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";

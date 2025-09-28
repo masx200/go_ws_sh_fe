@@ -158,7 +158,7 @@ async function handledelete() {
                 value: a.server,
                 label: a.server,
             }));
-              //@ts-ignore
+            //@ts-ignore
             urlvalue.value = serverinfo.serverinfo[0].server;
         }
     }
@@ -171,12 +171,12 @@ async function handleServerChange(value: string) {
             showloading.value = true;
             const serverinfooptions = (await fetchServerInfoServer(server))
                 .serverinfo?.[0];
-                  //@ts-ignore
+            //@ts-ignore
             await runAsync(serverinfooptions.token ?? gettoken() ?? "", value, {
                 type: "token",
-                  //@ts-ignore
+                //@ts-ignore
                 identifier: serverinfooptions.identifier ?? "",
-                  //@ts-ignore
+                //@ts-ignore
                 username: serverinfooptions.username ?? "",
             }).then(
                 (a) => console.log(a),
@@ -208,9 +208,9 @@ onMounted(async () => {
                       label: localStorage.getItem("server") ?? "",
                   },
               ];
-                //@ts-ignore
+        //@ts-ignore
         options.value = serverinfo.serverinfo
-          //@ts-ignore
+            //@ts-ignore
             .filter((i) => i.server == serverinfo.serverinfo[0].server)
             .map((a) => a.session)
             .map((s) => {
@@ -225,7 +225,7 @@ onMounted(async () => {
         toeknvalue.value = localStorage.getItem("token") ?? "";
         urlvalue.value = localStorage.getItem("server") ?? "";
         if (urlvalue.value.length == 0) {
-              //@ts-ignore
+            //@ts-ignore
             urlvalue.value = serverinfo.serverinfo[0].server;
             showloading.value = false;
         }
@@ -377,7 +377,7 @@ async function service(
             loginstate.value = "登录成功:" + sessionresult.username;
             loginstyle.value = "color:green";
             if (sessionresult.sessions.length !== 0) {
-                  //@ts-ignore
+                //@ts-ignore
                 const session = sessionresult.sessions[0].name;
                 localStorage.setItem("session", session);
             }
@@ -400,7 +400,7 @@ async function service(
                 identifier: identifier,
             });
             console.log(sessionresult.sessions);
-//@ts-ignore
+            //@ts-ignore
             return sessionresult.sessions.map((a) => a.name);
         }
         throw new Error("登录失败,服务端没有session列表");
@@ -446,9 +446,9 @@ watch(data, (data) => {
             };
         });
         if (data.length) {
-              //@ts-ignore
+            //@ts-ignore
             sessionvalue.value = data[0];
-              //@ts-ignore
+            //@ts-ignore
             localStorage.setItem("session", data[0]);
         }
     }

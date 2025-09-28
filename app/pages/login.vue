@@ -9,7 +9,7 @@
         "
     >
         <el-page-header
-        @back="goBack"
+            @back="goBack"
             style="border: 1px solid rgb(235, 237, 240); width: 100%"
             :breadcrumb="{ routes, itemRender }"
             title="登录"
@@ -21,91 +21,91 @@
             </template>
         </el-page-header>
         <!-- 修改：添加导航栏容器 -->
-    <div class="nav-container" style="
-    width: 100%;
-">
-        <el-tabs
-            v-model="activeTab"
-            type="card"
-            :stretch="true"
-            @tab-change="handleTabChange"
-        >
-            <el-tab-pane label="密码登录" name="password">
-                <!-- 密码登录表单 -->
-                <el-card class="box-card" style="width: 100%">
-                    <template #header>
-                        <div class="card-header">
-                            <span>密码登录</span>
-                        </div>
-                    </template>
-                    <el-form
-                        ref="loginFormRef"
-                        :model="loginForm"
-                        :rules="rules"
-                        label-width="auto"
-                        class="demo-ruleForm"
-                    >
-                        <el-form-item label="账号" prop="username">
-                            <el-input
-                                name="username"
-                                v-model="loginForm.username"
-                                autocomplete="on"
-                            />
-                        </el-form-item>
-                        <el-form-item label="密码" prop="password">
-                            <el-input
-                                name="password"
-                                v-model="loginForm.password"
-                                type="password"
-                                autocomplete="on"
-                                show-password
-                            />
-                        </el-form-item>
-                        <el-form-item label="网址" prop="server">
-                            <el-input
-                                name="server"
-                                v-model="loginForm.server"
-                                autocomplete="on"
-                            />
-                        </el-form-item>
-                        <el-form-item class="center-button">
-                            <el-button
-                                size="large"
-                                :loading="loading"
-                                type="primary"
-                                @click="submitForm(loginFormRef)"
-                                >登录</el-button
-                            >
-                            <el-button
-                                size="large"
-                                @click="resetForm(loginFormRef)"
-                                >重置</el-button
-                            >
-                        </el-form-item>
-                    </el-form>
-                    <template #footer>
-                        <div class="card-header">
-                            <span :style="loginstyle">{{ loginstate }}</span>
-                        </div>
-                    </template>
-                </el-card>
-            </el-tab-pane>
-            <el-tab-pane label="令牌登录" name="token">
-                <!-- 令牌登录表单 -->
-                <el-card class="box-card" style="width: 100%">
-                    <template #header>
-                        <div class="card-header">
-                            <span>令牌登录</span>
-                        </div>
-                    </template>
-                    <el-form
-                        ref="tokenFormRef"
-                        :model="tokenForm"
-                        :rules="tokenRules"
-                        label-width="auto"
-                        class="demo-ruleForm"
-                    >
-                        <!--<el-form-item label="账号" prop="username">
+        <div class="nav-container" style="width: 100%">
+            <el-tabs
+                v-model="activeTab"
+                type="card"
+                :stretch="true"
+                @tab-change="handleTabChange"
+            >
+                <el-tab-pane label="密码登录" name="password">
+                    <!-- 密码登录表单 -->
+                    <el-card class="box-card" style="width: 100%">
+                        <template #header>
+                            <div class="card-header">
+                                <span>密码登录</span>
+                            </div>
+                        </template>
+                        <el-form
+                            ref="loginFormRef"
+                            :model="loginForm"
+                            :rules="rules"
+                            label-width="auto"
+                            class="demo-ruleForm"
+                        >
+                            <el-form-item label="账号" prop="username">
+                                <el-input
+                                    name="username"
+                                    v-model="loginForm.username"
+                                    autocomplete="on"
+                                />
+                            </el-form-item>
+                            <el-form-item label="密码" prop="password">
+                                <el-input
+                                    name="password"
+                                    v-model="loginForm.password"
+                                    type="password"
+                                    autocomplete="on"
+                                    show-password
+                                />
+                            </el-form-item>
+                            <el-form-item label="网址" prop="server">
+                                <el-input
+                                    name="server"
+                                    v-model="loginForm.server"
+                                    autocomplete="on"
+                                />
+                            </el-form-item>
+                            <el-form-item class="center-button">
+                                <el-button
+                                    size="large"
+                                    :loading="loading"
+                                    type="primary"
+                                    @click="submitForm(loginFormRef)"
+                                    >登录</el-button
+                                >
+                                <el-button
+                                    size="large"
+                                    @click="resetForm(loginFormRef)"
+                                    >重置</el-button
+                                >
+                            </el-form-item>
+                        </el-form>
+                        <template #footer>
+                            <div class="card-header">
+                                <span :style="loginstyle">{{
+                                    loginstate
+                                }}</span>
+                            </div>
+                        </template>
+                    </el-card>
+                </el-tab-pane>
+                <el-tab-pane label="令牌登录" name="token">
+                    <!-- 令牌登录表单 -->
+                    <el-card class="box-card" style="width: 100%">
+                        <template #header>
+                            <div class="card-header">
+                                <span>令牌登录</span>
+                            </div>
+                        </template>
+                        <el-form
+                            ref="tokenFormRef"
+                            :model="tokenForm"
+                            :rules="tokenRules"
+                            label-width="auto"
+                            class="demo-ruleForm"
+                        >
+                            <!--<el-form-item label="账号" prop="username">
                             <el-input
                                 v-model="tokenForm.username"
                                 autocomplete="on"
@@ -113,52 +113,54 @@
                         </el-form-item>
                     -->
 
-                        <el-form-item label="标识" prop="identifier">
-                            <el-input
-                                name="identifier"
-                                v-model="tokenForm.identifier"
-                                autocomplete="on"
-                            /> </el-form-item
-                        ><el-form-item label="令牌" prop="token">
-                            <el-input
-                                name="token"
-                                v-model="tokenForm.token"
-                                autocomplete="on"
-                                type="password"
-                                show-password
-                            />
-                        </el-form-item>
-                        <el-form-item label="网址" prop="server">
-                            <el-input
-                                name="server"
-                                v-model="tokenForm.server"
-                                autocomplete="on"
-                            />
-                        </el-form-item>
-                        <el-form-item class="center-button">
-                            <el-button
-                                size="large"
-                                :loading="loading"
-                                type="primary"
-                                @click="submitTokenForm(tokenFormRef)"
-                                >登录</el-button
-                            >
-                            <el-button
-                                size="large"
-                                @click="resetForm(tokenFormRef)"
-                                >重置</el-button
-                            >
-                        </el-form-item>
-                    </el-form>
-                    <template #footer>
-                        <div class="card-header">
-                            <span :style="loginstyle">{{ loginstate }}</span>
-                        </div>
-                    </template>
-                </el-card>
-            </el-tab-pane>
-        </el-tabs>
-    </div>
+                            <el-form-item label="标识" prop="identifier">
+                                <el-input
+                                    name="identifier"
+                                    v-model="tokenForm.identifier"
+                                    autocomplete="on"
+                                /> </el-form-item
+                            ><el-form-item label="令牌" prop="token">
+                                <el-input
+                                    name="token"
+                                    v-model="tokenForm.token"
+                                    autocomplete="on"
+                                    type="password"
+                                    show-password
+                                />
+                            </el-form-item>
+                            <el-form-item label="网址" prop="server">
+                                <el-input
+                                    name="server"
+                                    v-model="tokenForm.server"
+                                    autocomplete="on"
+                                />
+                            </el-form-item>
+                            <el-form-item class="center-button">
+                                <el-button
+                                    size="large"
+                                    :loading="loading"
+                                    type="primary"
+                                    @click="submitTokenForm(tokenFormRef)"
+                                    >登录</el-button
+                                >
+                                <el-button
+                                    size="large"
+                                    @click="resetForm(tokenFormRef)"
+                                    >重置</el-button
+                                >
+                            </el-form-item>
+                        </el-form>
+                        <template #footer>
+                            <div class="card-header">
+                                <span :style="loginstyle">{{
+                                    loginstate
+                                }}</span>
+                            </div>
+                        </template>
+                    </el-card>
+                </el-tab-pane>
+            </el-tabs>
+        </div>
     </div>
     <!-- <div class="login-container">
         <!-- 这里原本的导航栏内容已移到上面 -->
@@ -185,8 +187,17 @@ const routes = [
 
 const subtitle = ref("服务器网址：");
 
-
-function itemRender({ route, params, routes, paths }: { route: any; params: any; routes: any; paths: any }) {
+function itemRender({
+    route,
+    params,
+    routes,
+    paths,
+}: {
+    route: any;
+    params: any;
+    routes: any;
+    paths: any;
+}) {
     console.log({ route, params, routes, paths });
     if (routes.indexOf(route) === routes.length - 1) {
         return h("span", {}, [route.breadcrumbName]);
@@ -538,7 +549,6 @@ watch(
     (newServer) => {
         subtitle.value = "服务器网址：" + newServer;
     },
-    
 );
 </script>
 

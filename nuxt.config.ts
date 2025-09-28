@@ -1,15 +1,15 @@
 // import Components from "unplugin-vue-components/vite";
-
-import { defineNuxtConfig } from "nuxt/config";
-import { nodePolyfills } from "vite-plugin-node-polyfills";
-import { generateDayjsPluginMapping } from "./generate-dayjs-mapping.ts";
+//@ts-ignore
+import { fileCache, httpResolve } from "@masx200/rollup-plugin-http-resolve";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-
+import { defineNuxtConfig } from "nuxt/config";
+import { join } from "path";
+import { nodePolyfills } from "vite-plugin-node-polyfills";
+import { generateDayjsPluginMapping } from "./generate-dayjs-mapping.ts";
+const cache = new fileCache();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-
-import { join } from "path";
 const pluginDirectory = join(__dirname, "./node_modules/dayjs/plugin");
 const mapping = await generateDayjsPluginMapping(pluginDirectory);
 const dayjsPlugins = [
@@ -37,9 +37,10 @@ const alias = {
 };
 // console.log("dayjs alias:", alias);
 export default defineNuxtConfig({
+    sourcemap: process.env.SOURCEMAP == "true",
     alias: alias,
     build: {
-        transpile: ["element-plus"],
+        transpile: ["element-plus", "avsc"],
     },
     typescript: {
         typeCheck: true,
@@ -91,6 +92,7 @@ export default defineNuxtConfig({
     ],
     elementPlus: {},
     nitro: {
+        sourceMap: process.env.SOURCEMAP == "true",
         preset: "static",
         debug: true,
     },
@@ -102,8 +104,11 @@ export default defineNuxtConfig({
             include: [], // 强制预打包
         },
         plugins: [
+            httpResolve({
+                cache,
+            }),
             // Components({
-          
+
             // }),
             // ,
             //@ts-ignore
@@ -121,9 +126,13 @@ export default defineNuxtConfig({
             }),
         ],
         esbuild: {
-            drop: ["console", "debugger"],
+            drop:
+                process.env.DEBUGCONSOLE == "true"
+                    ? []
+                    : ["console", "debugger"],
         },
         build: {
+            sourcemap: process.env.SOURCEMAP == "true",
             commonjsOptions: {
                 transformMixedEsModules: true,
             },
@@ -133,7 +142,9 @@ export default defineNuxtConfig({
             // },
         },
         resolve: {
-            alias: {},
+            alias: {
+                avsc: "https://esm.sh/avsc@5.7.9/",
+            },
         },
     },
 });

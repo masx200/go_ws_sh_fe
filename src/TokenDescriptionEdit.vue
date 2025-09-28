@@ -80,13 +80,15 @@ export default defineComponent({
                     if (tokens.length > 0) {
                         //@ts-ignore
                         tokenInfo.value.username = tokens[0].username;
-                            //@ts-ignore
+                        //@ts-ignore
                         tokenInfo.value.description = tokens[0].description;
                         console.log("令牌描述获取成功");
                         ElMessage.success("令牌描述获取成功");
                     } else {
                         console.error("令牌描述获取失败" + "\n" + "令牌不存在");
-                        ElMessage.error("令牌描述获取失败" + "\n" + "令牌不存在");
+                        ElMessage.error(
+                            "令牌描述获取失败" + "\n" + "令牌不存在",
+                        );
                     }
                 }
             } catch (error) {

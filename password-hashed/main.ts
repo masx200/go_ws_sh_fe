@@ -18,11 +18,8 @@ const debouncedGenerateHash = debounce(async function () {
     try {
         const result = await hashPasswordWithSalt(password, {
             algorithm,
-            saltlength: "SHA-384" == algorithm
-                ? 48
-                : "SHA-256" == algorithm
-                ? 32
-                : 64,
+            saltlength:
+                "SHA-384" == algorithm ? 48 : "SHA-256" == algorithm ? 32 : 64,
         });
         // 修改 HTML 模板为表格形式，并居中显示
         //@ts-ignore

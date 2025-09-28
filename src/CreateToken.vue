@@ -21,7 +21,9 @@
                     placeholder="请输入令牌描述"
                 />
             </el-form-item>
-            <el-button type="primary" native-type="submit">创建新令牌</el-button>
+            <el-button type="primary" native-type="submit"
+                >创建新令牌</el-button
+            >
         </el-form>
         <!-- 新增令牌信息展示区域 -->
         <div v-if="showTokenInfo" style="margin-top: 20px">

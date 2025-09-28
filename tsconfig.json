@@ -3,8 +3,10 @@
     "extends": "./.nuxt/tsconfig.json",
 
     "compilerOptions": {
-        "verbatimModuleSyntax": true,
         "allowImportingTsExtensions": true,
-        "experimentalDecorators": true
-    }
+        "experimentalDecorators": true,
+        "skipLibCheck": true,
+        "verbatimModuleSyntax": false
+    },
+    "exclude": ["node_modules"]
 }

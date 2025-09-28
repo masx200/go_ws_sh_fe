@@ -11,7 +11,7 @@
         "
     >
         <el-page-header
-         @back="goBack"
+            @back="goBack"
             style="border: 1px solid rgb(235, 237, 240); width: 100%"
             :breadcrumb="{ routes, itemRender }"
             title="终端"
@@ -35,7 +35,8 @@
     </div>
 </template>
 <script setup lang="ts">
-import { h } from "vue";function goBack() {
+import { h } from "vue";
+function goBack() {
     router.push("/");
 }
 
@@ -101,7 +102,7 @@ onMounted(async () => {
     const conninfo = (await fetchServerInfoServer(server || ""))
         .serverinfo?.[0];
 
-          //@ts-ignore
+    //@ts-ignore
     const token = server ? conninfo.token : localStorage?.getItem("token");
     if (!token || !server || !session) {
         return router.push("/");
@@ -109,10 +110,10 @@ onMounted(async () => {
         subtitle.value = "服务器网址：" + server;
         const searchParams = new URLSearchParams();
         searchParams.set("token", token);
-          //@ts-ignore
+        //@ts-ignore
         searchParams.set("username", conninfo.username);
         searchParams.set("type", "token");
-          //@ts-ignore
+        //@ts-ignore
         searchParams.set("identifier", conninfo.identifier);
         appopts.wsprotocol = encodeURIComponent(searchParams.toString());
         const url1 = new URL(server);
@@ -123,7 +124,7 @@ onMounted(async () => {
         localStorage.setItem("type", "token");
         localStorage.setItem("token", token);
         localStorage.setItem("server", server);
-          //@ts-ignore
+        //@ts-ignore
         localStorage.setItem("identifier", conninfo.identifier);
         localStorage.setItem("session", session);
     }

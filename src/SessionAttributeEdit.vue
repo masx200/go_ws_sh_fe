@@ -71,7 +71,12 @@
             </el-form-item> -->
 
             <el-form-item>
-                <el-button type="primary" plain style="width: 60%" @click="addarg">
+                <el-button
+                    type="primary"
+                    plain
+                    style="width: 60%"
+                    @click="addarg"
+                >
                     添加参数
                 </el-button>
             </el-form-item>
@@ -145,13 +150,13 @@ export default defineComponent({
                 const session = result.sessions[0];
                 sessionInfo = {
                     name: sessionname,
-                      //@ts-ignore
+                    //@ts-ignore
                     cmd: session.cmd,
                     // args: JSON.stringify(session.args), // 将数组转换为字符串
-                      //@ts-ignore
+                    //@ts-ignore
                     dir: session.dir,
                 };
-  //@ts-ignore
+                //@ts-ignore
                 this.dynamicValidateForm.args = session.args.map((arg) => ({
                     value: arg,
                     key: Date.now(),

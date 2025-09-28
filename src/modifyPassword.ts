@@ -40,8 +40,8 @@ export async function modifyPassword(
             headers: {
                 "x-HTTP-method-override": "PUT",
                 "Content-Type": "application/json",
-                authorization: "Bearer " +
-                    btoa(JSON.stringify(credentials.authorization)),
+                authorization:
+                    "Bearer " + btoa(JSON.stringify(credentials.authorization)),
             },
             body: JSON.stringify(credentials),
         };

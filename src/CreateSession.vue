@@ -11,74 +11,69 @@
             label-width="auto"
             class="demo-dynamic"
         >
-                <el-form-item
-                    prop="name"
-                    label="会话名称"
-                    :rules="[{ required: true, message: '请输入会话名称' }]"
-                >
-                    <el-input v-model="sessionInfo.name" />
-                </el-form-item>
-                <el-form-item
-                    prop="cmd"
-                    label="命令"
-                    :rules="[{ required: true, message: '请输入命令' }]"
-                >
-                    <el-input v-model="sessionInfo.cmd" />
-                </el-form-item>
-                <!-- <a-form-item
+            <el-form-item
+                prop="name"
+                label="会话名称"
+                :rules="[{ required: true, message: '请输入会话名称' }]"
+            >
+                <el-input v-model="sessionInfo.name" />
+            </el-form-item>
+            <el-form-item
+                prop="cmd"
+                label="命令"
+                :rules="[{ required: true, message: '请输入命令' }]"
+            >
+                <el-input v-model="sessionInfo.cmd" />
+            </el-form-item>
+            <!-- <a-form-item
                 name="args"
                 label="参数"
                 :rules="[{ required: true, message: '请输入参数' }]"
             >
                 <a-input v-model:value="sessionInfo.args" />
             </a-form-item> -->
-                <div
-                    v-for="(arg, index) in dynamicValidateForm.args"
-                    :key="arg.key"
-                >
-                    <el-form-item
-                        :label="'参数' + '[' + index + ']'"
-                        :prop="'args.' + index + '.value'"
-                        :rules="{
-                            required: true,
-                            message: '参数不能为空',
-                            trigger: 'blur',
-                        }"
-                    >
-                        <el-input
-                            v-model="arg.value"
-                            :name="'args[' + index + ']'"
-                            autocomplete="on"
-                        />
-                    </el-form-item>
-
-                    <el-form-item
-                        ><el-button
-                            class="mt-2"
-                            @click.prevent="removearg(arg)"
-                        >
-                            删除参数
-                        </el-button></el-form-item
-                    >
-                </div>
-                <el-form-item>
-                    <el-button @click="addarg">添加参数</el-button>
-                </el-form-item>
+            <div
+                v-for="(arg, index) in dynamicValidateForm.args"
+                :key="arg.key"
+            >
                 <el-form-item
-                    prop="dir"
-                    label="目录"
-                    :rules="[{ required: true, message: '请输入目录' }]"
+                    :label="'参数' + '[' + index + ']'"
+                    :prop="'args.' + index + '.value'"
+                    :rules="{
+                        required: true,
+                        message: '参数不能为空',
+                        trigger: 'blur',
+                    }"
                 >
-                    <el-input v-model="sessionInfo.dir" />
+                    <el-input
+                        v-model="arg.value"
+                        :name="'args[' + index + ']'"
+                        autocomplete="on"
+                    />
                 </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" native-type="submit">创建</el-button>
-                </el-form-item>
-                <el-form-item>
-                    <el-button @click="resetForm(formRef)"
-                        >重置参数</el-button
-                    >
-                </el-form-item>
+
+                <el-form-item
+                    ><el-button class="mt-2" @click.prevent="removearg(arg)">
+                        删除参数
+                    </el-button></el-form-item
+                >
+            </div>
+            <el-form-item>
+                <el-button @click="addarg">添加参数</el-button>
+            </el-form-item>
+            <el-form-item
+                prop="dir"
+                label="目录"
+                :rules="[{ required: true, message: '请输入目录' }]"
+            >
+                <el-input v-model="sessionInfo.dir" />
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" native-type="submit">创建</el-button>
+            </el-form-item>
+            <el-form-item>
+                <el-button @click="resetForm(formRef)">重置参数</el-button>
+            </el-form-item>
         </el-form>
     </div>
 </template>
@@ -191,9 +186,7 @@ export default defineComponent({
                         routepushdisplaySessions();
                     } catch (error) {
                         console.error("会话创建失败:", error);
-                        ElMessage.error(
-                            "会话创建失败" + "\n" + String(error),
-                        );
+                        ElMessage.error("会话创建失败" + "\n" + String(error));
                     }
                 } else {
                     console.log("error submit!");

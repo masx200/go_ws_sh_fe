@@ -10,7 +10,9 @@
         <el-table-column prop="updated_at" label="修改时间" />
         <el-table-column label="修改操作" key="modify">
             <template #default="{ row }">
-                <el-button type="text" @click="handleChangePassword(row.username)"
+                <el-button
+                    type="text"
+                    @click="handleChangePassword(row.username)"
                     >修改密码</el-button
                 >
             </template>
@@ -29,7 +31,13 @@
 </template>
 
 <script lang="ts">
-import { ElPopconfirm, ElTable, ElTableColumn, ElButton, ElMessage } from "element-plus";
+import {
+    ElPopconfirm,
+    ElTable,
+    ElTableColumn,
+    ElButton,
+    ElMessage,
+} from "element-plus";
 import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
 import { listcredentials } from "./listcredentials.ts";

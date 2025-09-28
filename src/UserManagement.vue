@@ -43,13 +43,7 @@
 <script lang="ts">
 import { type Router, useRouter } from "vue-router";
 import { defineComponent, ref } from "vue";
-import {
-    ElForm,
-    ElFormItem,
-    ElInput,
-    ElButton,
-    ElMessage,
-} from "element-plus";
+import { ElForm, ElFormItem, ElInput, ElButton, ElMessage } from "element-plus";
 import { modifyPassword } from "./modifyPassword.ts";
 import { getAuth } from "./SessionDisplay.vue";
 import type { FormRules } from "element-plus";

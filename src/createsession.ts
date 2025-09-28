@@ -45,8 +45,8 @@ export async function createsession(
             headers: {
                 "Content-Type": "application/json",
                 "x-HTTP-method-override": "POST",
-                authorization: "Bearer " +
-                    btoa(JSON.stringify(credentials.authorization)),
+                authorization:
+                    "Bearer " + btoa(JSON.stringify(credentials.authorization)),
             },
             body: JSON.stringify(credentials),
         };
