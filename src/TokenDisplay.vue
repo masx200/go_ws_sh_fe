@@ -1,5 +1,7 @@
 <template>
     <el-table
+        border
+        table-layout="auto"
         :data="tokens"
         :loading="loading"
         style="width: 100%"
@@ -16,8 +18,9 @@
                     <el-popconfirm
                         title="确定删除该令牌？"
                         @confirm="handleDeleteToken(record.identifier)"
-                    >
-                        <el-button type="text">删除</el-button>
+                        ><template #reference>
+                            <el-button type="text">删除</el-button></template
+                        >
                     </el-popconfirm>
                 </span>
             </template>
@@ -36,18 +39,18 @@
 
 <script lang="ts">
 import {
+    ElButton,
+    ElMessage,
     ElPopconfirm,
     ElTable,
     ElTableColumn,
-    ElButton,
-    ElMessage,
 } from "element-plus";
 import type { TableColumnCtx } from "element-plus/es/components/table/src/table-column/defaults";
 import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
+import { deleteToken } from "./deleteToken";
 import { listtokens } from "./listtokens";
 import { getAuth } from "./SessionDisplay.vue";
-import { deleteToken } from "./deleteToken";
 
 interface Token {
     description: string;

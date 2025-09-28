@@ -29,10 +29,11 @@
         <div v-if="showTokenInfo" style="margin-top: 20px">
             <p>令牌创建成功</p>
             <el-table
+                border
+                table-layout="auto"
                 :data="tokenInfoSource"
                 :columns="tokenInfoColumns"
                 :pagination="false"
-                border
             ></el-table>
             <!-- <p>令牌标识: {{ tokenInfo.identifier }}</p>
             <p>令牌密码: {{ tokenInfo.password }}</p> -->
@@ -43,17 +44,18 @@
     </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
 import {
+    ElButton,
     ElForm,
     ElFormItem,
     ElInput,
-    ElButton,
+    ElMessage,
     ElTable,
     ElTableColumn,
-    ElMessage,
     type FormRules,
 } from "element-plus";
+import { defineComponent } from "vue";
+import { useRouter } from "vue-router";
 import { getAuth } from "./SessionDisplay.vue";
 import { login } from "./login";
 import { routepushdisplayTokens } from "./routepush";
@@ -212,5 +214,4 @@ export default defineComponent({
         },
     },
 });
-import { useRouter } from "vue-router";
 </script>

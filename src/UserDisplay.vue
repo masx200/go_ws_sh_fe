@@ -1,5 +1,7 @@
 <template>
     <el-table
+        border
+        table-layout="auto"
         :data="users"
         :loading="loading"
         style="width: 100%"
@@ -22,8 +24,9 @@
                 <el-popconfirm
                     title="确定删除该用户？"
                     @confirm="handleDeleteUser(row.username)"
-                >
-                    <el-button type="text">删除</el-button>
+                    ><template #reference>
+                        <el-button type="text">删除</el-button></template
+                    >
                 </el-popconfirm>
             </template>
         </el-table-column>
@@ -32,17 +35,17 @@
 
 <script lang="ts">
 import {
+    ElButton,
+    ElMessage,
     ElPopconfirm,
     ElTable,
     ElTableColumn,
-    ElButton,
-    ElMessage,
 } from "element-plus";
 import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
+import { deleteUser } from "./deleteUser";
 import { listcredentials } from "./listcredentials.ts";
 import { getAuth } from "./SessionDisplay.vue";
-import { deleteUser } from "./deleteUser";
 
 interface User {
     username: string;

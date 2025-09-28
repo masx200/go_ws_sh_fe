@@ -1,32 +1,71 @@
 <template>
     <el-table
+        border
+        table-layout="auto"
         :data="sessions"
         :loading="loading"
         style="width: 100%"
         :row-key="(record) => record.name"
     >
         <el-table-column
+            width="auto"
             v-for="col in columns"
             :key="col.prop || col.label"
             :prop="col.prop"
             :label="col.label"
         >
-            <template v-if="col.key === 'copy'" #default="{ row: record }">
-                <span>
+            <template
+                v-if="col.key === 'copy_modify'"
+                #default="{ row: record }"
+            >
+                <span
+                    style="
+                        display: flex;
+                        flex-direction: row;
+                        flex-wrap: nowrap;
+                        align-content: center;
+                        justify-content: center;
+                        align-items: center;
+                    "
+                >
                     <el-button
                         type="text"
                         @click="handleCopyAttributes(record.name)"
                         >复制</el-button
+                    >
+                    <el-button
+                        type="text"
+                        @click="handleChangeAttributes(record.name)"
+                        >修改</el-button
                     ></span
                 >
             </template>
-            <template v-if="col.key === 'move'" #default="{ row: record }">
-                <span>
+            <template
+                v-if="col.key === 'move_delete'"
+                #default="{ row: record }"
+            >
+                <span
+                    style="
+                        display: flex;
+                        flex-direction: row;
+                        flex-wrap: nowrap;
+                        align-content: center;
+                        justify-content: center;
+                        align-items: center;
+                    "
+                >
                     <el-button
                         type="text"
                         @click="handleMoveAttributes(record.name)"
                         >移动</el-button
-                    ></span
+                    >
+                    <el-popconfirm
+                        title="确定删除该会话？"
+                        @confirm="handleDeleteSession(record.name)"
+                        ><template #reference>
+                            <el-button type="text">删除</el-button></template
+                        >
+                    </el-popconfirm></span
                 >
             </template>
             <template v-if="col.key === 'args'" #default="{ row: record }">
@@ -50,25 +89,6 @@
                         <el-tag type="primary">{{ arg }}</el-tag>
                     </li>
                 </ul>
-            </template>
-            <template v-if="col.key === 'delete'" #default="{ row: record }">
-                <span>
-                    <el-popconfirm
-                        title="确定删除该会话？"
-                        @confirm="handleDeleteSession(record.name)"
-                    >
-                        <el-button type="text">删除</el-button>
-                    </el-popconfirm></span
-                >
-            </template>
-            <template v-if="col.key === 'modify'" #default="{ row: record }">
-                <span>
-                    <el-button
-                        type="text"
-                        @click="handleChangeAttributes(record.name)"
-                        >修改</el-button
-                    ></span
-                >
             </template>
         </el-table-column>
     </el-table>
@@ -133,26 +153,26 @@
 </template>
 
 <script lang="ts">
-import { type Router, useRouter } from "vue-router";
 import {
+    ElButton,
     ElCol,
-    ElInput,
     ElDialog,
+    ElInput,
+    ElMessage,
     ElPopconfirm,
     ElTable,
     ElTableColumn,
     ElTag,
-    ElButton,
-    ElMessage,
 } from "element-plus";
 import type { TableColumnCtx } from "element-plus/es/components/table/src/table-column/defaults";
 import { defineComponent } from "vue";
+import { useRouter, type Router } from "vue-router";
 import { fetchServerInfoServer } from "./ServerConnectionInfo.ts";
-import { listsessions, type listResults } from "./listsessions.ts"; // 引入 listsessions 函数
-import { routepushEditSessions } from "./routepush";
-import { deletesession } from "./deletesession";
 import { copysession } from "./copysession";
+import { deletesession } from "./deletesession";
+import { listsessions, type listResults } from "./listsessions.ts"; // 引入 listsessions 函数
 import { MOVEsession } from "./movesession";
+import { routepushEditSessions } from "./routepush";
 
 export async function getAuth(router: Router): Promise<{
     baseurl: string;
@@ -414,10 +434,8 @@ export default defineComponent({
                 { prop: "dir", label: "目录" },
                 { prop: "created_at", label: "创建时间" },
                 { prop: "updated_at", label: "修改时间" },
-                { label: "修改", key: "modify" },
-                { label: "复制", key: "copy" },
-                { label: "移动", key: "move" },
-                { label: "删除", key: "delete" },
+                { label: "复制/修改", key: "copy_modify" },
+                { label: "移动/删除", key: "move_delete" },
             ] as TableColumnWithKey[],
         };
     },

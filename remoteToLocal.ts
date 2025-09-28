@@ -139,6 +139,7 @@ export default function remoteToLocal(
         return null;
     }
     return {
+        enforce: "pre" as const,
         name: "remote-to-local",
         resolveId(id: string, importer?: string) {
             if (importer?.startsWith("virtual:https:/"))
@@ -152,7 +153,8 @@ export default function remoteToLocal(
             }
 
             if (importer?.startsWith("virtual:https:/")) {
-                importer = importer?.replaceAll("virtual:https:/", "virtual:https://")
+                importer = importer
+                    ?.replaceAll("virtual:https:/", "virtual:https://")
                     .replaceAll("virtual:https:///", "virtual:https://");
             }
             const result = resolveId(id, importer);
@@ -246,14 +248,14 @@ export default function remoteToLocal(
                                     /,h=/g,
                                     `,h_${moduleName}=`,
                                 );
-                                processedData = processedData.replace(
-                                    /function e\(/g,
-                                    `function e_${moduleName}(`,
-                                );
-                                processedData = processedData.replace(
-                                    /,e\(/g,
-                                    `,e_${moduleName}(`,
-                                );
+                                // processedData = processedData.replace(
+                                //     /function e\(/g,
+                                //     `function e_${moduleName}(`,
+                                // );
+                                // processedData = processedData.replace(
+                                //     /,e\(/g,
+                                //     `,e_${moduleName}(`,
+                                // );
                             }
                         }
                     }
@@ -268,7 +270,7 @@ export default function remoteToLocal(
                 // );
                 throw new Error(
                     `Remote module load failed: ${urlToFetch}\n` +
-                    String(error),
+                        String(error),
                     { cause: error },
                 );
             }
