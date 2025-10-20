@@ -58,7 +58,7 @@
         "trzsz": "1.1.5",
         "ts-proto": "2.6.1",
         "util": "0.12.5",
-        "vite": "7.1.5",
+        "vite": "7.1.11",
         "vite-plugin-pwa": "^1.0.3",
         "vite-plugin-remote-assets": "^2.1.0",
         "vue": "latest",
