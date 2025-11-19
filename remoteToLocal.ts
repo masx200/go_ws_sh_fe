@@ -1,7 +1,7 @@
 import type { Plugin } from "vite";
 
-import { createHash } from "node:crypto";
 import fse from "fs-extra";
+import { createHash } from "node:crypto";
 import { homedir } from "node:os";
 import path from "node:path";
 
@@ -76,9 +76,9 @@ export default function remoteToLocal(
             return data;
         },
     } = options;
-    const remoteUrlvirtual = "virtual:https://esm.sh/avsc@5.7.9/";
-    const virtualModuleId = "virtual:https://esm.sh/avsc@5.7.9/";
-    let remoteUrlhttp = "https://esm.sh/avsc@5.7.9/";
+    const remoteUrlvirtual = "virtual:https://cdn.jsdelivr.net/npm/avsc/+esm";
+    const virtualModuleId = "virtual:https://cdn.jsdelivr.net/npm/avsc/+esm";
+    let remoteUrlhttp = "https://cdn.jsdelivr.net/npm/avsc/+esm";
     const resolvedId = `${virtualModuleId}`;
     function resolveId(id: string, importer?: string) {
         if (

@@ -45,7 +45,9 @@ export default defineNuxtConfig({
     sourcemap:
         process.env.NODE_ENV == "development" ||
         process.env.SOURCEMAP == "true",
-    alias: Object.assign(alias, { avsc: "virtual:https://esm.sh/avsc@5.7.9/" }),
+    alias: Object.assign(alias, {
+        avsc: "virtual:https://cdn.jsdelivr.net/npm/avsc/+esm",
+    }),
     build: {
         transpile: ["element-plus", "avsc"],
     },
@@ -110,10 +112,13 @@ export default defineNuxtConfig({
     modules: ["@element-plus/nuxt", "@vite-pwa/nuxt", "dayjs-nuxt"],
     vite: {
         ssr: {
-            noExternal: ["avsc", "virtual:https://esm.sh/avsc@5.7.9/"],
+            noExternal: [
+                "avsc",
+                "virtual:https://cdn.jsdelivr.net/npm/avsc/+esm",
+            ],
         },
         optimizeDeps: {
-            include: ["virtual:https://esm.sh/avsc@5.7.9/"], // 强制预打包
+            include: ["virtual:https://cdn.jsdelivr.net/npm/avsc/+esm"], // 强制预打包
         },
         plugins: [
             remoteToLocal({
@@ -176,7 +181,7 @@ export default defineNuxtConfig({
         },
         resolve: {
             alias: {
-                avsc: "virtual:https://esm.sh/avsc@5.7.9/",
+                avsc: "virtual:https://cdn.jsdelivr.net/npm/avsc/+esm",
             },
         },
     },
