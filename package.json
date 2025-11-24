@@ -40,7 +40,7 @@
         "dayjs": "^1.11.18",
         "dayjs-nuxt": "2.1.11",
         "decko": "1.2.0",
-        "dexie": "4.0.10",
+        "dexie": "4.2.1",
         "element-plus": "2.11.4",
         "esbuild": "^0.25.10",
         "file-saver": "2.0.5",
